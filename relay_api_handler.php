@@ -91,6 +91,7 @@ switch (count($url))
                 {
                     case 'GET':
                         $rtn_arr = $proc_api -> listdata();
+                        header('Content-Type: application/json; charset=utf-8');  
                         echo json_encode($rtn_arr);
                         break;
                     default :

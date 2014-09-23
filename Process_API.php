@@ -28,7 +28,7 @@ class Process_API
     
     function listdata()
     {
-        $ouputarr = null;
+        $ouputarr = array();
         $exu_str = 'sudo /var/www/html/relay.exe list';            
         exec($exu_str,$output);
         foreach ($output as $str)
