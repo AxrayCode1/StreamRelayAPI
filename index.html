@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Relay Setting</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="js/jquery-1.7.2.min.js"></script>
+        <script src="js/relay_index.js"></script>
+        <link href="css/index.css" rel="stylesheet">
+    </head>
+    <body>
+        <div id="div_relay_create_control">
+            <label>Source : </label>
+            <input id="Source"  style="height: 20px;width: 180px" class="inputs" value="" type="text">
+            <label style="margin-left: 10px;">Port : </label>
+            <input id="Port" style="height: 20px;width: 60px" class="inputs" value="" type="text">
+            <label style="margin-left: 10px;">Channel Name : </label>
+            <input id="ChannelName" style="height: 20px;width: 100px" class="inputs" value="" type="text">
+            <a id="btn_create" style="margin-left: 30px" href="#" class="btn-light"  onclick="$('#h1_header').text('Channel 01'); hPlayer.play({ stream: 'http://192.168.94.205:8090/channel01'}); return false">Create</a>
+        </div>
+        <div id="div_relay_table">
+            <table id="table_relay" style="width:100%; position: relative">
+                <tr>
+                    <th width="40%">Source</th>
+                    <th width="40%">Destination</th>		
+                    <th width="20%">Action</th>
+                </tr>               
+            </table>
+        </div>
+        <div id="div_control_table">
+            <a id="btn_refresh" href="#" class="btn-light">Refresh</a>
+        </div>
+        <script type="text/javascript">
+            action_Relay = Relay.createNew();        
+            action_Relay.getRelayList();
+            init();
+        </script>
+    </body>
+</html>
