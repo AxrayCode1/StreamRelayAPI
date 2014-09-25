@@ -26,6 +26,19 @@ class Process_API
 //        var_dump($output);       
     }
     
+    function resume($jsondata)
+    {
+        $result = false;
+        $inputjson = json_decode($jsondata,true);
+        if(!(strlen($inputjson['Source']) <=0 || strlen($inputjson['Port']) <=0))
+        {            
+            $this->deldata($inputjson['ID']);
+            $this->create($jsondata);
+            $result = true;
+        }
+        return $result;
+    }
+    
     function listdata()
     {
         $ouputarr = array();

@@ -1,4 +1,9 @@
-#div_relay_create_control{margin: 20px auto;height: 40px; width: 1024px;}
+html, body{
+    margin:0;
+    padding:0;
+    min-width: 1024px; /* this is the important part*/
+}
+#div_relay_create_control{position: relative;height: 50px;width: 100%;}
 #div_relay_table{margin: 20px auto; width: 1024px}
 #div_control_table{position: relative;margin: 20px auto; width: 1024px}
 a {text-decoration: none;}

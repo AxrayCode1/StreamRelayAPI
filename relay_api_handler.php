@@ -86,6 +86,19 @@ switch (count($url))
                         http_response_code(404);
                 }
                 break;
+            case 'resume':     
+                switch($_SERVER['REQUEST_METHOD'])
+                {
+                    case 'POST':
+                        echo 1;
+                        $result = $proc_api->resume(file_get_contents("php://input"));
+                        if(!result)
+                            http_response_code(404);
+                        break;
+                    default :
+                        http_response_code(404);
+                }
+                break;
             case 'list':
                 switch($_SERVER['REQUEST_METHOD'])
                 {
