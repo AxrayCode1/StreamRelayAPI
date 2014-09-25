@@ -10,18 +10,13 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="js/jquery-1.7.2.min.js"></script>
+        <script src="js/jquery.blockUI.js"></script>
         <script src="js/relay_index.js"></script>
         <link href="css/index.css" rel="stylesheet">
     </head>
     <body>
         <div id="div_relay_create_control">
-            <label>Source : </label>
-            <input id="Source"  style="height: 20px;width: 180px" class="inputs" value="" type="text">
-            <label style="margin-left: 10px;">Port : </label>
-            <input id="Port" style="height: 20px;width: 60px" class="inputs" value="" type="text">
-            <label style="margin-left: 10px;">Channel Name : </label>
-            <input id="ChannelName" style="height: 20px;width: 100px" class="inputs" value="" type="text">
-            <a id="btn_create" style="margin-left: 30px" href="#" class="btn-light"  onclick="$('#h1_header').text('Channel 01'); hPlayer.play({ stream: 'http://192.168.94.205:8090/channel01'}); return false">Create</a>
+            
         </div>
         <div id="div_relay_table">
             <table id="table_relay" style="width:100%; position: relative">
@@ -33,7 +28,14 @@ and open the template in the editor.
             </table>
         </div>
         <div id="div_control_table">
-            <a id="btn_refresh" href="#" class="btn-light">Refresh</a>
+            <label>Source : </label>
+            <input id="Source"  style="height: 20px;width: 180px" class="inputs" value="" type="text">
+            <label style="margin-left: 10px;">Port : </label>
+            <input id="Port" style="height: 20px;width: 60px" class="inputs" value="" type="text">
+            <label style="margin-left: 10px;">Channel Name : </label>
+            <input id="ChannelName" style="height: 20px;width: 100px" class="inputs" value="" type="text">
+            <a id="btn_create" style="margin-left: 10px" href="#" class="btn-light"  onclick="$('#h1_header').text('Channel 01'); hPlayer.play({ stream: 'http://192.168.94.205:8090/channel01'}); return false">Create</a>
+            <a id="btn_refresh" style="position: absolute; right: 0" href="#" class="btn-light">Refresh</a>
         </div>
         <script type="text/javascript">
             action_Relay = Relay.createNew();        

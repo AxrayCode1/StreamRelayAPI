@@ -1,6 +1,6 @@
 #div_relay_create_control{margin: 20px auto;height: 40px; width: 1024px;}
 #div_relay_table{margin: 20px auto; width: 1024px}
-#div_control_table{margin: 20px auto; width: 1024px}
+#div_control_table{position: relative;margin: 20px auto; width: 1024px}
 a {text-decoration: none;}
 .btn-dark {
     display: inline-block;
