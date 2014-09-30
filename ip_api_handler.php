@@ -9,43 +9,30 @@ switch (count($url))
     case 1:        
         switch ($url[0])
         {
-            case 'create':            
-                switch($_SERVER['REQUEST_METHOD'])
-                {
-                    case 'POST':
-                        $result = $proc_api -> create(file_get_contents("php://input"));
-                        if(!result)
-                            http_response_code(404);
-                        break;
-                    default :
-                        http_response_code(404);
-                }
-                break;
-            case 'resume':     
-                switch($_SERVER['REQUEST_METHOD'])
-                {
-                    case 'POST':
-                        echo 1;
-                        $result = $proc_api->resume(file_get_contents("php://input"));
-                        if(!result)
-                            http_response_code(404);
-                        break;
-                    default :
-                        http_response_code(404);
-                }
-                break;
-            case 'list':
+            case 'list':            
                 switch($_SERVER['REQUEST_METHOD'])
                 {
                     case 'GET':
-                        $rtn_arr = $proc_api -> listdata();
-                        header('Content-Type: application/json; charset=utf-8');  
-                        echo json_encode($rtn_arr);
+                        $outputarr = $proc_api ->listip();  
+                        echo json_encode($outputarr);
                         break;
                     default :
                         http_response_code(404);
                 }
-                break;            
+                break;    
+            case 'set':                
+                switch($_SERVER['REQUEST_METHOD'])
+                {
+                    case 'POST':
+                        //Input Json : {"IP":[{"name":"eth1","ip":"192.168.94.208","mask":"255.255.248.0"},{"name":"eth2","ip":"192.168.12.78","mask":"255.255.255.0"}],"Gateway":[{"ip":"","bindport":""}],"DNS":[{"ip":"168.95.192.1"},{"ip":"8.8.8.8"}]}
+                        $result = $proc_api ->setip(file_get_contents("php://input")); 
+                        if(!$result)
+                            http_response_code(400);
+                        break;
+                    default :
+                        http_response_code(404);
+                }
+                break;
             default :
                 http_response_code(404);
                 break;

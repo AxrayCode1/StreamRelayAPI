@@ -51,5 +51,140 @@ class Process_API
         }
         return $ouputarr;
     }
+    
+    function listip()
+    {
+        $outputarr = array();
+        $exu_str = 'sudo /var/www/html/ifcfg.sh list';            
+        $tmp = exec($exu_str,$output);
+        foreach ($output as $str)
+        {            
+            $str_arr=explode(" ",$str);
+            switch ($str_arr[0])
+            {
+                case 'IP':
+                    $outputarr['IP'][] = array('name'=>$str_arr[1],'ip'=>$str_arr[2]=='NULL' ? '' : $str_arr[2],'mask'=>$str_arr[3]=='NULL'?'':$str_arr[3]);
+                    break;
+                case 'Gateway':
+                    $outputarr['Gateway'][] = array('ip'=>$str_arr[1]=='NULL'?'':$str_arr[1],'bindport'=>$str_arr[2]=='NULL'?'':$str_arr[2]);
+                    break;
+                case 'DNS':
+                    $outputarr['DNS'][] = array('ip'=>$str_arr[1]=='NULL'?'':$str_arr[1]);
+                    break;
+            }                       
+        }
+        return $outputarr;        
+    }
+    
+    function setip($jsondata)
+    {
+        $result_ip = false;
+        $result_gateway = false;
+        $result_dns = false;
+        $inputjson = json_decode($jsondata,true);            
+        $ipsetlist = array();
+        $gatewaysetlist = array();
+        $dnssetlist = array();
+        $exu_str = 'sudo /var/www/html/ifcfg.sh set';        
+        foreach($inputjson as $key=>$item)
+        {
+            switch ($key)
+            {
+                case 'IP' :
+                    foreach ($item as $key => $ipitem)
+                    {             
+                        if($ipitem['ip'] == '' && $ipitem['mask'] == '')
+                        {                            
+                        }
+                        else if (!filter_var($ipitem['ip'], FILTER_VALIDATE_IP) || !filter_var($ipitem['mask'], FILTER_VALIDATE_IP)) 
+                        {
+                            $result_ip = false;
+                            break 2;
+                        }                        
+                        else                        
+                            $result_ip = true;
+                        $ipsetlist[] = $ipitem;                                                
+                    }
+                    break;
+                case 'Gateway':
+                    foreach ($item as $gatewayitem)
+                    {         
+                        if($gatewayitem['bindport'] == '')
+                        {
+                            $result_gateway = false;
+                            break 2;
+                        }
+                        else if ($gatewayitem['ip'] == '')
+                            $result_gateway = true;
+                        else if(!filter_var($gatewayitem['ip'], FILTER_VALIDATE_IP))
+                        {
+                            $result_gateway = false;
+                            break 2;
+                        }
+                        else
+                        {
+                            $result_gateway = true;
+                            foreach ($ipsetlist as $tmpitem)
+                            {
+                                if($gatewayitem['bindport'] == $tmpitem['name'])
+                                {
+                                    if(!$this->valiate_ip_gateway_same_lan($gatewayitem['ip'],$tmpitem['ip'],$tmpitem['mask']))
+                                    {                                        
+                                        $result_gateway = false;
+                                        break;
+                                    }
+                                }
+                            }                      
+                            if(!$result_gateway)
+                                break 2;
+                        }                                             
+                        $gatewaysetlist[]=$gatewayitem;
+                        break;
+                    }
+                    break;
+                case 'DNS':
+                    foreach ($item as $dnsitem)
+                    {                        
+                        if($dnsitem['ip'] == '')                        
+                            $result_dns = true;                                    
+                        else if(!filter_var($dnsitem['ip'], FILTER_VALIDATE_IP))
+                        {
+                            $result_dns = false;
+                            break 2;
+                        }
+                        else
+                            $result_dns = true;
+                        $dnssetlist[] = $dnsitem;
+                    }
+                    break;
+            }                                               
+        }        
+        if(!$result_ip || !$result_gateway || !$result_dns)
+            return false;
+        else
+            return true;
+    }
+    
+    function valiate_ip_gateway_same_lan($gateway,$ip,$mask)
+    {                   
+        $gatewayarr = explode('.',$gateway);
+        $iparr = explode('.',$ip);
+        $maskarr = explode('.',$mask);
+        if((ip2long($gateway) & ip2long($mask)) == (ip2long($ip) & ip2long($mask)))
+            return true;
+        else
+            return false;
+//        var_dump($gatewayarr);
+//        var_dump($iparr);
+//        var_dump($maskarr);
+//        foreach($gatewayarr as $key=>$value)
+//        {                        
+//            echo $gatewayarr[$key].' '.$iparr[$key].' '.$maskarr[$key];
+////            var_dump($iparr[key].' '.$maskarr[key].' '.$gatewayarr[key]);
+//            var_dump($iparr[key] and $maskarr[key]);
+//            var_dump($gatewayarr[key] and $maskarr[key]);
+//            
+//        }
+    }
 }
 

@@ -1,2 +1,3 @@
 RewriteEngine on
 RewriteRule ^(relay)/(.*)$ $1_api_handler.php?api=$2&%{QUERY_STRING}
+RewriteRule ^(ip)/(.*)$ $1_api_handler.php?api=$2&%{QUERY_STRING}

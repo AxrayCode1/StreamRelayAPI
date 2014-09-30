@@ -6,11 +6,30 @@
 //)
 var action_Relay = {};
 var relayList;
+var IPList;
+var GatewayList;
+var DNSList;
 var relayClass = function(id,source,port,channelname){
     this.id = id;
     this.source=source;
     this.port=port;
     this.channelname=channelname;
+}
+var IPClass = function(id,displayname,name,ip,mask){
+    this.id = id;    
+    this.displayname = displayname;
+    this.name = name;
+    this.ip = ip;
+    this.mask = mask;
+}
+var GatewayClass = function(id,ip,bindport){
+    this.id = id;
+    this.ip = ip;
+    this.bindport = bindport;
+}
+var DNSClass = function(id,ip){
+    this.id = id;
+    this.ip = ip;
 }
 function MyError(message) {  
     this.message = message || "Default Message";
@@ -27,8 +46,55 @@ function init()
     $('#btn_create').click(function(){
         createAction();
     });    
+    $('#a_btn_ip_setting').click(function(){
+        action_Relay.listip();
+    }); 
+    $('#btn_ip_confirm').click(function(){
+        SetIPAction();
+    }); 
+    $('#btn_ip_cancel').click(function(){
+        action_Relay.listip();
+    });    
 }
-
+function SetIPAction()
+{
+    var regexIP=/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    var bInputIP = false;
+    var sJsonIP = '';
+    $.each( IPList, function( index, element ) { 
+        if($('#IPMask'+element['id']).val().length > 0)
+        {
+            if(regexIP.test($('#IPMask'+element['id']).val()) === false)
+            {
+                alert(element['displayname'] + "'s Mask format error.");                
+                return false;
+            }
+            if(regexIP.test($('#IP'+element['id']).val()) === false)
+            {
+                alert(element['displayname'] + "'s IP format error.");                
+                return false;
+            }
+            bInputIP = true;
+        }
+        else
+        {
+            if($('#IP'+element['id']).val().length > 0)
+            {
+                alert("Please input " + element['displayname'] + "'s mask.");
+                return false;
+            }
+        }
+        if(!bInputIP)
+        {
+            alert("Please input ip and mask of one nic.")
+            return false;
+        }
+        if(index != 0)
+            sJsonIP += ',';
+        sJsonIP += '{"name":"' + element['name'] + '","ip":"' + element['ip'] + '","mask":"' + element['mask'] + '"}'
+    });
+    alert(sJsonIP);
+}
 function createAction()
 {
     var flag = true;
@@ -64,6 +130,7 @@ var CreateHtml = {
         var resume_class = '.resume'; 
         var relayobj_forhtml = input_relayobj;
         var table_relay = $('#table_relay');
+        var ip_field = $('#div_ip_field');
         var createobj = {};
         createobj.clearTable = function(){
             table_relay.find("tr:gt(0)").remove();
@@ -100,6 +167,102 @@ var CreateHtml = {
                 table_relay.append(append_str);                
              })            
         }       
+        createobj.EmptyIPDiv = function(){
+            ip_field.empty();
+        };
+        createobj.appendIPDiv = function(ip_list){
+            IPList = [];
+            GatewayList = [];
+            DNSList = [];
+            var tmp_ip_item;
+            var tmp_dns_item;
+            var tmp_gateway_item;
+            var tmp_ip_displayidex;
+            var tmp_ip;
+            var tmp_mask;
+            var tmp_ip_html;
+            var tmp_dns_html;
+            var tmp_bol_marge;
+            
+            $.each( ip_list, function( index, element ) 
+            {                
+               switch(index)
+               {
+                   case 'IP':
+                       $.each( element, function( ipindex, ipelement ) 
+                       {                  
+                           tmp_bol_marge = true;
+                           tmp_ip = ipelement['ip'];
+                           tmp_mask = ipelement['mask'];                                                      
+                           tmp_ip_displayidex = ipindex + 1;     
+                           tmp_ip_item = new IPClass(ipindex,'NIC' + tmp_ip_displayidex,ipelement['name'],tmp_ip,tmp_mask);
+                           IPList[ipindex]=tmp_ip_item;
+                           if(ipindex == 0)
+                               tmp_bol_marge = false
+                           tmp_ip_html = createobj.CreateIPHtml(ipindex,'NIC' + tmp_ip_displayidex, tmp_ip,tmp_mask,tmp_bol_marge);
+                           ip_field.append(tmp_ip_html);
+                       });
+                       break;
+                   case 'Gateway':
+                       $.each( element, function( gatewayindex, gatewayelement ) 
+                       {
+                           tmp_ip = gatewayelement['ip'];
+                           tmp_gateway_item = new GatewayClass(gatewayindex,tmp_ip,gatewayelement['bindport']);
+                           GatewayList[gatewayindex] = tmp_gateway_item;
+                           tmp_ip_html = createobj.CreateGatewayHtml(gatewayindex,tmp_ip,gatewayelement['bindport']);
+                           ip_field.append(tmp_ip_html);
+                           return false;
+                       });
+                       break;
+                   case 'DNS':
+                       $.each( element, function( dnsindex, dnselement ) 
+                       {
+                           tmp_ip = dnselement['ip'];
+                           tmp_dns_item = new DNSClass(dnsindex, tmp_ip);
+                           DNSList[dnsindex] = tmp_dns_item;
+                           tmp_dns_html = createobj.CreateDNSHtml(dnsindex,tmp_ip);
+                           ip_field.append(tmp_dns_html);
+                           return false;
+                       });
+                       break;
+               }                                
+            });
+        };
+        createobj.CreateIPHtml =function(id,displayname,ip,mask,bmarge){   
+            var rtnhtml = '<fieldset ';
+            if(bmarge)
+                rtnhtml += 'style="margin-top:10px"'
+            rtnhtml += '><legend>' + displayname + '</legend>IP : <input id="IP' + id +'" type="text" class="iptext" value="' + ip + '"><br><br>Mask : <input class="iptext" id="IPMask' + id + '" type="text" value="' + mask + '"><br></fieldset>';
+            return rtnhtml;
+        };
+        createobj.CreateGatewayHtml = function(id,ip,bindport){
+            var rtnhtml = '<fieldset ';            
+            rtnhtml += 'style="margin-top:10px"';
+            rtnhtml += '><legend>Gateway</legend>IP : <input id="Gateway' + id +'" type="text" class="iptext" value="' + ip + '"><br><br>';
+            rtnhtml += 'Bind NIC Port : <select id="GatewaySelect' + id + '">';
+            $.each(IPList, function( ipindex, ipelement )
+            {
+                if(bindport == '' && ipindex == 0)
+                {
+                    rtnhtml += '<option value="' + ipelement['name'] + '" selected=true>' + ipelement['displayname'] + '</option>';                    
+                }
+                else if(bindport == ipelement['name'])
+                {
+                    rtnhtml += '<option value="' + ipelement['name'] + '" selected=true>' + ipelement['displayname'] + '</option>';                    
+                }
+                else
+                    rtnhtml += '<option value="' + ipelement['name'] + '">' + ipelement['displayname'] + '</option>';                    
+            });
+            rtnhtml += '<br></fieldset>';
+            return rtnhtml; 
+        }
+        createobj.CreateDNSHtml = function(id,ip)
+        {
+            var rtnhtml = '<fieldset ';            
+            rtnhtml += 'style="margin-top:10px"'
+            rtnhtml += '><legend>DNS</legend>IP : <input id="DNS' + id +'" type="text" class="iptext" value="' + ip + '"><br></fieldset>';
+            return rtnhtml;
+        }
         createobj.rebindDeleteEvert = function(){
             $(delete_class).click(function () {
                 var thisitem = $(this);
@@ -143,7 +306,7 @@ var Relay = {
             request.fail(function (jqxhr, textStatus)
             {            
                 htmlobj.stopPage();
-                throw new MyError("Error : Ajax List Error" );
+                alert("Error : Ajax List Error" );
             });
         };
         relayobj.createRelay = function(source,port,channelname){ 
@@ -182,7 +345,7 @@ var Relay = {
                 htmlobj.blockPage();
                 request.done(function (msg, statustext, jqxhr)
                 {           
-                    htmlobj.stopPage();                
+                    htmlobj.stopPage();                         
                     setTimeout(relayobj.getRelayList(),2000); 
                 });
                 request.fail(function (jqxhr, textStatus)
@@ -195,6 +358,24 @@ var Relay = {
                 
             }
         }
+        relayobj.listip = function(){ 
+            var request = relayobj.CallAjax("ip/list","GET", '', "json");
+            htmlobj.blockPage();
+            request.done(function (msg, statustext, jqxhr)
+            {                       
+                htmlobj.EmptyIPDiv();
+                htmlobj.appendIPDiv(msg);
+                htmlobj.stopPage();                                   
+            });
+            request.fail(function (jqxhr, textStatus)
+            {            
+                htmlobj.stopPage();
+                alert("Error : Ajax List Error" );
+            });
+        };
+        relayobj.setip = function(){
+            
+        };
         relayobj.CallAjax = function(url,method, data, datatype){             
             var request = $.ajax({
                 type: method,

@@ -4,8 +4,11 @@ html, body{
     min-width: 1024px; /* this is the important part*/
 }
 #div_relay_create_control{position: relative;height: 50px;width: 100%;}
-#div_relay_table{margin: 20px auto; width: 1024px}
-#div_control_table{position: relative;margin: 20px auto; width: 1024px}
+#div_option{margin: 20px auto; width: 1024px; height: 40px}
+#div_relay_control{display: none; margin: 20px auto; width: 1024px}
+#div_ip_control{margin: 20px auto; width: 1024px}
+/*#div_relay_table{margin: 20px auto; width: 1024px}*/
+/*#div_control_table{position: relative;margin: 20px auto; width: 1024px}*/
 a {text-decoration: none;}
 .btn-dark {
     display: inline-block;
@@ -79,6 +82,7 @@ input[type="text"]{
     -o-transition: border linear 0.2s, box-shadow linear 0.2s;
     transition: border linear 0.2s, box-shadow linear 0.2s;
 }
+.iptext{width: 180px; height: 20px}
 table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
@@ -91,4 +95,27 @@ table tr:nth-child(even) {
 }
 table tr:nth-child(odd) {
    background-color:#fff;
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) {  /*safari and chrome*/
+    select {
+        width:120px;
+        height:30px;
+        line-height:30px;
+        background:#f4f4f4;
+    } 
+}
+select::-moz-focus-inner { /*Remove button padding in FF*/ 
+    border: 0;
+    padding: 0;
+}
+@-moz-document url-prefix() { /* targets Firefox only */
+    select {
+        padding: 15px 0!important;
+    }
+}        
+@media screen\0 { /* IE Hacks: targets IE 8, 9 and 10 */        
+    select {
+        height:30px;
+        line-height:30px;
+    }     
 }
