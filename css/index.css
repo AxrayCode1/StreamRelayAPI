@@ -3,12 +3,12 @@ html, body{
     padding:0;
     min-width: 1024px; /* this is the important part*/
 }
-#div_relay_create_control{position: relative;height: 50px;width: 100%;}
-#div_option{margin: 20px auto; width: 1024px; height: 40px}
-#div_relay_control{display: none; margin: 20px auto; width: 1024px}
-#div_ip_control{margin: 20px auto; width: 1024px}
-/*#div_relay_table{margin: 20px auto; width: 1024px}*/
-/*#div_control_table{position: relative;margin: 20px auto; width: 1024px}*/
+#div_relay_create_control{position: relative;height: 42px;width: 100%;}
+#div_option{position: relative;height: 50px;width: 100%;}
+#div_relay_control{position: relative; width: 100%}
+#div_ip_control{position: relative; width: 100%}
+/*#div_relay_table{margin: 20px auto;width: 1024px}*/
+#div_control_table{margin-top: 10px}
 a {text-decoration: none;}
 .btn-dark {
     display: inline-block;

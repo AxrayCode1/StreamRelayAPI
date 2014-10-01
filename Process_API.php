@@ -47,7 +47,7 @@ class Process_API
         foreach ($output as $str)
         {
             $str_arr=explode(" ",$str);
-            $ouputarr[] = array('id'=>$str_arr[0],'source'=>$str_arr[1],'dest'=>$str_arr[2]);           
+            $ouputarr[] = array('id'=>$str_arr[0],'source'=>$str_arr[1],'dest'=>$str_arr[2],'status'=>$str_arr[3]);           
         }
         return $ouputarr;
     }
@@ -85,7 +85,7 @@ class Process_API
         $ipsetlist = array();
         $gatewaysetlist = array();
         $dnssetlist = array();
-        $exu_str = 'sudo /var/www/html/ifcfg.sh set';        
+        $exu_str = 'sudo /var/www/html/ifcfg.sh ';        
         foreach($inputjson as $key=>$item)
         {
             switch ($key)
@@ -162,7 +162,37 @@ class Process_API
         if(!$result_ip || !$result_gateway || !$result_dns)
             return false;
         else
+        {
+            foreach ($ipsetlist as $setipitem)
+            {
+                $sExuSetIP = $exu_str.'set IP '.$setipitem['name'];
+                if($setipitem['ip'] == '')                                
+                    $sExuSetIP .= ' DEL DEL';
+                else
+                    $sExuSetIP .= ' '.$setipitem['ip'].' '.$setipitem['mask'];                
+                exec($sExuSetIP,$output);
+            }
+            foreach ($gatewaysetlist as $setgatewayitem)
+            {
+                $sExuSetGateway = $exu_str.'set Gateway';
+                if($setgatewayitem['ip'] == '')                                
+                    $sExuSetGateway .= ' DEL DEL';
+                else
+                    $sExuSetGateway .= ' '.$setgatewayitem['ip'].' '.$setgatewayitem['bindport'];                
+                exec($sExuSetGateway,$output);
+            }
+            foreach ($dnssetlist as $setdnsitem)
+            {
+                $sExuSetDNS = $exu_str.'set DNS';
+                if($setdnsitem['ip'] == '')                                
+                    $sExuSetDNS .= ' DEL DEL';
+                else
+                    $sExuSetDNS .= ' '.$setdnsitem['ip'];                 
+                exec($sExuSetDNS,$output);
+            }            
+            exec($exu_str.'restart all',$output);
             return true;
+        }
     }
     
     function valiate_ip_gateway_same_lan($gateway,$ip,$mask)

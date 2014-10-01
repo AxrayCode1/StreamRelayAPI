@@ -16,6 +16,10 @@ switch (count($url))
                         $result = $proc_api -> create(file_get_contents("php://input"));
                         if(!result)
                             http_response_code(404);
+                        else
+                        {
+                            echo '{}';
+                        }
                         break;
                     default :
                         http_response_code(404);
@@ -24,11 +28,12 @@ switch (count($url))
             case 'resume':     
                 switch($_SERVER['REQUEST_METHOD'])
                 {
-                    case 'POST':
-                        echo 1;
+                    case 'POST':                        
                         $result = $proc_api->resume(file_get_contents("php://input"));
                         if(!result)
                             http_response_code(404);
+                        else                        
+                            echo '{}';                                                                            
                         break;
                     default :
                         http_response_code(404);
@@ -64,6 +69,7 @@ switch (count($url))
                 {
                     case 'DELETE':
                         $proc_api ->deldata($url[1]);
+                        echo '{}';
                         break;
                     default :
                         http_response_code(404);
@@ -78,5 +84,3 @@ switch (count($url))
         http_response_code(404);
         break;                        
 }
-
-

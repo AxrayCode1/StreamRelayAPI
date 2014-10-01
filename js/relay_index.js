@@ -40,15 +40,25 @@ MyError.prototype = new Error();
 MyError.prototype.constructor = MyError;
 function init()
 {
+    var DivChannel = $('#div_relay_control');
+    var DivIP = $('#div_ip_control');
+    DivIP.hide();
     $('#btn_refresh').click(function () {
         action_Relay.getRelayList();
     });
     $('#btn_create').click(function(){
         createAction();
     });    
-    $('#a_btn_ip_setting').click(function(){
+    $('#ise').click(function(){      
+        DivChannel.hide();
+        DivIP.show();        
         action_Relay.listip();
     }); 
+    $('#rl').click(function(){
+        DivIP.css('display','none');
+        DivChannel.css('display','inline');
+        action_Relay.getRelayList();
+    });
     $('#btn_ip_confirm').click(function(){
         SetIPAction();
     }); 
@@ -59,9 +69,30 @@ function init()
 function SetIPAction()
 {
     var regexIP=/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    var bCheckHaveInputIP;
     var bInputIP = false;
+    var bInputGateway = false;
+    var bInputDNS = false;
     var sJsonIP = '';
+    var sJsonGateway = '';
+    var sJsonDNS = '';
+    var aGateway = [];
+    var aIP = [];
+    var aMask = [];
+    $.each(GatewayList,function(index,element){
+       if($('#Gateway' + element['id']).val().length > 0 && !regexIP.test($('#Gateway' + element['id']).val()))
+       {
+           alert("Gateway's IP format error.");
+           return false;
+       }
+       bInputGateway = true;
+       sJsonGateway += '{"ip":"' +  $('#Gateway' + element['id']).val() + '","bindport":"' + $('#GatewaySelect' + element['id']).select().val() +'"}';       
+       return false;
+    });
+    if(!bInputGateway)
+        return false;
     $.each( IPList, function( index, element ) { 
+        bInputIP = false;
         if($('#IPMask'+element['id']).val().length > 0)
         {
             if(regexIP.test($('#IPMask'+element['id']).val()) === false)
@@ -74,7 +105,26 @@ function SetIPAction()
                 alert(element['displayname'] + "'s IP format error.");                
                 return false;
             }
-            bInputIP = true;
+            bCheckHaveInputIP = true;              
+            if($('#Gateway' + GatewayList[0]['id']).val().length > 0 && $('#GatewaySelect' + GatewayList[0]['id']).select().val()==element['name'])
+            {
+                aGateway = $('#Gateway' + GatewayList[0]['id']).val().split('.');
+                aIP = $('#IP'+element['id']).val().split('.');
+                aMask = $('#IPMask'+element['id']).val().split('.');
+                var iIPAndMask1 = aIP[0] & aMask[0];
+                var iIPAndMask2 = aIP[1] & aMask[1];
+                var iIPAndMask3 = aIP[2] & aMask[2];
+                var iIPAndMask4 = aIP[3] & aMask[3];
+                var iGatewayAndMask1 = aGateway[0] & aMask[0];
+                var iGatewayAndMask2 = aGateway[1] & aMask[1];
+                var iGatewayAndMask3 = aGateway[2] & aMask[2];
+                var iGatewayAndMask4 = aGateway[3] & aMask[3];
+                if(iIPAndMask1 != iGatewayAndMask1 || iIPAndMask2 != iGatewayAndMask2 || iIPAndMask3 != iGatewayAndMask3 || iIPAndMask4 != iGatewayAndMask4)
+                {
+                    alert(element['displayname'] + "'s IP and Gateway's IP are not the same lan.");
+                    return false;
+                }
+            }                      
         }
         else
         {
@@ -83,17 +133,33 @@ function SetIPAction()
                 alert("Please input " + element['displayname'] + "'s mask.");
                 return false;
             }
-        }
-        if(!bInputIP)
-        {
-            alert("Please input ip and mask of one nic.")
-            return false;
-        }
+        }                
+        bInputIP = true;
         if(index != 0)
             sJsonIP += ',';
-        sJsonIP += '{"name":"' + element['name'] + '","ip":"' + element['ip'] + '","mask":"' + element['mask'] + '"}'
+        sJsonIP += '{"name":"' + element['name'] + '","ip":"' + $('#IP'+element['id']).val() + '","mask":"' + $('#IPMask'+element['id']).val() + '"}';
+    });  
+    if(!bCheckHaveInputIP)
+    {
+        alert("Please input ip and mask of one nic.")
+        return false;
+    }
+    if(!bInputIP)
+        return false;
+    
+    $.each(DNSList,function(index,element){           
+       if($('#DNS' + element['id']).val().length > 0 && !regexIP.test($('#DNS' + element['id']).val()))
+       {
+           alert("DNS's IP format error.");
+           return false;
+       }
+       bInputDNS = true;
+       sJsonDNS += '{"ip":"' +  $('#DNS' + element['id']).val() + '"}';
+       return false;
     });
-    alert(sJsonIP);
+    if(!bInputDNS)
+        return false;
+    action_Relay.setip(sJsonIP,sJsonGateway,sJsonDNS);
 }
 function createAction()
 {
@@ -156,8 +222,13 @@ var CreateHtml = {
                 relayList[index]=tmp_relay_item;                
                 var append_str = ''                 
                 append_str += '<tr>';
+                append_str += '<td style="text-align:center">' +  (index+1) + '</td>';
                 append_str += '<td>' +  element['source'] + '</td>';
-                append_str += '<td>' +  element['dest'] + '</td>';                
+                append_str += '<td>' +  element['dest'] + '</td>';    
+                if(element['status'] == 0)
+                    append_str += '<td>Not Ready</td>';       
+                else
+                    append_str += '<td>Ready</td>';       
                 append_str += '<td>';
                 append_str += '<a href="#" class="btn-light delete" id="' +  index + '">Delete</a>'
                 if(port != '')
@@ -281,6 +352,14 @@ var CreateHtml = {
         createobj.blockPage = function(){
             $.blockUI();
         }
+        createobj.blockPageMsg = function(msg){     
+            msg = '<h2>' + msg + '</h2>';
+            $.blockUI({message:msg,css: { padding:0,margin:0,width:'20%',top:'40%',left:'35%',textAlign:'center',
+				color:		'#000',
+				border:		'3px solid #aaa',
+				backgroundColor:'#fff',
+				cursor:		'wait'}});
+        }
         createobj.stopPage = function(){
             $(document).ajaxStop($.unblockUI);
         }
@@ -339,7 +418,6 @@ var Relay = {
         };     
         relayobj.resumeRelay = function(id,source,port,channelname){
             try{
-//                alert(id);
                 var jsonrequest = '{"Source":"' + source + '","Port":' + port + ',"ChannelName":"' + channelname +  '","ID":"' + id +'"}';
                 var request = relayobj.CallAjax("relay/resume","POST", jsonrequest, "json");
                 htmlobj.blockPage();
@@ -370,11 +448,46 @@ var Relay = {
             request.fail(function (jqxhr, textStatus)
             {            
                 htmlobj.stopPage();
-                alert("Error : Ajax List Error" );
+                alert("Error : Ajax List IP Error" );
             });
         };
-        relayobj.setip = function(){
-            
+        relayobj.setip = function(sJsonIP,sJsonGateway,sJsonDNS){            
+            var sJsonRequest = '{"IP":[' + sJsonIP + '],"Gateway":[' + sJsonGateway + '],"DNS":[' + sJsonDNS + ']}';
+            htmlobj.blockPageMsg("Please redirect new IP Address.");
+            var request = relayobj.CallAjax("ip/set","POST", sJsonRequest, "json");            
+            request.done(function (msg, statustext, jqxhr)
+            {                                           
+                if(jqxhr.status !== 400)
+                {                    
+                }
+                else
+                {
+                    htmlobj.stopPage();
+                    alert("Error : Set IP Error" );
+                }
+            });
+            request.fail(function (jqxhr, textStatus)
+            {                               
+                if(jqxhr.status !== 400)
+                {                   
+                }
+                else
+                {
+                    htmlobj.stopPage();
+                    alert("Error : Set IP Error" );
+                }
+                
+            });
+        };
+        relayobj.CallAjaxNoAsync = function(url,method, data, datatype){             
+            var request = $.ajax({
+                type: method,
+                url: url,
+                data: data,
+                dataType: datatype,
+                async: false
+            });
+            return request;
         };
         relayobj.CallAjax = function(url,method, data, datatype){             
             var request = $.ajax({

@@ -25,7 +25,7 @@ switch (count($url))
                 {
                     case 'POST':
                         //Input Json : {"IP":[{"name":"eth1","ip":"192.168.94.208","mask":"255.255.248.0"},{"name":"eth2","ip":"192.168.12.78","mask":"255.255.255.0"}],"Gateway":[{"ip":"","bindport":""}],"DNS":[{"ip":"168.95.192.1"},{"ip":"8.8.8.8"}]}
-                        $result = $proc_api ->setip(file_get_contents("php://input")); 
+                        $result = $proc_api ->setip(file_get_contents("php://input"));
                         if(!$result)
                             http_response_code(400);
                         break;
@@ -37,33 +37,8 @@ switch (count($url))
                 http_response_code(404);
                 break;
         }
-        break;
-    case 2:        
-        switch ($url[0])
-        {            
-            case 'delete':                
-                if(strlen($url[1]) <= 0)
-                {
-                    http_response_code(404);
-                    return;
-                }
-                switch($_SERVER['REQUEST_METHOD'])
-                {
-                    case 'DELETE':
-                        $proc_api ->deldata($url[1]);
-                        break;
-                    default :
-                        http_response_code(404);
-                }
-                break;
-            default :
-                http_response_code(404);
-                break;
-        }
-        break;
+        break;   
     default :
         http_response_code(404);
         break;                        
 }
-
-
