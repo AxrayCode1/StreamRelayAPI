@@ -6,12 +6,13 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>Relay Setting</title>
+        <title>AcroRed TV Relay Station</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="js/jquery-1.7.2.min.js"></script>
         <script src="js/jquery.blockUI.js"></script>
         <script src="js/relay_index.js"></script>
+        <script src="js/tvcloud.js"></script>
         <link href="css/index.css" rel="stylesheet">
     </head>
     <body>
@@ -21,24 +22,50 @@ and open the template in the editor.
             </div>
 
             <div style=" position: absolute; z-index:2; left: 0px; top:0px; width: 100%; height: 40px; color: white; text-align:center; line-height:40px; font-size:larger; font-weight:600; background-image: linear-gradient( to bottom , #FF0D0D 0%, #6B0404 100%); box-shadow: #666 0px 2px 3px;">
-                AcroRed TV Network Manager
+                TV Relay Station
             </div>
 
             <div style="position: absolute; left: 80%; top:25px; width: 20%; height: 10px; z-index:4; font-size:10px; color:white; text-align:right;">
                 version:0.1.1-001
             </div> 
+            
         </div>
-        <div id="div_option">
-            <a id="a_btn_channel_setting" href="#" class="btn-light">Channel Setting</a>
-            <a id="a_btn_ip_setting" style="margin-left: 10px" href="#" class="btn-light">IP Setting</a>
+        <div id="div_option" >
+            <div style="position: absolute; z-index:2; left: 0px; width: 100%; height: 30px; background-image: linear-gradient( to bottom , #F8FF3B 0%, #EFDF00 100%); box-shadow: #666 0px 2px 3px;">	
+            </div>
+            <div id="rl" style="position: absolute; z-index:2; left: 120px; width: 130px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('rl');" onmouseout="mouseout_b('rl');">
+                <img src="img/list.jpg" height="20" width="20" align="center" /> Relay List
+            </div>             
+
+            <div id="ise" style="position: absolute; z-index:2; left: 250px; width: 130px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('ise');" onmouseout="mouseout_b('ise');">
+                <img src="img/socket.png" height="20" width="20" align="center" /> IP Setting
+            </div>
+
+            <!--<div id="ss" style="position: absolute; z-index:2; left: 380px; width: 130px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('ss');" onmouseout="mouseout_b('ss');">
+        	<img src="img/config.png" height="20" width="20" align="center" /> Sys. Setup
+            </div>
+    
+            <div id="per" style="position: absolute; z-index:2; left: 510px; width: 150px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('per');" onmouseout="mouseout_b('per');">
+                <img src="img/performance.png" height="20" width="20" align="center" /> Performance
+            </div>
+
+            <div id="el" style="position: absolute; z-index:2; left: 660px; width: 130px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('el');" onmouseout="mouseout_b('el');">
+                <img src="img/log.png" height="20" width="20" align="center" /> Event Log.
+            </div>
+
+            <div id="lo" style="position: absolute; z-index:2; left: 790px; width: 100px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('lo');" onmouseout="mouseout_b('lo');">
+                <img src="img/logout-512.png" height="20" width="20" align="center" /> Logout
+            </div>-->                           
         </div>
         <div id="div_relay_control">
             <div id="div_relay_table">
-                <table id="table_relay" style="width:100%; position: relative">
+                <table id="table_relay" style="width: 100%">
                     <tr>
-                        <th width="40%">Source</th>
-                        <th width="40%">Destination</th>		
-                        <th width="20%">Action</th>
+                        <th width="3%"></th>
+                        <th width="35%">Source</th>
+                        <th width="35%">Destination</th>
+                        <th width="10%">Status</th>
+                        <th width="17%">Action</th>
                     </tr>               
                 </table>
             </div>
