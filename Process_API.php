@@ -11,8 +11,13 @@ class Process_API
             $exu_str.=$inputjson['Source'];
             $exu_str.=' ';
             $exu_str.=$inputjson['Port'];
-            $exu_str.=' ';
-            $exu_str.=$inputjson['ChannelName'];            
+            $exu_str.=' -cn="';
+            $exu_str.=$inputjson['ChannelName'];
+            $exu_str.='" -cd="';
+            $exu_str.=$inputjson['Remark1'];
+            $exu_str.='" -rd="';
+            $exu_str.=$inputjson['Remark2'];
+            $exu_str.='"';
             exec($exu_str,$output);         
             $result = true;
         }
@@ -32,8 +37,8 @@ class Process_API
         $inputjson = json_decode($jsondata,true);
         if(!(strlen($inputjson['Source']) <=0 || strlen($inputjson['Port']) <=0))
         {            
-            $this->deldata($inputjson['ID']);
-            $this->create($jsondata);
+            $exu_str = "sudo /var/www/html/relay.exe restart ".$inputjson['ID'];
+            exec($exu_str,$output);
             $result = true;
         }
         return $result;
@@ -46,8 +51,10 @@ class Process_API
         exec($exu_str,$output);
         foreach ($output as $str)
         {
-            $str_arr=explode(" ",$str);
-            $ouputarr[] = array('id'=>$str_arr[0],'source'=>$str_arr[1],'dest'=>$str_arr[2],'status'=>$str_arr[3]);           
+            $str_arr=explode(" ",$str);            
+            //substr($str_arr[4],1,  strlen($str_arr[4])-1)
+            //substr($str_arr[5],1,strlen($str_arr[5])-1)            
+            $ouputarr[] = array('id'=>$str_arr[0],'source'=>$str_arr[1],'dest'=>$str_arr[2],'status'=>$str_arr[3],'remark1'=>substr($str_arr[4],1,  strlen($str_arr[4])-2),'remark2'=>substr($str_arr[5],1,strlen($str_arr[5])-2));           
         }
         return $ouputarr;
     }

@@ -87,13 +87,20 @@ table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
 }
-th, td {
+th{    
+     background: #96f8ff;
+    font-weight:bolder;
+    height: 25px;
+}
+th, td {    
+   
+    font-family:"Times New Roman";
     padding: 5px;
 }
-table tr:nth-child(even) {
+table tr:nth-child(odd) {
     background-color: #eee;
 }
-table tr:nth-child(odd) {
+table tr:nth-child(even) {
    background-color:#fff;
 }
 @media screen and (-webkit-min-device-pixel-ratio:0) {  /*safari and chrome*/
@@ -121,5 +128,9 @@ select::-moz-focus-inner { /*Remove button padding in FF*/
 }
 
 legend {
-  color:blue;
+    color:blue;
+}
+
+.div_fieldcontent{
+    margin-left: 40px
 }

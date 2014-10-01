@@ -167,6 +167,25 @@ function createAction()
     var source = $('#Source').val();
     var port = $('#Port').val();
     var name = $('#ChannelName').val();
+    var sRemark1 = $('#Remark1').val();
+    var sRemark2 = $('#Remark2').val();
+    var whitespace = " ";
+    var sDot = ","
+    if(name.indexOf(whitespace) != -1 || name.indexOf(sDot) != -1)
+    {
+        alert("Error : Can't input whitespace and ',' in Channel Name." );
+        return;
+    }    
+    if(sRemark1.indexOf(whitespace) != -1 || sRemark1.indexOf(sDot) != -1)
+    {
+        alert("Error : Can't input whitespace and ',' in Remark1." );
+        return;
+    }  
+    if(sRemark2.indexOf(whitespace) != -1 || sRemark2.indexOf(sDot) != -1)
+    {
+        alert("Error : Can't input whitespace and ',' in Remark2." );
+        return;
+    }  
     if(source.length  == 0)    
     {
         alert("Error : Please input Source" );
@@ -187,7 +206,7 @@ function createAction()
     });
     if(!flag)
         return;
-    action_Relay.createRelay(source,port,name);
+    action_Relay.createRelay(sRemark1,sRemark2,source,port,name);
 }
 
 var CreateHtml = {
@@ -222,13 +241,15 @@ var CreateHtml = {
                 relayList[index]=tmp_relay_item;                
                 var append_str = ''                 
                 append_str += '<tr>';
-                append_str += '<td style="text-align:center">' +  (index+1) + '</td>';
+                append_str += '<td style="text-align:center">' +  (index+1) + '</td>';                
                 append_str += '<td>' +  element['source'] + '</td>';
-                append_str += '<td>' +  element['dest'] + '</td>';    
+                append_str += '<td>' +  element['dest'] + '</td>';                    
                 if(element['status'] == 0)
                     append_str += '<td>Not Ready</td>';       
                 else
                     append_str += '<td>Ready</td>';       
+                append_str += '<td>' +  element['remark1'] + '</td>';
+                append_str += '<td>' +  element['remark2'] + '</td>'; 
                 append_str += '<td>';
                 append_str += '<a href="#" class="btn-light delete" id="' +  index + '">Delete</a>'
                 if(port != '')
@@ -303,13 +324,13 @@ var CreateHtml = {
             var rtnhtml = '<fieldset ';
             if(bmarge)
                 rtnhtml += 'style="margin-top:10px"'
-            rtnhtml += '><legend style="">' + displayname + '</legend>IP : <input id="IP' + id +'" type="text" class="iptext" value="' + ip + '"><br><br>Mask : <input class="iptext" id="IPMask' + id + '" type="text" value="' + mask + '"><br></fieldset>';
+            rtnhtml += '><legend style="">' + displayname + '</legend><div class="div_fieldcontent">IP : <input id="IP' + id +'" type="text" class="iptext" value="' + ip + '"><br><br>Mask : <input class="iptext" id="IPMask' + id + '" type="text" value="' + mask + '"><br></div></fieldset>';
             return rtnhtml;
         };
         createobj.CreateGatewayHtml = function(id,ip,bindport){
             var rtnhtml = '<fieldset ';            
             rtnhtml += 'style="margin-top:10px"';
-            rtnhtml += '><legend>Gateway</legend>IP : <input id="Gateway' + id +'" type="text" class="iptext" value="' + ip + '"><br><br>';
+            rtnhtml += '><legend>Gateway</legend><div class="div_fieldcontent">IP : <input id="Gateway' + id +'" type="text" class="iptext" value="' + ip + '"><br><br>';
             rtnhtml += 'Bind NIC Port : <select id="GatewaySelect' + id + '">';
             $.each(IPList, function( ipindex, ipelement )
             {
@@ -324,14 +345,14 @@ var CreateHtml = {
                 else
                     rtnhtml += '<option value="' + ipelement['name'] + '">' + ipelement['displayname'] + '</option>';                    
             });
-            rtnhtml += '<br></fieldset>';
+            rtnhtml += '<br></div><fieldset>';
             return rtnhtml; 
         }
         createobj.CreateDNSHtml = function(id,ip)
         {
             var rtnhtml = '<fieldset ';            
             rtnhtml += 'style="margin-top:10px"'
-            rtnhtml += '><legend>DNS</legend>IP : <input id="DNS' + id +'" type="text" class="iptext" value="' + ip + '"><br></fieldset>';
+            rtnhtml += '><legend>DNS</legend><div class="div_fieldcontent">IP : <input id="DNS' + id +'" type="text" class="iptext" value="' + ip + '"><br></div</fieldset>';
             return rtnhtml;
         }
         createobj.rebindDeleteEvert = function(){
@@ -388,15 +409,15 @@ var Relay = {
                 alert("Error : Ajax List Error" );
             });
         };
-        relayobj.createRelay = function(source,port,channelname){ 
+        relayobj.createRelay = function(remark1,remark2,source,port,channelname){ 
             
-            var jsonrequest = '{"Source":"' + source + '","Port":' + port + ',"ChannelName":"' + channelname +  '"}';
+            var jsonrequest = '{"Remark1":"' + remark1 + '","Remark2":"' + remark2 + '","Source":"' + source + '","Port":' + port + ',"ChannelName":"' + channelname +  '"}';
             var request = relayobj.CallAjax("relay/create","POST", jsonrequest, "json");
             htmlobj.blockPage();
             request.done(function (msg, statustext, jqxhr)
             {           
                 htmlobj.stopPage();
-                alert('Success');
+//                alert('Success');
                 relayobj.getRelayList();
             });
             request.fail(function (jqxhr, textStatus)
