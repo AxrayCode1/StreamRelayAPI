@@ -303,7 +303,7 @@ var CreateHtml = {
             var rtnhtml = '<fieldset ';
             if(bmarge)
                 rtnhtml += 'style="margin-top:10px"'
-            rtnhtml += '><legend>' + displayname + '</legend>IP : <input id="IP' + id +'" type="text" class="iptext" value="' + ip + '"><br><br>Mask : <input class="iptext" id="IPMask' + id + '" type="text" value="' + mask + '"><br></fieldset>';
+            rtnhtml += '><legend style="">' + displayname + '</legend>IP : <input id="IP' + id +'" type="text" class="iptext" value="' + ip + '"><br><br>Mask : <input class="iptext" id="IPMask' + id + '" type="text" value="' + mask + '"><br></fieldset>';
             return rtnhtml;
         };
         createobj.CreateGatewayHtml = function(id,ip,bindport){

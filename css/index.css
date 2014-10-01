@@ -119,3 +119,7 @@ select::-moz-focus-inner { /*Remove button padding in FF*/
         line-height:30px;
     }     
 }
+
+legend {
+  color:blue;
+}
