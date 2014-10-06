@@ -24,4 +24,20 @@ jQuery(function ($) {
             setTimeout(function(){$('.yes').show();}, 8000);
             return false;
 	});
+      var progressbar = $( "#progressbar" ),
+      progressLabel = $( ".progress-label" ); 
+    progressbar.progressbar({
+        max:1024,
+      value: 10,
+      change: function() { 
+          var oPG = $(this);
+            progressLabel.text( oPG.progressbar("option","value") + '/' + oPG.progressbar( "option", "max" ) );
+      },
+//      complete: function() {
+//        progressLabel.text( "Complete!" );
+//      }
+    });
+    
+//    progressbar.progressbar( "value", 0);
+    progressbar.progressbar( "value", 1024 );
 });

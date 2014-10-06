@@ -23,8 +23,7 @@
 #progressbar
 {
     position:absolute;
-    top:276px;
-    left:360px;
+    top:100px;
     width:450px; 
     height: 25px;
 }
