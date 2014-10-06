@@ -1,6 +1,6 @@
 <?php
-include_once('Process_API.php');
-include_once('api_global_function.php');
+include_once('include/Process_API.php');
+include_once('include/api_global_function.php');
 
 $url=explode("/",$_GET["api"]);
 $proc_api = new Process_API();
