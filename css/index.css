@@ -249,7 +249,7 @@ border-color: #357ebd;
 
 #uploadFile{
     font-size: 15px; 
-    width: 195px;
+    width: 250px;
     height: 30px
 }
 
@@ -264,4 +264,39 @@ input:-moz-placeholder {   /* Older versions of Firefox */
 }
 input:-ms-input-placeholder { 
     padding-left: 5px;
+}
+
+#modal_update_progress_content {display:none;}
+
+/* Overlay */
+#simplemodal-overlay {background-color:#000;}
+
+/* Container */
+#simplemodal-container {height:400px; width:560px; color:#bbb; background-color:#333; border:4px solid #444; padding:12px;}
+#simplemodal-container .simplemodal-data {padding:8px;}
+/*#simplemodal-container a.modalCloseImg {background:url(../img/basic/x.png) no-repeat; width:25px; height:29px; display:inline; z-index:3200; position:absolute; top:-15px; right:-16px; cursor:pointer;}*/
+#simplemodal-container h3 {color:#84b8d9;}
+
+#progressbar
+{
+    position:absolute;
+    left: 100px;
+    width:400px; 
+    height: 25px;
+    top: -5px;
+}
+
+.progress-label 
+{
+    position: absolute;    
+    top: 2px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #fff;
+    text-align: center;
+    width:400px;
+}
+
+.scrollit {
+    overflow:auto;
+    height:100px;
 }

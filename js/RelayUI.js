@@ -17,7 +17,7 @@ function MyError(message) {
 MyError.prototype = new Error();
 MyError.prototype.constructor = MyError;
 
-function init() {
+function main() {
     var OUIControl = UIControl.createNew();
     OUIControl.Init();
 }
@@ -59,12 +59,12 @@ var UIControl = {
             $('#btn_ip_cancel').click(function() {
                 UIObj.GetIPList();
             });
-            $('#file_test').change(function(event){                
+            $('#file_mass_create').change(function(event){                
                 $('#uploadFile').val($(this).val());
                 UIObj.FileBindChangeEvent(event);
             });
-            $('#btn_create').click(function() {                        
-                UIObj.MassFileParserAction();        
+            $('#btn_mass_create').click(function() {                        
+                UIObj.MassFileCreateAction();        
             });
         };
         
@@ -119,7 +119,7 @@ var UIControl = {
         };
         
         UIObj.ResumeRelay = function(index){
-            var request = action_Relay.deleteRelay(relayList[index]['id'], relayList[index]['source'], relayList[index]['port'], relayList[index]['channelname']);   
+            var request = action_Relay.resumeRelay(relayList[index]['id'], relayList[index]['source'], relayList[index]['port'], relayList[index]['channelname']);   
             UIObj.CallBackResumeRelay(request);
         };
         
@@ -141,8 +141,8 @@ var UIControl = {
             HtmlObj.blockPage();
             request.done(function(msg, statustext, jqxhr) {
                 HtmlObj.stopPage();
-                HtmlObj.EmptyIPDiv()();
-                HtmlObj.appendTable(msg);               
+                HtmlObj.EmptyIPDiv();
+                HtmlObj.appendIPDiv(msg);               
             });
             request.fail(function(jqxhr, textStatus) {
                 HtmlObj.stopPage();
@@ -241,16 +241,16 @@ var UIControl = {
         }
         
         UIObj.CallBackSetIP=function(request){
-            htmlobj.blockPageMsg("Please redirect new IP Address.");            
+            HtmlObj.blockPageMsg("Please redirect new IP Address.");            
             request.done(function(msg, statustext, jqxhr) {
                 if (jqxhr.status !== 400) {} else {
-                    htmlobj.stopPage();
+                    HtmlObj.stopPage();
                     alert("Error : Set IP Error");
                 }
             });
             request.fail(function(jqxhr, textStatus) {
                 if (jqxhr.status !== 400) {} else {
-                    htmlobj.stopPage();
+                    HtmlObj.stopPage();
                     alert("Error : Set IP Error");
                 }
 
@@ -263,9 +263,7 @@ var UIControl = {
             var port = $('#Port').val();
             var name = $('#ChannelName').val();
             var sRemark1 = $('#Remark1').val();
-            var sRemark2 = $('#Remark2').val();
-            var whitespace = " ";
-            var sDot = ",";
+            var sRemark2 = $('#Remark2').val();            
             if (!UIObj.VerifyRelayInput(name)) {
                 alert("Error : Can't input whitespace and ',' in Channel Name.");
                 return;
@@ -300,6 +298,8 @@ var UIControl = {
         
         UIObj.VerifyRelayInput = function(Input_Data)
         {
+            var whitespace = " ";
+            var sDot = ",";
             if (Input_Data.indexOf(whitespace) !== -1 || Input_Data.indexOf(sDot) !== -1)
                 return false;
             else
@@ -316,7 +316,7 @@ var UIControl = {
             HtmlObj.blockPage();
             request.done(function(msg, statustext, jqxhr) {
                 HtmlObj.stopPage();                
-                HtmlObj.getRelayList();
+                UIObj.GetRelayList();
             });
             request.fail(function(jqxhr, textStatus) {
                 HtmlObj.stopPage();
@@ -327,36 +327,66 @@ var UIControl = {
         UIObj.FileBindChangeEvent = function(event){  
             if (window.File && window.FileReader && window.FileList && window.Blob) {
                 sMassCreateStr = '';
-                var filelist = event.target.files;
-                var str = "";
-                for(var i = 0; i < filelist.length ; i++ ) {
-                    var file = filelist[i];
-                    str += "name：" + escape(file.name) + "\n" + //檔名
-                           "type：" + file.type + "\n" +  //檔案類型
-                           "size：" + file.size + "\n" +  //檔案大小
-                           "lastModifiedDate：" + file.lastModifiedDate.toLocaleDateString() + "\n\n\n"; //最後修改日期              
-
-
-                }    
-                alert(str);
+                var filelist = event.target.files;                
+                $('#uploadFile').val(filelist[0].name);
                 file = filelist[0];    
                 var reader = new FileReader();
                 reader.onload = function() {
-                    sMassCreateStr = reader.result;
-                    alert(sMassCreateStr);
+                    sMassCreateStr = reader.result;                    
                 };
                 reader.readAsText(file);
             }
         };
 
-        UIObj.MassFileParserAction = function () {
+        UIObj.MassFileCreateAction = function () {
+            $('#uploadFile').val('');
+            $('#file_mass_create').val('');
             if (window.File && window.FileReader && window.FileList && window.Blob) {
-                alert("support");
-            } else {
-                alert('Please Change Your Browser.Your Browser is not support File API.');
+                if(sMassCreateStr.length === 0)
+                {
+                    alert("Please select a file to create.");
+                    return false;
+                }                
+                var aMassCreate = sMassCreateStr.split('\n');
+                if(aMassCreate.length > 1001)
+                {
+                    alert("You can olny create 1000 Items at the same time.");
+                    return false;
+                }
+                UIObj.MassEntryDialog(aMassCreate);
+            } 
+            else {
+                alert('Please Change Your Browser.Your Browser is not support File API.');               
             }
         };
         
+        UIObj.MassEntryDialog = function(aMassCreateItem)
+        {
+            var progressbar = $( "#progressbar" );
+            var progressLabel = $( ".progress-label" ); 
+            var iTotalCreate = aMassCreateItem.length - 1;      
+            progressLabel.text("0/" + iTotalCreate);
+            progressbar.progressbar({
+                max:iTotalCreate,
+                value:0,
+                change: function() { 
+                    var oPG = $(this);
+                    progressLabel.text( oPG.progressbar("option","value") + '/' + oPG.progressbar( "option", "max" ) );
+                },
+//              complete: function() {
+//              progressLabel.text( "Complete!" );
+//              }
+            });  
+            $('#modal_update_progress_content').modal({
+                escClose : false,
+                onShow: function () {
+                    var modal = this;			
+                    $('#closedialog').click(function () {								
+                        modal.close();
+                    });
+		}
+            });            
+        };        
         return UIObj;
     }    
 };
