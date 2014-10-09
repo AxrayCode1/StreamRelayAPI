@@ -2,23 +2,23 @@ var Relay = {
     createNew: function() {
         var relayobj = {};        
         relayobj.getRelayList = function() {
-            var request = relayobj.CallAjax("relay/list", "GET", '', "json");
+            var request = relayobj.CallAjax("/relay/list", "GET", '', "json");
             return request;
             
         };
         relayobj.createRelay = function(remark1, remark2, source, port, channelname) {
             var jsonrequest = '{"Remark1":"' + remark1 + '","Remark2":"' + remark2 + '","Source":"' + source + '","Port":' + port + ',"ChannelName":"' + channelname + '"}';
-            var request = relayobj.CallAjax("relay/create", "POST", jsonrequest, "json");
+            var request = relayobj.CallAjax("/relay/create", "POST", jsonrequest, "json");
             return request;            
         };
         relayobj.deleteRelay = function(deleteID) {
-            var request = relayobj.CallAjax("relay/delete/" + deleteID, "DELETE", "", "json");
+            var request = relayobj.CallAjax("/relay/delete/" + deleteID, "DELETE", "", "json");
             return request;           
         };
         relayobj.resumeRelay = function(id, source, port, channelname) {
             try {
                 var jsonrequest = '{"Source":"' + source + '","Port":' + port + ',"ChannelName":"' + channelname + '","ID":"' + id + '"}';
-                var request = relayobj.CallAjax("relay/resume", "POST", jsonrequest, "json");
+                var request = relayobj.CallAjax("/relay/resume", "POST", jsonrequest, "json");
                 return request;
                 htmlobj.blockPage();
                 request.done(function(msg, statustext, jqxhr) {
@@ -33,13 +33,13 @@ var Relay = {
             }
         };
         relayobj.listip = function() {
-            var request = relayobj.CallAjax("ip/list", "GET", '', "json");
+            var request = relayobj.CallAjax("/ip/list", "GET", '', "json");
             return request;
             
         };
         relayobj.setip = function(sJsonIP, sJsonGateway, sJsonDNS) {
             var sJsonRequest = '{"IP":[' + sJsonIP + '],"Gateway":[' + sJsonGateway + '],"DNS":[' + sJsonDNS + ']}';
-            var request = relayobj.CallAjax("ip/set", "POST", sJsonRequest, "json");
+            var request = relayobj.CallAjax("/ip/set", "POST", sJsonRequest, "json");
             return request;            
         };
         relayobj.CallAjaxNoAsync = function(url, method, data, datatype) {

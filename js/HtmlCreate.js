@@ -2,6 +2,7 @@ var CreateHtml = {
     createNew: function() {                
         var table_relay = $('#table_relay');
         var ip_field = $('#div_ip_field');
+        var Table_Result_Mass_Entry = $('#MassEntryResulTable');
         var createobj = {};
         createobj.clearTable = function() {
             table_relay.find("tr:gt(0)").remove();
@@ -128,6 +129,17 @@ var CreateHtml = {
             rtnhtml += '><legend>DNS</legend><div class="div_fieldcontent">IP : <input id="DNS' + id + '" type="text" class="iptext" value="' + ip + '"><br></div</fieldset>';
             return rtnhtml;
         };        
+        createobj.EmptyMassEntryResultTable = function(){
+            Table_Result_Mass_Entry.empty();
+        };
+        createobj.AppendMassEntryResultTable = function(InputRow,InputResult){
+            var sAppend = '';
+            sAppend += '<tr>';
+            sAppend += '<td>' + InputRow + '</td>';
+            sAppend += '<td>' + InputResult + '</td>';           
+            sAppend += '</tr>';
+            Table_Result_Mass_Entry.append(sAppend);
+        };
         createobj.blockPage = function() {
             $.blockUI();
         };

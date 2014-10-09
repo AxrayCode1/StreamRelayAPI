@@ -8,7 +8,9 @@ var UIRelayControl = {
         var delete_class = '.delete';
         var resume_class = '.resume';
         var oUIRelayContorl={};
-        oUIRelayContorl.Init = function(){                        
+        var sPortCheck = '';
+        oUIRelayContorl.Init = function(){   
+            DivIP.hide();
             oUIRelayContorl.GetRelayList();
             $('#btn_refresh').click(function() {
                 oUIRelayContorl.GetRelayList();
@@ -100,7 +102,11 @@ var UIRelayControl = {
             var port = $('#Port').val();
             var name = $('#ChannelName').val();
             var sRemark1 = $('#Remark1').val();
-            var sRemark2 = $('#Remark2').val();            
+            var sRemark2 = $('#Remark2').val();     
+            if (!oUIRelayContorl.VerifyRelayInput(source)) {
+                alert("Error : Can't input whitespace and ',' in Source.");
+                return;
+            }
             if (!oUIRelayContorl.VerifyRelayInput(name)) {
                 alert("Error : Can't input whitespace and ',' in Channel Name.");
                 return;
@@ -121,6 +127,10 @@ var UIRelayControl = {
                 alert("Error : Please input Port");
                 return;
             };
+            if (!(port === parseInt(port))){
+                alert("Error : Port must be integer.");   
+                return false;
+            };
             $.each(relayList, function(index, element) {                
                 if (String(port) === element['port']) {
                     flag = false;
@@ -136,7 +146,7 @@ var UIRelayControl = {
         oUIRelayContorl.VerifyRelayInput = function(Input_Data)
         {
             var whitespace = " ";
-            var sDot = ",";
+            var sDot = ",";            
             if (Input_Data.indexOf(whitespace) !== -1 || Input_Data.indexOf(sDot) !== -1)
                 return false;
             else
@@ -184,13 +194,15 @@ var UIRelayControl = {
                     alert("Please select a file to create.");
                     return false;
                 }                
-                var aMassCreate = sMassCreateStr.split('\n');
+                
+                var aMassCreate = sMassCreateStr.trim().split('\n');
                 if(aMassCreate.length > 1001)
                 {
                     alert("You can olny create 1000 Items at the same time.");
                     return false;
                 }
-                oUIRelayContorl.MassEntryDialog(aMassCreate);
+                if(aMassCreate.length > 1)
+                    oUIRelayContorl.MassEntryDialog(aMassCreate);
             } 
             else {
                 alert('Please Change Your Browser.Your Browser is not support File API.');               
@@ -201,7 +213,8 @@ var UIRelayControl = {
         {
             var progressbar = $( "#progressbar" );
             var progressLabel = $( ".progress-label" ); 
-            var iTotalCreate = aMassCreateItem.length - 1;      
+            var iTotalCreate = aMassCreateItem.length - 1;   
+            sPortCheck = "";
             progressLabel.text("0/" + iTotalCreate);
             progressbar.progressbar({
                 max:iTotalCreate,
@@ -210,9 +223,9 @@ var UIRelayControl = {
                     var oPG = $(this);
                     progressLabel.text( oPG.progressbar("option","value") + '/' + oPG.progressbar( "option", "max" ) );
                 },
-//              complete: function() {
-//              progressLabel.text( "Complete!" );
-//              }
+                complete: function() {
+                    $('#closedialog').show();
+                }
             });  
             $('#modal_update_progress_content').modal({
                 escClose : false,
@@ -220,10 +233,91 @@ var UIRelayControl = {
                     var modal = this;			
                     $('#closedialog').click(function () {								
                         modal.close();
+                        oUIRelayContorl.GetRelayList();
                     });
+                    $('#closedialog').hide();
+                    $.each(relayList, function(index, element) {                
+                        sPortCheck += element['port'] + ',';                
+                    });
+                    oUIRelayContorl.MassCreatRelay(1,aMassCreateItem);
 		}
-            });            
+            }); 
+            
         };        
+                
+        oUIRelayContorl.MassCreatRelay = function(RowNum,aMassCreateItem){
+            if(RowNum > aMassCreateItem.length - 1)            
+                return false;
+            $( "#progressbar" ).progressbar( "value", RowNum);     
+            var aCreateInput = aMassCreateItem[RowNum].trim().split(/\s+/);
+            if(oUIRelayContorl.MassEntryVerifyInput(RowNum,aCreateInput))
+            {
+                var request =  oRelayAjax.createRelay(aCreateInput[3], aCreateInput[4], aCreateInput[0], aCreateInput[1], aCreateInput[2]);
+                oUIRelayContorl.CallBackMassCreateRelay(RowNum,aMassCreateItem,request);
+            }
+            else
+            {
+                ++RowNum;
+                oUIRelayContorl.MassCreatRelay(RowNum,aMassCreateItem);
+            }
+        };
+        
+        oUIRelayContorl.CallBackMassCreateRelay = function(RowNum,aMassCreateItem,request)
+        {            
+            request.done(function(msg, statustext, jqxhr) {                                
+                ++RowNum;
+                oUIRelayContorl.MassCreatRelay(RowNum,aMassCreateItem);
+            });
+            request.fail(function(jqxhr, textStatus) {                
+                oHtml.AppendMassEntryResultTable(RowNum,'Ajax Create Relay Error.');
+                ++RowNum;
+                oUIRelayContorl.MassCreatRelay(RowNum,aMassCreateItem);
+            });
+        };        
+        
+        oUIRelayContorl.MassEntryVerifyInput = function(RowNum,aCreateInput)
+        {                                      
+            if(aCreateInput.length !== 5)
+            {
+                oHtml.AppendMassEntryResultTable(RowNum,'Number of Input Fields is not match.');
+                return false;
+            }
+            if (!oUIRelayContorl.VerifyRelayInput(aCreateInput[0])) {
+                oHtml.AppendMassEntryResultTable(RowNum,"Can't input whitespace and ',' in Source.");
+                return false;
+            }
+            if (!oUIRelayContorl.VerifyRelayInput(aCreateInput[2])) {
+                oHtml.AppendMassEntryResultTable(RowNum,"Can't input whitespace and ',' in Channel Name.");
+                return false;
+            }
+            if (!oUIRelayContorl.VerifyRelayInput(aCreateInput[3])) {
+                oHtml.AppendMassEntryResultTable(RowNum,"Can't input whitespace and ',' in Remark1.");
+                return false;
+            }
+            if (!oUIRelayContorl.VerifyRelayInput(aCreateInput[4])) {
+                oHtml.AppendMassEntryResultTable(RowNum,"Can't input whitespace and ',' in Remark2.");
+                return false;
+            }
+            if (aCreateInput[0].length === 0) {
+                oHtml.AppendMassEntryResultTable(RowNum,"Please input Source.");
+                return false;
+            }
+            if (aCreateInput[1].length === 0) {
+                oHtml.AppendMassEntryResultTable(RowNum,"Please input Port.");
+                return false;
+            };
+            if (isNaN(parseInt(aCreateInput[1]))){
+                oHtml.AppendMassEntryResultTable(RowNum,"Port must be integer.");   
+                return false;
+            };           
+            if(sPortCheck.indexOf(aCreateInput[1]) !== -1){
+                oHtml.AppendMassEntryResultTable(RowNum,"Port is duplicate.");   
+                return false;
+            }           
+            sPortCheck += aCreateInput[1] + ',';
+            return true;
+       
+        };
         return oUIRelayContorl;
     }
 };

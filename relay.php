@@ -9,21 +9,21 @@ and open the template in the editor.
         <title>AcroRed TV Relay Station</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script type='text/javascript' src="js/jquery-1.7.2.min.js"></script>
-        <script type='text/javascript' src='js/jquery-ui-1.11.1.min.js'></script>
-        <script type='text/javascript' src="js/jquery.simplemodal.js"></script>
-        <script type='text/javascript' src="js/jquery.blockUI.js"></script>
-        <script type='text/javascript' src="js/tvcloud.js"></script>
-        <script type='text/javascript' src="js/Structure.js"></script>
-        <script type='text/javascript' src="js/RelayAjax.js"></script>
-        <script type='text/javascript' src="js/HtmlCreate.js"></script>        
-        <script type='text/javascript' src="js/UIIPControl.js"></script>
-        <script type='text/javascript' src="js/UIRelayControl.js"></script>
-        <script type='text/javascript' src="js/RelayUI.js"></script>        
-        <link type='text/css' href="css/index.css" rel="stylesheet">
-        <link type='text/css' href='css/jquery-ui.min.css' rel='stylesheet'/>
-        <link type='text/css' href='css/jquery-ui.structure.min.css' rel='stylesheet'/>
-        <link type='text/css' href='css/jquery-ui.theme.min.css' rel='stylesheet'/>
+        <script type='text/javascript' src="/js/jquery-1.7.2.min.js"></script>
+        <script type='text/javascript' src='/js/jquery-ui-1.11.1.min.js'></script>
+        <script type='text/javascript' src="/js/jquery.simplemodal.js"></script>
+        <script type='text/javascript' src="/js/jquery.blockUI.js"></script>
+        <script type='text/javascript' src="/js/tvcloud.js"></script>
+        <script type='text/javascript' src="/js/Structure.js"></script>
+        <script type='text/javascript' src="/js/RelayAjax.js"></script>
+        <script type='text/javascript' src="/js/HtmlCreate.js"></script>        
+        <script type='text/javascript' src="/js/UIIPControl.js"></script>
+        <script type='text/javascript' src="/js/UIRelayControl.js"></script>
+        <script type='text/javascript' src="/js/RelayUI.js"></script>        
+        <link type='text/css' href="/css/index.css" rel="stylesheet">
+        <link type='text/css' href='/css/jquery-ui.min.css' rel='stylesheet'/>
+        <link type='text/css' href='/css/jquery-ui.structure.min.css' rel='stylesheet'/>
+        <link type='text/css' href='/css/jquery-ui.theme.min.css' rel='stylesheet'/>
     </head>
     <body>
         <div id="div_relay_create_control">                
@@ -44,11 +44,11 @@ and open the template in the editor.
             <div class="OptionBar">	
             </div>
             <div id="rl" onmouseover="mouseon_b('rl');" onmouseout="mouseout_b('rl');">
-                <img src="img/list.jpg" height="20" width="20" align="center" /> Relay List
+                <img src="/img/list.jpg" height="20" width="20" align="center" /> Relay List
             </div>             
 
             <div id="ise" onmouseover="mouseon_b('ise');" onmouseout="mouseout_b('ise');">
-                <img src="img/socket.png" height="20" width="20" align="center" /> IP Setting
+                <img src="/img/socket.png" height="20" width="20" align="center" /> IP Setting
             </div>
 
             <!--<div id="ss" style="position: absolute; z-index:2; left: 380px; width: 130px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('ss');" onmouseout="mouseout_b('ss');">
@@ -106,15 +106,18 @@ and open the template in the editor.
                     </div>
                     <div style="position: absolute;left:10px; top: 120px">
                         <fieldset>
-                            <legend>Mass Entry</legend>
+                            <legend>Mass Entry</legend>                            
                             <div class="div_fieldcontent">
-                                <input id="uploadFile" type="text" disabled="disabled" placeholder="Choose File">
-                                <div class="file-upload btn btn-primary" style="margin-left: 10px">    
-                                    <span>Select</span>
-                                    <br>
-                                    <input id="file_mass_create" accept=".csv" type="file" class="upload" />
+                                <a href="MassCreateRelay.txt" style="text-decoration: underline;" download>Download Sample File</a>
+                                <div style="margin-top:10px">
+                                    <input id="uploadFile" type="text" disabled="disabled" placeholder="Choose File">
+                                    <div class="file-upload btn btn-primary" style="margin-left: 10px">    
+                                        <span>Select</span>
+                                        <br>
+                                        <input id="file_mass_create" accept=".txt" type="file" class="upload" />
+                                    </div>
+                                    <a id="btn_mass_create" style="margin-left: 10px" href="#" class="btn-light">Create</a>
                                 </div>
-                                <a id="btn_mass_create" style="margin-left: 10px" href="#" class="btn-light">Create</a>
                             </div>
                         </fieldset>
                     </div>
@@ -131,18 +134,17 @@ and open the template in the editor.
         </div>
         <div id="modal_update_progress_content">
             <h3>Mass Entry</h3>
-            <div style="position: relative;top:5px;color: white">Progress : <div id="progressbar">
+            <div style="position: relative;top:5px;color: black">Progress : <div id="progressbar">
                     <div class="progress-label"></div>                
                 </div>               
             </div>
             <div>
-                <div class="scrollit">
-                    <table  style="position: relative;top:20px;color: white">
-                        <tr>
-                            <th style="height: 15px" width="3%">Item</th>                        
-                            <th style="height: 15px" width="5%">Row</th>
-                            <th style="height: 15px" width="95%">Fail Result</th>                        
-                        </tr>      
+                <div class="scrollit" style="position: relative;top:20px">
+                    <table id="MassEntryResulTable"  style="width: 100%">
+                        <tr>                            
+                            <th style="height: 15px" width="20%">Fail Row</th>
+                            <th style="height: 15px" width="80%">Fail Result</th>                        
+                        </tr>                        
                     </table>
                 </div>
             </div>
