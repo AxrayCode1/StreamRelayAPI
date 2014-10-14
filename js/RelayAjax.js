@@ -41,7 +41,12 @@ var Relay = {
             var sJsonRequest = '{"IP":[' + sJsonIP + '],"Gateway":[' + sJsonGateway + '],"DNS":[' + sJsonDNS + ']}';
             var request = relayobj.CallAjax("/ip/set", "POST", sJsonRequest, "json");
             return request;            
-        };
+        };    
+        relayobj.changepwd = function(sNewPWD) {
+            var sJsonRequest = '{"PWD":"' + sNewPWD + '"}';            
+            var request = relayobj.CallAjax("/system/password/change", "PUT", sJsonRequest, "json");
+            return request;            
+        };     
         relayobj.CallAjaxNoAsync = function(url, method, data, datatype) {
             var request = $.ajax({
                 type: method,

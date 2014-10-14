@@ -1,3 +1,33 @@
+<?php
+include_once('/var/www/html/include/api_global_function.php');
+include_once '/var/www/html/include/HandleLogin.php';
+$oLogin = new Login();
+$oLogin->Sec_Session_Start();
+if($oLogin->DB_Connection() == LoginStatus::DBConnectSuccess)
+{
+    $eLoginStatus = $oLogin->Login_Check();
+    if($eLoginStatus != LoginStatus::LoginSuccess)
+    {
+        switch ($eLoginStatus)
+        {
+            case LoginStatus::DBPrepareFail:
+                http_response_code(503);
+                echo "<h1>Error 503 DBPrepareFail</h1>";                
+                break;
+            default :
+                http_response_code(401);
+                echo "<h1>Error 401 Unauthorized</h1>";
+                break;
+        }
+        exit();      
+    }
+}
+else
+{
+    http_response_code(503);
+    exit();
+}
+?>
 <!DOCTYPE html>
 <!--
 To change this license header, choose License Headers in Project Properties.
@@ -14,11 +44,14 @@ and open the template in the editor.
         <script type='text/javascript' src="/js/jquery.simplemodal.js"></script>
         <script type='text/javascript' src="/js/jquery.blockUI.js"></script>
         <script type='text/javascript' src="/js/tvcloud.js"></script>
+        <script type='text/javascript' src="/js/sha512.js"></script>
         <script type='text/javascript' src="/js/Structure.js"></script>
+        <script type='text/javascript' src="/js/ErrorHandle.js"></script>
         <script type='text/javascript' src="/js/RelayAjax.js"></script>
         <script type='text/javascript' src="/js/HtmlCreate.js"></script>        
         <script type='text/javascript' src="/js/UIIPControl.js"></script>
         <script type='text/javascript' src="/js/UIRelayControl.js"></script>
+        <script type='text/javascript' src="/js/UISystemControl.js"></script>
         <script type='text/javascript' src="/js/RelayUI.js"></script>        
         <link type='text/css' href="/css/index.css" rel="stylesheet">
         <link type='text/css' href='/css/jquery-ui.min.css' rel='stylesheet'/>
@@ -51,21 +84,21 @@ and open the template in the editor.
                 <img src="/img/socket.png" height="20" width="20" align="center" /> IP Setting
             </div>
 
-            <!--<div id="ss" style="position: absolute; z-index:2; left: 380px; width: 130px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('ss');" onmouseout="mouseout_b('ss');">
-        	<img src="img/config.png" height="20" width="20" align="center" /> Sys. Setup
+            <div id="ss" style="position: absolute; z-index:2; left: 380px; width: 130px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('ss');" onmouseout="mouseout_b('ss');">
+        	<img src="/img/config.png" height="20" width="20" align="center" /> Sys. Setup
             </div>
     
-            <div id="per" style="position: absolute; z-index:2; left: 510px; width: 150px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('per');" onmouseout="mouseout_b('per');">
+            <!--<div id="per" style="position: absolute; z-index:2; left: 510px; width: 150px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('per');" onmouseout="mouseout_b('per');">
                 <img src="img/performance.png" height="20" width="20" align="center" /> Performance
             </div>
 
             <div id="el" style="position: absolute; z-index:2; left: 660px; width: 130px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('el');" onmouseout="mouseout_b('el');">
                 <img src="img/log.png" height="20" width="20" align="center" /> Event Log.
-            </div>
+            </div>--> 
 
-            <div id="lo" style="position: absolute; z-index:2; left: 790px; width: 100px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('lo');" onmouseout="mouseout_b('lo');">
-                <img src="img/logout-512.png" height="20" width="20" align="center" /> Logout
-            </div>-->                           
+            <div id="lo" style="position: absolute; z-index:2; left: 790px; width: 100px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('lo');" onmouseout="mouseout_b('lo');" onclick='window.location="/ui/Logout.html"'>
+                <img src="/img/logout-512.png" height="20" width="20" align="center" /> Logout
+            </div>                          
         </div>
         <div id="div_relay_control">
             <div id="div_relay_table">
@@ -90,7 +123,7 @@ and open the template in the editor.
                         <fieldset>
                             <legend>Create</legend>
                             <div class="div_fieldcontent">
-                                <label>Source : </label>
+                                <label>Source Url : </label>
                                 <input id="Source"  style="height: 20px;width: 200px" class="inputs" value="" type="text">
                                 <label style="margin-left: 10px;">Port : </label>
                                 <input id="Port" style="height: 20px;width: 60px" class="inputs" value="" type="text">
@@ -131,6 +164,26 @@ and open the template in the editor.
                 <a id="btn_ip_confirm" href="#" class="btn-light">Confirm</a>
                 <a style="margin-left: 10px" id="btn_ip_cancel" href="#" class="btn-light">Cancel</a>
             </div>
+        </div>
+        <div id="div_sys_config">
+            <fieldset>
+                <legend>Change Password</legend>                            
+                <div class="div_fieldcontent">                                        
+                    <label>Current Password : </label>                    
+                    <input id="CurPWD"  style="height: 20px;width: 150px" class="inputs" value="" type="password">
+                    <br>    
+                    <br>
+                    <label>New Password : </label>                    
+                    <input id="NewPWD" style="height: 20px;width: 150px" class="inputs" value="" type="password">
+                    <br>
+                    <br>
+                    <label>Confirm New Password : </label>                    
+                    <input id="ConfNewPWD" style="height: 20px;width: 150px" class="inputs" value="" type="password">                    
+                    <br>
+                    <br>
+                    <a id="btn_chg_pwd" href="#" class="btn-light">Confirm</a>
+                </div>
+            </fieldset>
         </div>
         <div id="modal_update_progress_content">
             <h3>Mass Entry</h3>

@@ -2,29 +2,33 @@ var UIIPControl = {
     createNew:function(oInputHtml,oInputRelayAjax){
         var oHtml = oInputHtml;
         var oRelayAjax = oInputRelayAjax;        
+        var oUIIPContorl={};
+        var oError = {};
         var DivChannel = $('#div_relay_control');
         var DivIP = $('#div_ip_control');
-        var oUIRelayContorl={};
-        oUIRelayContorl.Init = function(){            
+        var DivSystem = $('#div_sys_config');
+        oUIIPContorl.Init = function(){   
+            oError = ErrorHandle.createNew();
             $('#ise').click(function() {
                 DivChannel.hide();
+                DivSystem.hide();
                 DivIP.show();
-                oUIRelayContorl.GetIPList();
+                oUIIPContorl.GetIPList();
             });            
             $('#btn_ip_confirm').click(function() {
-                oUIRelayContorl.SetIPAction();
+                oUIIPContorl.SetIPAction();
             });
             $('#btn_ip_cancel').click(function() {
-                oUIRelayContorl.GetIPList();
+                oUIIPContorl.GetIPList();
             });           
         };                        
         
-        oUIRelayContorl.GetIPList = function(){
+        oUIIPContorl.GetIPList = function(){
             var request = oRelayAjax.listip();
-            oUIRelayContorl.CallBackGetIP(request);
+            oUIIPContorl.CallBackGetIP(request);
         };
         
-        oUIRelayContorl.CallBackGetIP = function(request){
+        oUIIPContorl.CallBackGetIP = function(request){
             oHtml.blockPage();
             request.done(function(msg, statustext, jqxhr) {
                 oHtml.stopPage();
@@ -33,11 +37,11 @@ var UIIPControl = {
             });
             request.fail(function(jqxhr, textStatus) {
                 oHtml.stopPage();
-                alert("Error : Ajax List IP Error");
+                oError.CheckAuth(jqxhr.status,ActionStatus.GetIP);
             });
         };
         
-        oUIRelayContorl.SetIPAction = function(){
+        oUIIPContorl.SetIPAction = function(){
             var regexIP = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
             var bCheckHaveInputIP;
             var bInputIP = false;
@@ -118,16 +122,16 @@ var UIIPControl = {
             });
             if (!bInputDNS)
                 return false;
-            oUIRelayContorl.SetIP(sJsonIP, sJsonGateway, sJsonDNS);           
+            oUIIPContorl.SetIP(sJsonIP, sJsonGateway, sJsonDNS);           
         };    
         
-        oUIRelayContorl.SetIP=function(sJsonIP, sJsonGateway, sJsonDNS)
+        oUIIPContorl.SetIP=function(sJsonIP, sJsonGateway, sJsonDNS)
         {
             var request = oRelayAjax.setip(sJsonIP, sJsonGateway, sJsonDNS);
-            oUIRelayContorl.CallBackSetIP(request); 
+            oUIIPContorl.CallBackSetIP(request); 
         };
         
-        oUIRelayContorl.CallBackSetIP=function(request){
+        oUIIPContorl.CallBackSetIP=function(request){
             oHtml.blockPageMsg("Please redirect new IP Address.");            
             request.done(function(msg, statustext, jqxhr) {
                 if (jqxhr.status !== 400) {} else {
@@ -143,7 +147,7 @@ var UIIPControl = {
 
             });
         };               
-        return oUIRelayContorl;
+        return oUIIPContorl;
     }
 };
 

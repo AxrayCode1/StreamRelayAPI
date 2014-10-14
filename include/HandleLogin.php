@@ -1,14 +1,22 @@
 <?php
 include_once '/var/www/html/include/Config.php';
-$oLogin = new Login();
-var_dump($oLogin->DB_Connection());
+include_once '/var/www/html/include/Enum.php';
+//salt : a7589e77a8a2a21c37b168e6d7ff817b93f2d19a5154f3ac1df51b9efbca535bb1858a75aaaca5ee255408bc1f785619799f2c8b7c5ca32202b68deee71c46d9
+//password : 708a0d020a9962ebd63d6667f5eb4f3c8d315ad473748f0774c01114ee6bf5357afc72e5eef1bda7945b6357c447a94e0c843020b3462235cd956b1f0c923639
+//$oLogin = new Login();
+//$oLogin->Sec_Session_Start();
+//$oLogin->DB_Connection();
+////var_dump($oLogin->Login_Check());
+//$oLogin->Login_By_Data('admin', hash('sha512', '000000'));
+//var_dump($_SESSION);
 class Login{
+    
     public $PDODB;
     public function DB_Connection()
     {
         // if connection already exists
         if ($this->PDODB != null) {
-            return true;
+            return LoginStatus::DBConnectSuccess;
         } else {
             try {
                 // Generate a database connection, using the PDO connector
@@ -18,17 +26,17 @@ class Login{
                 // "Adding the charset to the DSN is very important for security reasons,
                 // most examples you'll see around leave it out. MAKE SURE TO INCLUDE THE CHARSET!"
                 $this->PDODB = new PDO('mysql:host='. DB_HOST .';dbname='. DB_NAME . ';charset=utf8', DB_USER, DB_PASS);
-                return true;
+                return LoginStatus::DBConnectSuccess;
             } catch (PDOException $e) {
-                $this->errors[] = MESSAGE_DATABASE_ERROR . $e->getMessage();
+                return LoginStatus::DBConnectFail;
             }
         }
         // default return
-        return false;
+        return LoginStatus::DBConnectFail;
     }
     
     public function Sec_Session_Start() {
-        $session_name = 'sec_session_acrored';   // Set a custom session name 
+        $session_name = 'SessionAcrored';   // Set a custom session name 
         $secure = SECURE;
 
         // This stops JavaScript being able to access the session id.
@@ -51,139 +59,160 @@ class Login{
         session_regenerate_id();    // regenerated the session, delete the old one. 
     }
     
-    function Login($sInputUserName, $sInputPassword, $mysqli) {
+    function Login_By_Data($sInputUserName, $sInputPassword) {        
+        $sqlSELECTUser = <<<SQL
+                SELECT idUser,password,salt From tbUser
+                WHERE nameUser = :nameUser LIMIT 1;
+SQL;
+        $Stmt = $this->PDODB->prepare($sqlSELECTUser);
         // Using prepared statements means that SQL injection is not possible. 
-        if ($stmt = $mysqli->prepare("SELECT id, username, password, salt 
-				  FROM members 
-                                  WHERE email = ? LIMIT 1")) {
-            $stmt->bind_param('s', $email);  // Bind "$email" to parameter.
-            $stmt->execute();    // Execute the prepared query.
-            $stmt->store_result();
-
-            // get variables from result.
-            $stmt->bind_result($user_id, $username, $db_password, $salt);
-            $stmt->fetch();
-
-            // hash the password with the unique salt.
-            $password = hash('sha512', $password . $salt);
-            if ($stmt->num_rows == 1) {
-            // If the user exists we check if the account is locked
-            // from too many login attempts 
-//            if (checkbrute($user_id, $mysqli) == true) {
-//                // Account is locked 
-//                // Send an email to user saying their account is locked 
-//                return false;
-//            } else {
-                // Check if the password in the database matches 
-                // the password the user submitted.
-                if ($db_password == $password) {
+        if ($Stmt) {
+            $Stmt->bindValue(':nameUser', $sInputUserName, PDO::PARAM_STR);
+            $Stmt->execute();    // Execute the prepared query.               
+            if ($Stmt->rowCount() == 1) {
+                while ($row = $Stmt->fetch()) {
+                    $DBUserID = (int)$row['idUser'];                    
+                    $DBUserPassword = $row['password'];
+                    $DBUserSalt = $row['salt'];
+                }              
+                // hash the password with the unique salt.
+                $sPassword = hash('sha512', $sInputPassword . $DBUserSalt);
+                if ($DBUserPassword === $sPassword) {
                     // Password is correct!
                     // Get the user-agent string of the user.
-                    $user_browser = $_SERVER['HTTP_USER_AGENT'];
+                    $sUserBrowser = $_SERVER['HTTP_USER_AGENT'];
 
                     // XSS protection as we might print this value
-                    $user_id = preg_replace("/[^0-9]+/", "", $user_id);
-                    $_SESSION['user_id'] = $user_id;
+                    $UserID = preg_replace("/[^0-9]+/", "", $DBUserID);
+                    $_SESSION['UserID'] = $UserID;
 
                     // XSS protection as we might print this value
-                    $username = preg_replace("/[^a-zA-Z0-9_\-]+/", "", $username);
+                    $sUsername = preg_replace("/[^a-zA-Z0-9_\-]+/", "", $sInputUserName);
 
-                    $_SESSION['username'] = $username;
-                    $_SESSION['login_string'] = hash('sha512', $password . $user_browser);
-
+                    $_SESSION['Username'] = $sUsername;
+                    $_SESSION['LoginString'] = hash('sha512', $sPassword . $sUserBrowser);                    
                     // Login successful. 
-                    return true;
+                    setcookie("CheckKey", $sInputPassword);
+                    return LoginStatus::LoginSuccess;
                 } else {
                     // Password is not correct 
                     // We record this attempt in the database 
-                    $now = time();
-                    if (!$mysqli->query("INSERT INTO login_attempts(user_id, time) 
-                                    VALUES ('$user_id', '$now')")) {
-                        header("Location: ../error.php?err=Database error: login_attempts");
-                        exit();
-                    }
+//                    $now = time();
+//                    if (!$mysqli->query("INSERT INTO login_attempts(user_id, time) 
+//                                    VALUES ('$user_id', '$now')")) {
+//                        header("Location: ../error.php?err=Database error: login_attempts");
+//                        exit();
+//                    }
 
-                    return false;
+                    return LoginStatus::LoginFail;
                 }
 //            }
+            } 
+            else {
+                // No user exists. 
+                return LoginStatus::LoginFail;
+            }
         } 
         else {
-            // No user exists. 
-            return false;
+            // Could not create a prepared statement
+            return LoginStatus::DBPrepareFail;
         }
-    } 
-    else {
-        // Could not create a prepared statement
-        header("Location: ../error.php?err=Database error: cannot prepare statement");
-        exit();
     }
-}
     
-    public function Login_Check($PDO) {    
-        if (isset($_SESSION['UserID'], $_SESSION['UserName'], $_SESSION['LoginString'])) {
+    public function Change_Password($sNewPWD){
+        $sqlSELECTUserSalt = <<<SQL
+                SELECT salt From tbUser
+                WHERE idUser = :idUser LIMIT 1;
+SQL;
+        $sqlUpdatePassword = <<<SQL
+                Update tbUser set tbUser.password=:NewPWD WHERE idUser = :idUser;
+SQL;
+        if (isset($_SESSION['UserID'])) {
+            $iUserID = $_SESSION['UserID'];   
+            $Stmt = $this->PDODB->prepare($sqlSELECTUserSalt);                      
+            if($Stmt)
+            {                
+                $Stmt->bindValue(':idUser', $iUserID,  PDO::PARAM_INT);   
+                $Stmt->execute();                
+                if($Stmt->rowCount() == 1)
+                {                                
+                    while ($row = $Stmt->fetch()) {                        
+                        $DBUserSalt = $row['salt'];
+                    }                          
+                    $sNewPWD = hash('sha512', $sNewPWD . $DBUserSalt);
+                    $Stmt = $this->PDODB->prepare($sqlUpdatePassword);
+                    if ($Stmt) {
+                        // Bind "$user_id" to parameter. 
+                        $Stmt->bindValue(':NewPWD', $sNewPWD,  PDO::PARAM_STR);
+                        $Stmt->bindValue(':idUser', $iUserID,  PDO::PARAM_INT);
+                        $Stmt->execute();   // Execute the prepared query.
+
+                        if ($Stmt->rowCount() == 1 || $Stmt->rowCount() == 0) {     
+                            $this->SessionDestroy();
+                            return LoginStatus::ChangePWDSuccess;                    
+                        } else {                    
+                            return LoginStatus::ChangePWDFail;
+                        }
+                    } else {
+                        // Could not prepare statement                        
+                        return LoginStatus::DBPrepareFail;
+                    }
+                }
+                else {                    
+                    return LoginStatus::ChangePWDFail;
+                }
+            } else {
+                // Could not prepare statement
+                return LoginStatus::DBPrepareFail;
+            }
+        } else {            
+            return LoginStatus::ChangePWDFail;
+        }
+    }
+    
+    public function Login_Check() {    
+        $sqlSELECTPassword = <<<SQL
+                SELECT password FROM tbUser WHERE idUser = :idUser LIMIT 1
+SQL;
+        if (isset($_SESSION['UserID'], $_SESSION['Username'], $_SESSION['LoginString'])) {
             $iUserID = $_SESSION['UserID'];
             $sLoginString = $_SESSION['LoginString'];            
 
             // Get the user-agent string of the user.
-            $UserBrowser = $_SERVER['HTTP_USER_AGENT'];
-
-            if ($stmt = $mysqli->prepare("SELECT password 
-                                          FROM members 
-                                          WHERE id = ? LIMIT 1")) {
+            $sUserBrowser = $_SERVER['HTTP_USER_AGENT'];
+            $Stmt = $this->PDODB->prepare($sqlSELECTPassword);
+            if ($Stmt) {
                 // Bind "$user_id" to parameter. 
-                $stmt->bind_param('i', $user_id);
-                $stmt->execute();   // Execute the prepared query.
-                $stmt->store_result();
+                $Stmt->bindValue(':idUser', $iUserID,PDO::PARAM_INT);
+                $Stmt->execute();   // Execute the prepared query.
 
-                if ($stmt->num_rows == 1) {
+                if ($Stmt->rowCount() == 1) {
                     // If the user exists get variables from result.
-                    $stmt->bind_result($password);
-                    $stmt->fetch();
-                    $login_check = hash('sha512', $password . $user_browser);
+                    while ($row = $Stmt->fetch()) {                                            
+                        $DBUserPassword = $row['password'];                        
+                    }
+                    $sLoginCheck = hash('sha512', $DBUserPassword . $sUserBrowser);
 
-                    if ($login_check == $login_string) {
+                    if ($sLoginCheck == $sLoginString) {
                         // Logged In!!!! 
-                        return true;
+                        return LoginStatus::LoginSuccess;
                     } else {
                         // Not logged in 
-                        return false;
+                        return LoginStatus::LoginFail;
                     }
                 } else {
                     // Not logged in 
-                    return false;
+                    return LoginStatus::LoginFail;
                 }
             } else {
                 // Could not prepare statement
-                header("Location: ../error.php?err=Database error: cannot prepare statement");
-                exit();
+                return LoginStatus::DBPrepareFail;
             }
         } else {
             // Not logged in 
-            return false;
+            return LoginStatus::LoginFail;
         }
-    }
-    
-    /**
-     * Create all data needed for remember me cookie connection on client and server side
-     */
-    private function NewRememberMeCookie()
-    {
-        // if database connection opened
-        if ($this->DB_Connection()) {
-            // generate 64 char random string and store it in current user data
-            $random_token_string = hash('sha512', mt_rand());
-            $sth = $this->db_connection->prepare("UPDATE users SET user_rememberme_token = :user_rememberme_token WHERE user_id = :user_id");
-            $sth->execute(array(':user_rememberme_token' => $random_token_string, ':user_id' => $_SESSION['user_id']));
-
-            // generate cookie string that consists of userid, randomstring and combined hash of both
-            $cookie_string_first_part = $_SESSION['user_id'] . ':' . $random_token_string;
-            $cookie_string_hash = hash('sha512', $cookie_string_first_part . COOKIE_SECRET_KEY);
-            $cookie_string = $cookie_string_first_part . ':' . $cookie_string_hash;
-
-            // set cookie
-            setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/", COOKIE_DOMAIN);
-        }
-    }
+    }        
 
     /**
      * Logs in via the Cookie
@@ -233,6 +262,28 @@ class Login{
     }
     
     /**
+     * Create all data needed for remember me cookie connection on client and server side
+     */
+    private function NewRememberMeCookie()
+    {
+        // if database connection opened
+        if ($this->DB_Connection()) {
+            // generate 64 char random string and store it in current user data
+            $random_token_string = hash('sha512', mt_rand());
+            $sth = $this->db_connection->prepare("UPDATE users SET user_rememberme_token = :user_rememberme_token WHERE user_id = :user_id");
+            $sth->execute(array(':user_rememberme_token' => $random_token_string, ':user_id' => $_SESSION['user_id']));
+
+            // generate cookie string that consists of userid, randomstring and combined hash of both
+            $cookie_string_first_part = $_SESSION['user_id'] . ':' . $random_token_string;
+            $cookie_string_hash = hash('sha512', $cookie_string_first_part . COOKIE_SECRET_KEY);
+            $cookie_string = $cookie_string_first_part . ':' . $cookie_string_hash;
+
+            // set cookie
+            setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/", COOKIE_DOMAIN);
+        }
+    }
+    
+    /**
      * Delete all data needed for remember me cookie connection on client and server side
      */
     private function DeleteRememberMeCookie()
@@ -255,12 +306,25 @@ class Login{
      */
     public function DoLogout()
     {
-        $this->DeleteRememberMeCookie();
-
-        $_SESSION = array();
-        session_destroy();
+//        $this->DeleteRememberMeCookie();
+        $this->sec_session_start();
+        $this->SessionDestroy();
     }
 
+    private function SessionDestroy()
+    {
+         // Unset all session values 
+        $_SESSION = array();
+
+        // get session parameters 
+        $params = session_get_cookie_params();
+
+        // Delete the actual cookie. 
+        setcookie(session_name(),'', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
+
+        // Destroy session 
+        session_destroy();      
+    }
+    
 }
 ?>
-

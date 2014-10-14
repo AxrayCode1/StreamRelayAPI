@@ -3,15 +3,19 @@ var UIRelayControl = {
         var oHtml = oInputHtml;
         var oRelayAjax = oInputRelayAjax;
         var sMassCreateStr = '';
-        var DivChannel = $('#div_relay_control');
-        var DivIP = $('#div_ip_control');
         var delete_class = '.delete';
         var resume_class = '.resume';
         var oUIRelayContorl={};
         var sPortCheck = '';
+        var oError = {};
+        var DivChannel = $('#div_relay_control');
+        var DivIP = $('#div_ip_control');
+        var DivSystem = $('#div_sys_config');
         oUIRelayContorl.Init = function(){   
+            oError = ErrorHandle.createNew();
             DivIP.hide();
-            oUIRelayContorl.GetRelayList();
+            DivSystem.hide();
+            oUIRelayContorl.GetRelayList();            
             $('#btn_refresh').click(function() {
                 oUIRelayContorl.GetRelayList();
             });
@@ -19,8 +23,9 @@ var UIRelayControl = {
                 oUIRelayContorl.CreateRelayAction();                       
             });            
             $('#rl').click(function() {
-                DivIP.css('display', 'none');
-                DivChannel.css('display', 'inline');
+                DivIP.hide();
+                DivSystem.hide();
+                DivChannel.show();
                 oUIRelayContorl.GetRelayList();
             });            
             $('#file_mass_create').change(function(event){                
@@ -41,7 +46,7 @@ var UIRelayControl = {
         oUIRelayContorl.CallBackGetRelay = function(request){
             oHtml.blockPage();
             request.done(function(msg, statustext, jqxhr) {
-                oHtml.stopPage();
+                oHtml.stopPage();                
                 oHtml.clearTable();
                 oHtml.appendTable(msg);
                 oUIRelayContorl.RebindDeleteEvert();
@@ -49,7 +54,7 @@ var UIRelayControl = {
             });
             request.fail(function(jqxhr, textStatus) {
                 oHtml.stopPage();
-                alert("Error : Ajax List Relay Error");
+                oError.CheckAuth(jqxhr.status,ActionStatus.GetRelay);
             });
         };
                        
@@ -70,7 +75,7 @@ var UIRelayControl = {
                 setTimeout(oUIRelayContorl.GetRelayList(), 2000);
             });
             request.fail(function(jqxhr, textStatus) {
-                alert("Error : Ajax Delete Relay Error");
+                oError.CheckAuth(jqxhr.status,ActionStatus.DeleteRealy);
             });
         };
         
@@ -92,7 +97,7 @@ var UIRelayControl = {
                 setTimeout(oUIRelayContorl.GetRelayList(), 2000);
             });
             request.fail(function(jqxhr, textStatus) {
-                alert("Error : Ajax Delete Relay Error");
+                oError.CheckAuth(jqxhr.status,ActionStatus.ResumeRelay);
             });
         };                
         
@@ -167,7 +172,7 @@ var UIRelayControl = {
             });
             request.fail(function(jqxhr, textStatus) {
                 oHtml.stopPage();
-                alert("Error : Ajax Create Relay Error");
+                oError.CheckAuth(jqxhr.status,ActionStatus.CreateRelay);
             });
         };
 
@@ -269,9 +274,10 @@ var UIRelayControl = {
                 oUIRelayContorl.MassCreatRelay(RowNum,aMassCreateItem);
             });
             request.fail(function(jqxhr, textStatus) {                
-                oHtml.AppendMassEntryResultTable(RowNum,'Ajax Create Relay Error.');
-                ++RowNum;
-                oUIRelayContorl.MassCreatRelay(RowNum,aMassCreateItem);
+//                oHtml.AppendMassEntryResultTable(RowNum,'Ajax Create Relay Error.');
+//                ++RowNum;
+//                oUIRelayContorl.MassCreatRelay(RowNum,aMassCreateItem);
+                  oError.CheckAuth(jqxhr.status,ActionStatus.CreateRelay);
             });
         };        
         

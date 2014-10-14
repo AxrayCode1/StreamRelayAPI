@@ -6,6 +6,7 @@ var oRelayAjax = {};
 var oHtmlCreate = {};
 var oUIRelay = {};
 var oUIIP = {};
+var oUISystem = {};
 function MyError(message) {
     this.message = message || "Default Message";
     alert(this.message);
@@ -13,11 +14,14 @@ function MyError(message) {
 }
 MyError.prototype = new Error();
 MyError.prototype.constructor = MyError;
-function main() {
+
+function main() {    
     oRelayAjax = Relay.createNew();
     oHtmlCreate = CreateHtml.createNew();
     oUIRelay = UIRelayControl.createNew(oHtmlCreate,oRelayAjax);
     oUIIP = UIIPControl.createNew(oHtmlCreate,oRelayAjax);
+    oUISystem = UISystemControl.createNew(oHtmlCreate,oRelayAjax);
     oUIRelay.Init();
     oUIIP.Init();
+    oUISystem.Init();
 }
