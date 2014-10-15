@@ -41,7 +41,7 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script type='text/javascript' src="/js/jquery-1.7.2.min.js"></script>
         <script type='text/javascript' src='/js/jquery-ui-1.11.1.min.js'></script>
-        <script type='text/javascript' src="/js/jquery.simplemodal.js"></script>
+        <!--<script type='text/javascript' src="/js/jquery.simplemodal.js"></script>-->
         <script type='text/javascript' src="/js/jquery.blockUI.js"></script>
         <script type='text/javascript' src="/js/tvcloud.js"></script>
         <script type='text/javascript' src="/js/sha512.js"></script>
@@ -107,9 +107,10 @@ and open the template in the editor.
                         <th width="3%">Item</th>                        
                         <th width="20%">Source</th>
                         <th width="20%">Destination</th>
-                        <th width="10%">Status</th>
-                        <th width="15%">Remark 1</th>
-                        <th width="15%">Remark 2</th>                        
+                        <th width="8%">Status</th>
+                        <th width="10%">Channel Number</th>
+                        <th width="8%">Name</th>
+                        <th width="14%">Description</th>                        
                         <th width="17%">Action</th>
                     </tr>               
                 </table>
@@ -119,29 +120,43 @@ and open the template in the editor.
                     <div style="position: absolute; right: 0px">
                         <a id="btn_refresh"  href="#" class="btn-light">Refresh</a>
                     </div>
-                    <div style="position: absolute;left: 10px; top: 35px">
+                    <div style="position: absolute;left: 10px; top: 30px">
                         <fieldset>
                             <legend>Create</legend>
                             <div class="div_fieldcontent">
                                 <label>Source Url : </label>
-                                <input id="Source"  style="height: 20px;width: 200px" class="inputs" value="" type="text">
-                                <label style="margin-left: 10px;">Port : </label>
+                                <input id="Source"  style="height: 20px;width: 250px" class="inputs" value="" type="text">
+                                <br>
+                                <br>                                
+                                <label>Destination Port : </label>
                                 <input id="Port" style="height: 20px;width: 60px" class="inputs" value="" type="text">
-                                <label style="margin-left: 10px;">Channel Name : </label>
-                                <input id="ChannelName" style="height: 20px;width: 100px" class="inputs" value="" type="text">
-                                <label>Remark 1 : </label>
-                                <input id="Remark1"  style="height: 20px;width: 120px" class="inputs" value="" type="text">
-                                <label>Remark 2 : </label>
-                                <input id="Remark2"  style="height: 20px;width: 120px" class="inputs" value="" type="text">
-                                <a id="btn_create" style="margin-left: 10px" href="#" class="btn-light">Create</a>
+                                <br>
+                                <br>
+                                <label">Destination Name : </label>
+                                <input id="DestinationName" style="height: 20px;width: 100px" class="inputs" value="" type="text">
+                                <br>
+                                <br>
+                                <label>Channel Number : </label>
+                                <input id="ChannelNumber"  style="height: 20px;width: 120px" class="inputs" value="" type="text">
+                                <br>
+                                <br>
+                                <label>Name : </label>
+                                <input id="Name"  style="height: 20px;width: 120px" class="inputs" value="" type="text">
+                                <br>
+                                <br>
+                                <label>Description : </label>
+                                <input id="Description"  style="height: 20px;width: 120px" class="inputs" value="" type="text">
+                                <br>
+                                <br>
+                                <a id="btn_create" href="#" class="btn-light">Create</a>
                             </div>
                         </fieldset>
                     </div>
-                    <div style="position: absolute;left:10px; top: 120px">
+                    <div style="position: absolute;left:450px; top: 30px">
                         <fieldset>
                             <legend>Mass Entry</legend>                            
                             <div class="div_fieldcontent">
-                                <a href="MassCreateRelay.txt" style="text-decoration: underline;" download>Download Sample File</a>
+                                <a href="/MassCreateRelay.txt" style="text-decoration: underline;" download>Download Sample File</a>
                                 <div style="margin-top:10px">
                                     <input id="uploadFile" type="text" disabled="disabled" placeholder="Choose File">
                                     <div class="file-upload btn btn-primary" style="margin-left: 10px">    
@@ -186,7 +201,7 @@ and open the template in the editor.
             </fieldset>
         </div>
         <div id="modal_update_progress_content">
-            <h3>Mass Entry</h3>
+            <!--h3>Mass Entry</h3>-->
             <div style="position: relative;top:5px;color: black">Progress : <div id="progressbar">
                     <div class="progress-label"></div>                
                 </div>               
@@ -195,8 +210,8 @@ and open the template in the editor.
                 <div class="scrollit" style="position: relative;top:20px">
                     <table id="MassEntryResulTable"  style="width: 100%">
                         <tr>                            
-                            <th style="height: 15px" width="20%">Fail Row</th>
-                            <th style="height: 15px" width="80%">Fail Result</th>                        
+                            <th style="height: 12px" width="20%">Fail Row</th>
+                            <th style="height: 12px" width="80%">Fail Result</th>                        
                         </tr>                        
                     </table>
                 </div>

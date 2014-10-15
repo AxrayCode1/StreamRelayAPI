@@ -11,30 +11,29 @@ var CreateHtml = {
             var tmp_relay_item;
             var dest_temp;
             var port;
-            var channelname;
+            var dest_name;
             relayList = [];
             $.each(relay_list, function(index, element) {
-                dest_temp = element['dest'].split(':');
+                dest_temp = element['Dest'].split(':');
                 port = '';
-                channelname = '';
+                dest_name = '';
                 if (typeof(dest_temp[2]) !== 'undefined') {
                     dest_temp = dest_temp[2].split('/');
                     port = dest_temp[0];
                     channelname = dest_temp[1];
                 }
-                tmp_relay_item = new relayClass(element['id'], element['source'], port, channelname);
+                tmp_relay_item = new relayClass(element['id'], element['SourceUrl']
+                , port, dest_name,element['ChannelNumber'],element['Name'],element['Description']);
                 relayList[index] = tmp_relay_item;
                 var append_str = '';
                 append_str += '<tr>';
                 append_str += '<td style="text-align:center">' + (index + 1) + '</td>';
-                append_str += '<td>' + element['source'] + '</td>';
-                append_str += '<td>' + element['dest'] + '</td>';
-                if (parseInt(element['status']) === 0)
-                    append_str += '<td>Not Ready</td>';
-                else
-                    append_str += '<td>Ready</td>';
-                append_str += '<td>' + element['remark1'] + '</td>';
-                append_str += '<td>' + element['remark2'] + '</td>';
+                append_str += '<td>' + element['SourceUrl'] + '</td>';
+                append_str += '<td>' + element['Dest'] + '</td>';
+                append_str += '<td>' + createobj.GetRelayStatusStr(element['Status']) + '</td>';
+                append_str += '<td>' + element['ChannelNumber'] + '</td>';
+                append_str += '<td>' + element['Name'] + '</td>';
+                append_str += '<td>' + element['Description'] + '</td>';
                 append_str += '<td>';
                 append_str += '<a href="#" class="btn-light delete" id="' + index + '">Delete</a>';
                 if (port !== '')
@@ -43,6 +42,23 @@ var CreateHtml = {
                 append_str += '</tr>';
                 table_relay.append(append_str);
             });
+        };
+        createobj.GetRelayStatusStr = function(sStatus){
+            iStatus = parseInt(sStatus);
+            switch(iStatus)
+            {
+                case 0:
+                    return 'Not Ready';
+                    break;
+                case 1:
+                    return 'Ready';
+                    break;
+                case 2:
+                    return 'Initializing';                    
+                    break;
+                defalue:
+                    return 'Unknow('+sStatus + ')';
+            }
         };
         createobj.EmptyIPDiv = function() {
             ip_field.empty();
@@ -130,7 +146,7 @@ var CreateHtml = {
             return rtnhtml;
         };        
         createobj.EmptyMassEntryResultTable = function(){
-            Table_Result_Mass_Entry.empty();
+            Table_Result_Mass_Entry.find("tr:gt(0)").remove();
         };
         createobj.AppendMassEntryResultTable = function(InputRow,InputResult){
             var sAppend = '';

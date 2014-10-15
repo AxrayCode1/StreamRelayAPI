@@ -6,8 +6,13 @@ var Relay = {
             return request;
             
         };
-        relayobj.createRelay = function(remark1, remark2, source, port, channelname) {
-            var jsonrequest = '{"Remark1":"' + remark1 + '","Remark2":"' + remark2 + '","Source":"' + source + '","Port":' + port + ',"ChannelName":"' + channelname + '"}';
+        relayobj.createRelay = function(channelnumber,name, description, source, destport, destname) {
+            var jsonrequest = '{"ChannelNumber":'+ channelnumber 
+                    +',"Name":"' + name 
+                    + '","Description":"' + description 
+                    + '","SourceUrl":"' + source 
+                    + '","DestPort":' + destport 
+                    + ',"DestName":"' + destname + '"}';            
             var request = relayobj.CallAjax("/relay/create", "POST", jsonrequest, "json");
             return request;            
         };

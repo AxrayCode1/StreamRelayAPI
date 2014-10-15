@@ -10,6 +10,9 @@ var UISystemControl = {
         oUISystemContorl.Init = function(){   
             oError = ErrorHandle.createNew();
             $('#ss').click(function() {
+                $('#CurPWD').val('');        
+                $('#NewPWD').val('');
+                $('#ConfNewPWD').val('');
                 DivChannel.hide();                
                 DivIP.hide();     
                 DivSystem.show();

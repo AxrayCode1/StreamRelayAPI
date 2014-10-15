@@ -1,8 +1,11 @@
-var relayClass = function(id, source, port, channelname) {
+var relayClass = function(id, source, port, destname,channelnumber,name,description) {
     this.id = id;
     this.source = source;
     this.port = port;
-    this.channelname = channelname;
+    this.destname = destname;
+    this.name = name;
+    this.channelnumber = channelnumber;
+    this.description = description;
 };
 var IPClass = function(id, displayname, name, ip, mask) {
     this.id = id;

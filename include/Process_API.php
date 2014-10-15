@@ -5,19 +5,20 @@ class Process_API
     {
         $result = false;
         $inputjson = json_decode($jsondata,true);
-        if(!(strlen($inputjson['Source']) <=0 || strlen($inputjson['Port']) <=0))
+        if(!(strlen($inputjson['SourceUrl']) <=0 || strlen($inputjson['DestPort']) <=0 || strlen($inputjson['ChannelNumber']) <=0 || strlen($inputjson['Name']) <=0))
         {
-            $exu_str = 'sudo /var/www/html/relay.exe ';
-            $exu_str.=$inputjson['Source'];
-            $exu_str.=' ';
-            $exu_str.=$inputjson['Port'];
-            $exu_str.=' -cn="';
-            $exu_str.=$inputjson['ChannelName'];
+            $exu_str = 'sudo /var/www/html/relay.exe "';
+            $exu_str.=$inputjson['SourceUrl'];
+            $exu_str.='" ';
+            $exu_str.=$inputjson['DestPort'];
+            $exu_str.=' -nf="';
+            $exu_str.=$inputjson['DestName'];
+            $exu_str.='" -cn="';
+            $exu_str.=$inputjson['Name'];
             $exu_str.='" -cd="';
-            $exu_str.=$inputjson['Remark1'];
-            $exu_str.='" -rd="';
-            $exu_str.=$inputjson['Remark2'];
-            $exu_str.='"';
+            $exu_str.=$inputjson['Description'];
+            $exu_str.='" -nc=';
+            $exu_str.=$inputjson['ChannelNumber'];            
             exec($exu_str,$output);         
             $result = true;
         }
@@ -54,7 +55,9 @@ class Process_API
             $str_arr=explode(" ",$str);            
             //substr($str_arr[4],1,  strlen($str_arr[4])-1)
             //substr($str_arr[5],1,strlen($str_arr[5])-1)            
-            $ouputarr[] = array('id'=>$str_arr[0],'source'=>$str_arr[1],'dest'=>$str_arr[2],'status'=>$str_arr[3],'remark1'=>substr($str_arr[4],1,  strlen($str_arr[4])-2),'remark2'=>substr($str_arr[5],1,strlen($str_arr[5])-2));           
+            $ouputarr[] = array('id'=>$str_arr[0],'SourceUrl'=>$str_arr[1],'Dest'=>$str_arr[2]
+                    ,'Status'=>$str_arr[3],'Name'=>substr($str_arr[4],1,  strlen($str_arr[4])-2)
+                ,'Description'=>substr($str_arr[5],1,strlen($str_arr[5])-2),'ChannelNumber'=>$str_arr[6]);           
         }
         return $ouputarr;
     }
