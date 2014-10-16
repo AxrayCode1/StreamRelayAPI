@@ -9,14 +9,11 @@ var UIRelayControl = {
         var sPortCheck = '';
         var sNameCheck = '';
         var sChannelNumberCheck = '';
-        var oError = {};
-        var DivChannel = $('#div_relay_control');
-        var DivIP = $('#div_ip_control');
-        var DivSystem = $('#div_sys_config');        
+        var oError = {};      
         oUIRelayContorl.Init = function(){   
             oError = ErrorHandle.createNew();
-            DivIP.hide();
-            DivSystem.hide();      
+            oHtml.HideAllOption();
+            oHtml.ShowOption(DivRelay);
             oUIRelayContorl.InitMassEntryDialog();
             oUIRelayContorl.GetRelayList();            
             $('#btn_refresh').click(function() {
@@ -26,9 +23,8 @@ var UIRelayControl = {
                 oUIRelayContorl.CreateRelayAction();                       
             });            
             $('#rl').click(function() {
-                DivIP.hide();
-                DivSystem.hide();
-                DivChannel.show();
+                oHtml.HideAllOption();
+                oHtml.ShowOption(DivRelay);
                 oUIRelayContorl.GetRelayList();
             });            
             $('#file_mass_create').change(function(event){                
@@ -64,6 +60,10 @@ var UIRelayControl = {
                 $( "#modal_update_progress_content" ).dialog('close');
                 oUIRelayContorl.GetRelayList();
             });
+        };
+                
+        oUIRelayContorl.CheckNum = function(str){
+            return str.match(/^[0-9]*$/);
         };
                 
         oUIRelayContorl.GetRelayList = function(){
@@ -160,12 +160,12 @@ var UIRelayControl = {
             if (iDestPort.length === 0) {
                 alert("Error : Please input value in Port.");
                 return;
-            };
-            iDestPort = parseInt(iDestPort);
-            if (isNaN(iDestPort)){
+            };            
+            if (!oUIRelayContorl.CheckNum(iDestPort)){
                 alert("Error : Port must be integer.");   
                 return false;
             };
+            iDestPort = parseInt(iDestPort);
             if (sName.length === 0) {
                 alert("Error : Please input value in Name.");
                 return;
@@ -173,12 +173,12 @@ var UIRelayControl = {
             if (iChannelNumber.length === 0) {
                 alert("Error : Please input value in Channel Number.");
                 return;
-            }; 
-            iChannelNumber = parseInt(iChannelNumber);
-            if (isNaN(iChannelNumber)){
+            };                         
+            if (!oUIRelayContorl.CheckNum(iChannelNumber)){
                 alert("Error : Channel Number must be integer.");   
                 return false;
             };            
+            iChannelNumber = parseInt(iChannelNumber);
             $.each(relayList, function(index, element) {                
                 if (String(iDestPort) === element['port']) {
                     flag = false;
@@ -330,7 +330,7 @@ var UIRelayControl = {
                 oHtml.AppendMassEntryResultTable(RowNum,'Number of Input Fields is not match.');
                 return false;
             }
-            if (aCreateInput[0].length === 0) {
+            if (aCreateInput[0].length <= 2) {
                 oHtml.AppendMassEntryResultTable(RowNum,"Please input value in Source Url.");
                 return false;
             }
@@ -342,49 +342,58 @@ var UIRelayControl = {
                 oHtml.AppendMassEntryResultTable(RowNum,"Please input value in Channel Number.");
                 return false;
             };
-            if (aCreateInput[4].length === 0) {
+            if (aCreateInput[4].length <= 2) {
                 oHtml.AppendMassEntryResultTable(RowNum,"Please input value in Name.");
                 return false;
             };
-            if (!oUIRelayContorl.VerifyRelayInput(aCreateInput[0])) {
-                oHtml.AppendMassEntryResultTable(RowNum,"Can't input whitespace and ',' in Source.");
+            var sSourceUrl = aCreateInput[0];            
+            var sDestinationName = aCreateInput[2].length > 2 ? aCreateInput[2].substring(1,aCreateInput[2].length-1) : '';
+            aCreateInput[2] = sDestinationName;
+            var sName = aCreateInput[4].substring(1,aCreateInput[4].length-1);
+            aCreateInput[4] = sName;
+            var sDescription = aCreateInput[5].length > 2 ? aCreateInput[5].substring(1,aCreateInput[5].length-1) : '';
+            aCreateInput[5] = sDescription;
+            if (!oUIRelayContorl.VerifyRelayInput(sSourceUrl)) {
+                oHtml.AppendMassEntryResultTable(RowNum,"Can't input whitespace and ',' in Source Url('" + sSourceUrl + "').");
                 return false;
             }
-            if (!oUIRelayContorl.VerifyRelayInput(aCreateInput[2])) {
-                oHtml.AppendMassEntryResultTable(RowNum,"Can't input whitespace and ',' in Destination Name.");
+            if (!oUIRelayContorl.VerifyRelayInput(sDestinationName)) {
+                oHtml.AppendMassEntryResultTable(RowNum,"Can't input whitespace and ',' in Destination Name('" + sDestinationName + "').");
                 return false;
             }
-            if (!oUIRelayContorl.VerifyRelayInput(aCreateInput[4])) {
-                oHtml.AppendMassEntryResultTable(RowNum,"Can't input whitespace and ',' in Name.");
+            if (!oUIRelayContorl.VerifyRelayInput(sName)) {
+                oHtml.AppendMassEntryResultTable(RowNum,"Can't input whitespace and ',' in Name('" + sName + "').");
                 return false;
             }
-            if (!oUIRelayContorl.VerifyRelayInput(aCreateInput[5])) {
-                oHtml.AppendMassEntryResultTable(RowNum,"Can't input whitespace and ',' in Description.");
+            if (!oUIRelayContorl.VerifyRelayInput(sDescription)) {
+                oHtml.AppendMassEntryResultTable(RowNum,"Can't input whitespace and ',' in Description('" + sDescription + "').");
                 return false;
-            }            
-            if (isNaN(parseInt(aCreateInput[1]))){
-                oHtml.AppendMassEntryResultTable(RowNum,"Destination Port must be integer.");   
+            }                        
+            if (!oUIRelayContorl.CheckNum(aCreateInput[1])){
+                oHtml.AppendMassEntryResultTable(RowNum,"Destination Port('" + aCreateInput[1] + "') must be integer.");   
                 return false;
             };   
-            if (isNaN(parseInt(aCreateInput[3]))){
-                oHtml.AppendMassEntryResultTable(RowNum,"Channel Number must be integer.");   
+            aCreateInput[1] = parseInt(aCreateInput[1]);
+            if (!oUIRelayContorl.CheckNum(aCreateInput[3])){
+                oHtml.AppendMassEntryResultTable(RowNum,"Channel Number('" + aCreateInput[3] + "') must be integer.");   
                 return false;
             }; 
+            aCreateInput[3] = parseInt(aCreateInput[3]);
             if(sPortCheck.indexOf(aCreateInput[1]) !== -1){
-                oHtml.AppendMassEntryResultTable(RowNum,"Destination Port is duplicate.");   
+                oHtml.AppendMassEntryResultTable(RowNum,"Destination Port('" + aCreateInput[1] + "') is duplicate.");   
                 return false;
             }  
-            if(sNameCheck.indexOf(aCreateInput[4]) !== -1){
-                oHtml.AppendMassEntryResultTable(RowNum,"Name is duplicate.");   
+            if(sNameCheck.indexOf(sName) !== -1){
+                oHtml.AppendMassEntryResultTable(RowNum,"Name('" + sName + "') is duplicate.");   
                 return false;
             }  
             if(sChannelNumberCheck.indexOf(aCreateInput[3]) !== -1){
-                oHtml.AppendMassEntryResultTable(RowNum,"Channel Number is duplicate.");   
+                oHtml.AppendMassEntryResultTable(RowNum,"Channel Number('" + aCreateInput[3] + "') is duplicate.");   
                 return false;
             }
             sPortCheck += aCreateInput[1] + ',';
             sChannelNumberCheck += aCreateInput[3] + ',';
-            sNameCheck += aCreateInput[4] + ',';
+            sNameCheck += sName + ',';
             return true;
        
         };

@@ -3,16 +3,12 @@ var UIIPControl = {
         var oHtml = oInputHtml;
         var oRelayAjax = oInputRelayAjax;        
         var oUIIPContorl={};
-        var oError = {};
-        var DivChannel = $('#div_relay_control');
-        var DivIP = $('#div_ip_control');
-        var DivSystem = $('#div_sys_config');
+        var oError = {};       
         oUIIPContorl.Init = function(){   
             oError = ErrorHandle.createNew();
             $('#ise').click(function() {
-                DivChannel.hide();
-                DivSystem.hide();
-                DivIP.show();
+                oHtml.HideAllOption();
+                oHtml.ShowOption(DivIP);
                 oUIIPContorl.GetIPList();
             });            
             $('#btn_ip_confirm').click(function() {

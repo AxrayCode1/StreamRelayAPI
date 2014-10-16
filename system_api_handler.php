@@ -14,30 +14,76 @@ function ResponseChangePassword($Result)
             exit();
     }
 }
-$oLogin = new Login();
-$oLogin->Sec_Session_Start();
-if($oLogin->DB_Connection() == LoginStatus::DBConnectSuccess)
+function HandlePassword($Action,$oProcSystem,$oLogin)
 {
-    $eLoginStatus = $oLogin->Login_Check();
-    if($eLoginStatus != LoginStatus::LoginSuccess)
-    {
-        switch ($eLoginStatus)
-        {
-            case LoginStatus::DBPrepareFail:
-                http_response_code(503);
-                break;
-            default :
-                http_response_code(401);
-                break;
-        }
-        exit();      
+    switch ($Action)
+    {                    
+        case 'change':
+            switch($_SERVER['REQUEST_METHOD'])
+            {
+                case 'PUT':
+                    $ResultChgPWD = $oProcSystem ->ChangePassword(file_get_contents("php://input"),$oLogin);
+                    ResponseChangePassword($ResultChgPWD);
+                    break;
+                default :
+                    http_response_code(404);
+            }
+            break;
+        default :
+            http_response_code(404);
+            break;
     }
 }
-else
+function HandleUpdate($Action,$oProcSystem)
 {
-    http_response_code(503);
-    exit();
+    switch($Action)
+    {
+        case 'list':
+            switch($_SERVER['REQUEST_METHOD'])
+            {
+                case 'GET':
+                    $VersionData = $oProcSystem->ListVersion();
+                    break;
+                default :
+                    http_response_code(404);
+            }
+            break;
+        case 'checknew':
+            switch($_SERVER['REQUEST_METHOD'])
+            {
+                case 'GET':
+                    $VersionData = $oProcSystem->CheckNewVersion();
+                    break;
+                default :
+                    http_response_code(404);
+            }
+            break;
+        case 'updatenew':
+            switch($_SERVER['REQUEST_METHOD'])
+            {
+                case 'POST':
+                    $Result = $oProcSystem->Update();
+                    break;
+                default :
+                    http_response_code(404);
+            }
+            break;
+        case 'checkupdate':
+            switch($_SERVER['REQUEST_METHOD'])
+            {
+                case 'GET':
+                    $Result = $oProcSystem->CheckUpdate();
+                    break;
+                default :
+                    http_response_code(404);
+            }
+            break;
+        default :
+            http_response_code(404);
+            break;
+    }
 }
+$ologin = CheckAuth();
 $url=explode("/",$_GET["api"]);
 $oProcSystem = new Process_System_API();
 switch (count($url))
@@ -46,24 +92,11 @@ switch (count($url))
         switch ($url[0])
         {
             case 'password':
-                switch ($url[1])
-                {                    
-                    case 'change':
-                        switch($_SERVER['REQUEST_METHOD'])
-                        {
-                            case 'PUT':
-                                $ResultChgPWD = $oProcSystem ->ChangePassword(file_get_contents("php://input"),$oLogin);
-                                ResponseChangePassword($ResultChgPWD);
-                                break;
-                            default :
-                                http_response_code(404);
-                        }
-                        break;
-                    default :
-                        http_response_code(404);
-                        break;
-                }
+                HandlePassword($url[1],$oProcSystem,$ologin);
                 break;            
+            case 'update':
+                HandleUpdate($url[1],$oProcSystem);
+                break;
             default :
                 http_response_code(404);
                 break;

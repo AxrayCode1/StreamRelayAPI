@@ -52,6 +52,22 @@ var Relay = {
             var request = relayobj.CallAjax("/system/password/change", "PUT", sJsonRequest, "json");
             return request;            
         };     
+        relayobj.listversion = function(){
+            var request = relayobj.CallAjax("/system/update/list", "GET", '', "json");
+            return request;            
+        };
+        relayobj.checknewversion = function(){
+            var request = relayobj.CallAjax("/system/update/checknew", "GET", '', "json");
+            return request;            
+        };
+        relayobj.updatenewversion = function(){
+            var request = relayobj.CallAjax("/system/update/updatenew", "POST", '', "json");
+            return request;            
+        };
+        relayobj.checkupdate = function(){
+            var request = relayobj.CallAjax("/system/update/checkupdate", "GET", '', "json");
+            return request;            
+        };
         relayobj.CallAjaxNoAsync = function(url, method, data, datatype) {
             var request = $.ajax({
                 type: method,

@@ -11,5 +11,25 @@ class Process_System_API
         }
         return $Result;
     }
+    
+    function ListVersion()
+    {
+        
+    }
+    
+    function CheckNewVersion()
+    {
+        
+    }
+    
+    function Update()
+    {
+        
+    }
+    
+    function CheckUpdate()
+    {
+        
+    }
 }
 ?>

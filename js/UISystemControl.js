@@ -4,18 +4,14 @@ var UISystemControl = {
         var oRelayAjax = oInputRelayAjax;                        
         var oUISystemContorl={};
         var oError = {};
-        var DivChannel = $('#div_relay_control');
-        var DivIP = $('#div_ip_control');
-        var DivSystem = $('#div_sys_config');
         oUISystemContorl.Init = function(){   
             oError = ErrorHandle.createNew();
             $('#ss').click(function() {
                 $('#CurPWD').val('');        
                 $('#NewPWD').val('');
                 $('#ConfNewPWD').val('');
-                DivChannel.hide();                
-                DivIP.hide();     
-                DivSystem.show();
+                oHtml.HideAllOption();
+                oHtml.ShowOption(DivSystem);                
             });            
             $('#btn_chg_pwd').click(function() {
                  oUISystemContorl.ChangePasswordAction();
@@ -51,9 +47,9 @@ var UISystemControl = {
                 alert("Can't input whitespace in New Password.");
                 return false;
             }
-            if (sNewPWD.length < 6)
+            if (sNewPWD.length < 6 || sNewPWD.length > 12)
             {
-                alert("New Password's length must be over 6 chars.");
+                alert("New Password's length must be between 6 and 12 chars.");
                 return false;
             }
             if(sNewPWD !== sConfirmNewPWD)
@@ -98,5 +94,3 @@ var UISystemControl = {
         return oUISystemContorl;
     }
 };
-
-

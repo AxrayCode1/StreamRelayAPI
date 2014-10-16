@@ -180,6 +180,20 @@ var CreateHtml = {
         createobj.stopPage = function() {
             $(document).ajaxStop($.unblockUI);
         };
+        createobj.HideAllOption = function(){
+            $.each(DivAllOption,function(index,element){
+               $(element[0]).hide(); 
+               $(element[1]).removeClass('OptionSelect');
+               $(element[1]).css('background-image','');
+               $(element[1]).addClass('OptionUnSelect');
+            });
+        };
+        createobj.ShowOption = function(Option){
+            $(Option[0]).show();            
+            $(Option[1]).removeClass('OptionUnSelect');
+            $(Option[1]).css('background-image','');
+            $(Option[1]).addClass('OptionSelect');
+        };
         return createobj;
     }
 };

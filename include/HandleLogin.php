@@ -311,7 +311,7 @@ SQL;
         $this->SessionDestroy();
     }
 
-    private function SessionDestroy()
+    public function SessionDestroy()
     {
          // Unset all session values 
         $_SESSION = array();

@@ -62,4 +62,36 @@ if (!function_exists('http_response_code'))
         return $code;
     }
 }
+
+function CheckAuth()
+{
+    $oLogin = new Login();
+    $oLogin->Sec_Session_Start();
+    if($oLogin->DB_Connection() == LoginStatus::DBConnectSuccess)
+    {
+        $eLoginStatus = $oLogin->Login_Check();
+        if($eLoginStatus != LoginStatus::LoginSuccess)
+        {
+            switch ($eLoginStatus)
+            {
+                case LoginStatus::DBPrepareFail:
+                    $oLogin->SessionDestroy();
+                    http_response_code(503);
+                    break;
+                default :
+                    $oLogin->SessionDestroy();
+                    http_response_code(401);
+                    break;
+            }
+            exit();      
+        }
+    }
+    else
+    {
+        $oLogin->SessionDestroy();
+        http_response_code(503);
+        exit();
+    }
+    return $oLogin;
+}
 ?>

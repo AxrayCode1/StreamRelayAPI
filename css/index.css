@@ -320,3 +320,15 @@ input:-ms-input-placeholder {
 .ui-dialog-title{
     color: black;
 }
+
+.FunctionControl{
+    cursor: pointer;
+}
+
+.OptionSelect{
+    background-image: linear-gradient( to bottom , #FFD712 0%, #DB9B05 100%);
+}
+
+.OptionUnSelect{
+    background-image: linear-gradient( to bottom , #F8FF3B 0%, #EFDF00 100%);
+}
