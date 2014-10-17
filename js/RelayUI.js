@@ -24,11 +24,12 @@ function main() {
     oUISystem = UISystemControl.createNew(oHtmlCreate,oRelayAjax);
     oUIUpgrade = UIUpgradeControl.createNew(oHtmlCreate,oRelayAjax);
     oHtmlCreate.HideAllOption();
+    oHtmlCreate.InitWaitDialog();
     oUIIP.Init();
     oUISystem.Init();    
-//    oUIUpgrade.Init();
-//    TimerCheckUpdateFlag = setInterval(function(){CheckUpdateFlag();}, 5000);
-    oUIRelay.Init();   
+    oUIUpgrade.Init();
+    TimerCheckUpdateFlag = setInterval(function(){CheckUpdateFlag();}, 5000);
+//    oUIRelay.Init();   
 }
 
 function CheckUpdateFlag()

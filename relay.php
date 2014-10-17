@@ -244,6 +244,9 @@ and open the template in the editor.
                 <a id="closedialog" href="#" class="btn-light">Close</a>
             </div>
         </div>
+        <div id="dialog_wait">
+            <h2 id="dialog_msg" style="text-align: center;top:50%">Please Wait...</h2>
+        </div>
         <script type="text/javascript">            
             main();
         </script>

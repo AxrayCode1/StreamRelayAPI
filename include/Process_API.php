@@ -18,8 +18,10 @@ class Process_API
             $exu_str.='" -cd="';
             $exu_str.=$inputjson['Description'];
             $exu_str.='" -nc=';
-            $exu_str.=$inputjson['ChannelNumber'];            
-            exec($exu_str,$output);         
+            $exu_str.=$inputjson['ChannelNumber'];
+            $exu_str.=' >/dev/null 2>&1 &';
+            $pipe = popen($exu_str,"r");    
+            pclose($pipe);
             $result = true;
         }
         return $result;
@@ -38,8 +40,12 @@ class Process_API
         $inputjson = json_decode($jsondata,true);
         if(!(strlen($inputjson['Source']) <=0 || strlen($inputjson['Port']) <=0))
         {            
-            $exu_str = "sudo /var/www/html/relay.exe restart ".$inputjson['ID'];
-            exec($exu_str,$output);
+            popen("/bin/ls","r");
+            pclose($file);
+            $exu_str = "sudo /var/www/html/relay.exe restart ".$inputjson['ID'] .' >/dev/null 2>&1 &';
+            $pipe = popen($exu_str,"r");
+            pclose($pipe);
+//            passthru($exu_str,$output);            
             $result = true;
         }
         return $result;

@@ -11,7 +11,7 @@ var UIRelayControl = {
         var sChannelNumberCheck = '';
         var oError = {};      
         oUIRelayContorl.Init = function(){   
-            oError = ErrorHandle.createNew();
+            oError = ErrorHandle.createNew();            
             oHtml.HideAllOption();
             oHtml.ShowOption(DivRelay);
             oUIRelayContorl.InitMassEntryDialog();
@@ -67,12 +67,12 @@ var UIRelayControl = {
         };
                 
         oUIRelayContorl.GetRelayList = function(){
+            oHtml.blockPage();
             var request = oRelayAjax.getRelayList();
             oUIRelayContorl.CallBackGetRelay(request);
         };     
         
-        oUIRelayContorl.CallBackGetRelay = function(request){
-            oHtml.blockPage();
+        oUIRelayContorl.CallBackGetRelay = function(request){            
             request.done(function(msg, statustext, jqxhr) {
                 oHtml.stopPage();                
                 oHtml.clearTable();
@@ -94,15 +94,17 @@ var UIRelayControl = {
         };
         
         oUIRelayContorl.DeleteRelay = function(id){
+            oHtml.blockPage();            
             var request = oRelayAjax.deleteRelay(id);   
             oUIRelayContorl.CallBackDeleteRelay(request);
         };
         
-        oUIRelayContorl.CallBackDeleteRelay = function(request){
-            request.done(function(msg, statustext, jqxhr) {
-                setTimeout(oUIRelayContorl.GetRelayList(), 2000);
+        oUIRelayContorl.CallBackDeleteRelay = function(request){            
+            request.done(function(msg, statustext, jqxhr) {                
+                setTimeout(function(){oUIRelayContorl.GetRelayList();}, 1000);
             });
             request.fail(function(jqxhr, textStatus) {
+                oHtml.stopPage();
                 oError.CheckAuth(jqxhr.status,ActionStatus.DeleteRealy);
             });
         };
@@ -116,15 +118,17 @@ var UIRelayControl = {
         };
         
         oUIRelayContorl.ResumeRelay = function(index){
+            oHtml.blockPage();
             var request = oRelayAjax.resumeRelay(relayList[index]['id'], relayList[index]['source'], relayList[index]['port'], relayList[index]['channelname']);   
             oUIRelayContorl.CallBackResumeRelay(request);
         };
         
-        oUIRelayContorl.CallBackResumeRelay = function(request){
-            request.done(function(msg, statustext, jqxhr) {
-                setTimeout(oUIRelayContorl.GetRelayList(), 2000);
+        oUIRelayContorl.CallBackResumeRelay = function(request){            
+            request.done(function(msg, statustext, jqxhr) {                
+                setTimeout(function(){oUIRelayContorl.GetRelayList();}, 2000);
             });
             request.fail(function(jqxhr, textStatus) {
+                oHtml.stopPage();
                 oError.CheckAuth(jqxhr.status,ActionStatus.ResumeRelay);
             });
         };                
@@ -212,16 +216,15 @@ var UIRelayControl = {
         };
         
         oUIRelayContorl.CreatRelay = function(iChannelNumber,sName, sDescription, sSourceUrl, iDestPort, sDestName){
+            oHtml.blockPage();
             var request =  oRelayAjax.createRelay(iChannelNumber,sName, sDescription, sSourceUrl, iDestPort, sDestName);
-            oUIRelayContorl.CallBackCreateRelay(request);
+            oUIRelayContorl.CallBackCreateRelay(request);            
         };
         
         oUIRelayContorl.CallBackCreateRelay = function(request)
-        {
-            oHtml.blockPage();
-            request.done(function(msg, statustext, jqxhr) {
-                oHtml.stopPage();                
-                oUIRelayContorl.GetRelayList();
+        {            
+            request.done(function(msg, statustext, jqxhr) {                
+                setTimeout(function(){oUIRelayContorl.GetRelayList();}, 6000);
             });
             request.fail(function(jqxhr, textStatus) {
                 oHtml.stopPage();
@@ -273,9 +276,9 @@ var UIRelayControl = {
             $('#closedialog').hide();
             var progressLabel = $( ".progress-label" ); 
             var iTotalCreate = aMassCreateItem.length - 1;   
-            sPortCheck = "";
-            sNameCheck = "";
-            sChannelNumberCheck = "";
+            sPortCheck = ",";
+            sNameCheck = ",";
+            sChannelNumberCheck = ",";
             $.each(relayList, function(index, element) {                
                            sPortCheck += element['port'] + ',';      
                            sNameCheck += element['name'] + ',';
@@ -383,7 +386,7 @@ var UIRelayControl = {
                 oHtml.AppendMassEntryResultTable(RowNum,"Destination Port('" + aCreateInput[1] + "') is duplicate.");   
                 return false;
             }  
-            if(sNameCheck.indexOf(sName) !== -1){
+            if(sNameCheck.indexOf(',' + sName + ',') !== -1){
                 oHtml.AppendMassEntryResultTable(RowNum,"Name('" + sName + "') is duplicate.");   
                 return false;
             }  

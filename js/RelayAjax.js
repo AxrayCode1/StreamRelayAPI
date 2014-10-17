@@ -24,15 +24,7 @@ var Relay = {
             try {
                 var jsonrequest = '{"Source":"' + source + '","Port":' + port + ',"ChannelName":"' + channelname + '","ID":"' + id + '"}';
                 var request = relayobj.CallAjax("/relay/resume", "POST", jsonrequest, "json");
-                return request;
-                htmlobj.blockPage();
-                request.done(function(msg, statustext, jqxhr) {
-                    htmlobj.stopPage();
-                    setTimeout(relayobj.getRelayList(), 2000);
-                });
-                request.fail(function(jqxhr, textStatus) {
-                    alert("Error : Ajax Resume Error");
-                });
+                return request;                
             } catch (exception) {
 
             }
@@ -74,6 +66,7 @@ var Relay = {
                 url: url,
                 data: data,
                 dataType: datatype,
+                timeout:30000,
                 async: false
             });
             return request;
@@ -83,6 +76,7 @@ var Relay = {
                 type: method,
                 url: url,
                 data: data,
+                timeout:30000,
                 dataType: datatype
             });
             return request;

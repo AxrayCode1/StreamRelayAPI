@@ -4,6 +4,20 @@ var CreateHtml = {
         var ip_field = $('#div_ip_field');
         var Table_Result_Mass_Entry = $('#MassEntryResulTable');
         var createobj = {};
+        createobj.InitWaitDialog = function(){
+            $( "#dialog_wait" ).dialog({
+                    title: "",
+                    modal: true,
+                    resizable: false,
+                    draggable: false,
+                    closeOnEscape: false,
+                    autoOpen: false,
+                    dialogClass: "no-close",
+                    height:140,
+                    width:300               
+            });           
+            $(".ui-dialog-titlebar").hide();
+        };
         createobj.clearTable = function() {
             table_relay.find("tr:gt(0)").remove();
         };
@@ -157,28 +171,34 @@ var CreateHtml = {
             Table_Result_Mass_Entry.append(sAppend);
         };
         createobj.blockPage = function() {
-            $.blockUI();
+            $('#dialog_msg').text('Please Wait...');
+            $( "#dialog_wait" ).dialog('open');
+//            $.blockUI();
         };
         createobj.blockPageMsg = function(msg) {
-            msg = '<h2>' + msg + '</h2>';
-            $.blockUI({
-                message: msg,
-                css: {
-                    padding: 0,
-                    margin: 0,
-                    width: '20%',
-                    top: '40%',
-                    left: '35%',
-                    textAlign: 'center',
-                    color: '#000',
-                    border: '3px solid #aaa',
-                    backgroundColor: '#fff',
-                    cursor: 'wait'
-                }
-            });
+            $('#dialog_msg').text(msg);
+            $("#dialog_wait" ).dialog('open');
+            
+//            msg = '<h2>' + msg + '</h2>';
+//            $.blockUI({
+//                message: msg,
+//                css: {
+//                    padding: 0,
+//                    margin: 0,
+//                    width: '20%',
+//                    top: '40%',
+//                    left: '35%',
+//                    textAlign: 'center',
+//                    color: '#000',
+//                    border: '3px solid #aaa',
+//                    backgroundColor: '#fff',
+//                    cursor: 'wait'
+//                }
+//            });
         };
         createobj.stopPage = function() {
-            $(document).ajaxStop($.unblockUI);
+            $( "#dialog_wait" ).dialog('close');
+//            $(document).ajaxStop($.unblockUI);
         };
         createobj.HideAllOption = function(){
             $.each(DivAllOption,function(index,element){
