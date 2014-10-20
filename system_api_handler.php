@@ -35,7 +35,7 @@ function HandlePassword($Action,$oProcSystem,$oLogin)
     }
 }
 function HandleUpdate($Action,$oProcSystem)
-{
+{    
     switch($Action)
     {
         case 'list':
@@ -43,6 +43,7 @@ function HandleUpdate($Action,$oProcSystem)
             {
                 case 'GET':
                     $VersionData = $oProcSystem->ListVersion();
+                    echo json_encode($VersionData);
                     break;
                 default :
                     http_response_code(404);
@@ -52,7 +53,8 @@ function HandleUpdate($Action,$oProcSystem)
             switch($_SERVER['REQUEST_METHOD'])
             {
                 case 'GET':
-                    $VersionData = $oProcSystem->CheckNewVersion();
+                    $VersionData = $oProcSystem->CheckNewVersion();                    
+                    echo json_encode($VersionData);
                     break;
                 default :
                     http_response_code(404);
@@ -73,6 +75,7 @@ function HandleUpdate($Action,$oProcSystem)
             {
                 case 'GET':
                     $Result = $oProcSystem->CheckUpdate();
+                    echo json_encode($Result);
                     break;
                 default :
                     http_response_code(404);

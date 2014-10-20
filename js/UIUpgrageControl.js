@@ -1,19 +1,25 @@
 var UIUpgradeControl = {
     createNew:function(oInputHtml,oInputRelayAjax){
-        
+        var eCheckStatus = {
+            NoCheck: -1,
+            CanUpdate:0,
+            NoNewVersion:1
+        };
+        var CheckStatus;
         var oHtml = oInputHtml;
         var oRelayAjax = oInputRelayAjax;   
         var TimerCheckUpdate;
         var oUIUpgradeContorl={};
         var oError = {};
         var bSetInterval;
-        oUIUpgradeContorl.bCheckUpdateFlag;        
-        var i=0;
+        oUIUpgradeContorl.bCheckUpdateFlag;                
         oUIUpgradeContorl.Init = function(){   
             oError = ErrorHandle.createNew();     
             oUIUpgradeContorl.bCheckUpdateFlag = false;
             bSetInterval = false;
-            $('#sup').click(function() {                
+            $('#sup').click(function() {  
+                CheckStatus = eCheckStatus.NoCheck;
+                $('#txt_new_firmware').text('');
                 oHtml.HideAllOption();
                 oHtml.ShowOption(DivUpgrade);                
                 oUIUpgradeContorl.ListVersion();
@@ -22,44 +28,104 @@ var UIUpgradeControl = {
                 oUIUpgradeContorl.CheckNewVersion();
             });
             $('#btn_update_firmware').click(function(){
-                
+                oUIUpgradeContorl.Update();
             });
+            oHtml.blockPageMsg('Please Wait. Checking...');            
+            oUIUpgradeContorl.CheckUpdate();            
+            TimerCheckUpdate = setInterval(function(){oUIUpgradeContorl.CheckUpdate();}, 8000);
+        };                
+        oUIUpgradeContorl.Update = function(){
+            switch(CheckStatus)
+            {
+                case eCheckStatus.NoCheck:
+                    alert('Please Click "Check New Firmware" to check new vesion.');
+                    break
+                case eCheckStatus.NoNewVersion:
+                    alert('No new vesion can be updated.');
+                    break;
+                case eCheckStatus.CanUpdate:
+                    var request = oRelayAjax.updatenewversion();
+                    oUIUpgradeContorl.CallBackUpdate(request);
+                    break;
+            }
+        };
+        oUIUpgradeContorl.CallBackUpdate = function(request){     
+            oHtml.blockPageMsg('Please Wait. System is updating.');
             oUIUpgradeContorl.CheckUpdate();
-//            oUIUpgradeContorl.CheckNewVersion();
-        };                    
+            TimerCheckUpdate = setInterval(function(){oUIUpgradeContorl.CheckUpdate();}, 8000);
+        };
+        
         oUIUpgradeContorl.CheckUpdate = function(){
             var request = oRelayAjax.checkupdate();
             oUIUpgradeContorl.CallBackCheckUpdate(request);
         };
         oUIUpgradeContorl.CallBackCheckUpdate = function(request){            
-            if(i<2)
-            {
-                if(!bSetInterval)
-                {                    
-                    oHtml.blockPageMsg('Please Wait. System is updating.');
-                    TimerCheckUpdate = setInterval(function(){oUIUpgradeContorl.CheckUpdate();}, 4000);
-                    bSetInterval = true;
+            request.done(function(msg, statustext, jqxhr) {  
+                switch(msg['Result'])
+                {
+                    case 0:
+                        window.clearInterval(TimerCheckUpdate);   
+                        alert('Successful to upgrage system. Please relogin.');
+                        window.location = '/ui/Logout.html';
+                        break;
+                    case 1:
+                        window.clearInterval(TimerCheckUpdate);   
+                        oUIUpgradeContorl.bCheckUpdateFlag = true;
+                        oHtml.stopPage();
+                        break;
+                    case 2:                        
+                        oHtml.ChangeblockMsg('Please Wait. System is updating.');                        
+                        break;
+                    case -1:
+                        window.clearInterval(TimerCheckUpdate);   
+                        alert('Failed to upgrage system. Please check your network configuration.');
+                        oHtml.stopPage();
+                        oUIUpgradeContorl.bCheckUpdateFlag = true;
+                        break;                       
+                    case -2:
+                        window.clearInterval(TimerCheckUpdate);   
+                        alert('Failed to upgrage system. New firmware version is not right.');
+                        oHtml.stopPage();
+                        oUIUpgradeContorl.bCheckUpdateFlag = true;
+                        break;
+                    case -3:
+                        window.clearInterval(TimerCheckUpdate);   
+                        alert('Failed to upgrage system.');
+                        oHtml.stopPage();
+                        oUIUpgradeContorl.bCheckUpdateFlag = true;
+                        break;
+                    default:
+                        window.clearInterval(TimerCheckUpdate);   
+                        alert('Failed to upgrage system. Unknow Error.');
+                        oHtml.stopPage();
+                        oUIUpgradeContorl.bCheckUpdateFlag = true;
+                        break;
                 }
-                ++i;
-            }
-            else
-            {                
-                window.clearInterval(TimerCheckUpdate);   
-                oUIUpgradeContorl.bCheckUpdateFlag = true;
-            }
-//            request.done(function(msg, statustext, jqxhr) {                
-//            });
-//            request.fail(function(jqxhr, textStatus) {                
-//            });
+            });
+            request.fail(function(jqxhr, textStatus) {   
+                window.clearInterval(TimerCheckUpdate);
+                oError.CheckAuth(jqxhr.status,ActionStatus.SystemCheckUpdate);
+            });
         };
         oUIUpgradeContorl.ListVersion = function(){
             var request = oRelayAjax.listversion();
             oUIUpgradeContorl.CallBackListVersion(request);
         };
         oUIUpgradeContorl.CallBackListVersion = function(request){
-            request.done(function(msg, statustext, jqxhr) {                
+            oHtml.blockPage();
+            request.done(function(msg, statustext, jqxhr) {
+                oHtml.stopPage();
+                if(msg['Result'] === 0)
+                {
+                    $('#txt_now_firmware').text(msg['Version']);                    
+                }
+                else{
+                    alert('Error : List Version Error.');
+                }
             });
-            request.fail(function(jqxhr, textStatus) {                
+            request.fail(function(jqxhr, textStatus) {    
+                oHtml.stopPage();
+                oError.CheckAuth(jqxhr.status,ActionStatus.SystemListVersion);
             });
         };
         oUIUpgradeContorl.CheckNewVersion = function(){
@@ -67,9 +133,29 @@ var UIUpgradeControl = {
             oUIUpgradeContorl.CallBackCheckNewVersion(request);
         };
         oUIUpgradeContorl.CallBackCheckNewVersion = function(request){
+            oHtml.blockPage();
             request.done(function(msg, statustext, jqxhr) {
+                oHtml.stopPage();                
+                if(msg['Result'] === 0)
+                {
+                    if(msg['Version'] !== $('#txt_now_firmware').text())
+                    {
+                        CheckStatus = eCheckStatus.CanUpdate;
+                        $('#txt_new_firmware').text(msg['Version']);                    
+                    }
+                    else
+                    {
+                        CheckStatus = eCheckStatus.NoNewVersion;
+                        $('#txt_new_firmware').text('No New Version');                    
+                    }
+                }
+                else{
+                    alert('Error : failed to check new version. Please check network configuration.');
+                }
             });
             request.fail(function(jqxhr, textStatus) {           
+                oHtml.stopPage();
+                oError.CheckAuth(jqxhr.status,ActionStatus.SystemCheckNewVersion);
             });
         };
         oUIUpgradeContorl.UpdateNewVersion = function(){

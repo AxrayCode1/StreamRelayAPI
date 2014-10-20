@@ -40,8 +40,6 @@ class Process_API
         $inputjson = json_decode($jsondata,true);
         if(!(strlen($inputjson['Source']) <=0 || strlen($inputjson['Port']) <=0))
         {            
-            popen("/bin/ls","r");
-            pclose($file);
             $exu_str = "sudo /var/www/html/relay.exe restart ".$inputjson['ID'] .' >/dev/null 2>&1 &';
             $pipe = popen($exu_str,"r");
             pclose($pipe);

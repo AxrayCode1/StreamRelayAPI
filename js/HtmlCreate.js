@@ -178,23 +178,9 @@ var CreateHtml = {
         createobj.blockPageMsg = function(msg) {
             $('#dialog_msg').text(msg);
             $("#dialog_wait" ).dialog('open');
-            
-//            msg = '<h2>' + msg + '</h2>';
-//            $.blockUI({
-//                message: msg,
-//                css: {
-//                    padding: 0,
-//                    margin: 0,
-//                    width: '20%',
-//                    top: '40%',
-//                    left: '35%',
-//                    textAlign: 'center',
-//                    color: '#000',
-//                    border: '3px solid #aaa',
-//                    backgroundColor: '#fff',
-//                    cursor: 'wait'
-//                }
-//            });
+        };
+        createobj.ChangeblockMsg = function(msg) {
+            $('#dialog_msg').text(msg);            
         };
         createobj.stopPage = function() {
             $( "#dialog_wait" ).dialog('close');

@@ -28,7 +28,7 @@ function main() {
     oUIIP.Init();
     oUISystem.Init();    
     oUIUpgrade.Init();
-    TimerCheckUpdateFlag = setInterval(function(){CheckUpdateFlag();}, 5000);
+    TimerCheckUpdateFlag = setInterval(function(){CheckUpdateFlag();}, 500);
 //    oUIRelay.Init();   
 }
 
@@ -36,8 +36,7 @@ function CheckUpdateFlag()
 {
     if(oUIUpgrade.bCheckUpdateFlag)
     {        
-        window.clearInterval(TimerCheckUpdateFlag); 
-        oHtmlCreate.stopPage();
+        window.clearInterval(TimerCheckUpdateFlag);         
         oUIRelay.Init();
     }
 }

@@ -101,7 +101,7 @@ var UIRelayControl = {
         
         oUIRelayContorl.CallBackDeleteRelay = function(request){            
             request.done(function(msg, statustext, jqxhr) {                
-                setTimeout(function(){oUIRelayContorl.GetRelayList();}, 1000);
+                setTimeout(function(){oUIRelayContorl.GetRelayList();}, 200);
             });
             request.fail(function(jqxhr, textStatus) {
                 oHtml.stopPage();
@@ -125,7 +125,7 @@ var UIRelayControl = {
         
         oUIRelayContorl.CallBackResumeRelay = function(request){            
             request.done(function(msg, statustext, jqxhr) {                
-                setTimeout(function(){oUIRelayContorl.GetRelayList();}, 2000);
+                setTimeout(function(){oUIRelayContorl.GetRelayList();}, 1000);
             });
             request.fail(function(jqxhr, textStatus) {
                 oHtml.stopPage();

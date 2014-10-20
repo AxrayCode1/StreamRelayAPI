@@ -5,7 +5,11 @@ var ActionStatus = {
     ResumeRelay:3,
     GetIP:24,
     SetIP:25,
-    SystemChangePWD:41
+    SystemChangePWD:41,
+    SystemListVersion:42,
+    SystemCheckNewVersion:43,
+    SystemUpdate:44,
+    SystemCheckUpdate:45
 };
 var ErrorHandle = {
     createNew: function() {                        
@@ -32,8 +36,8 @@ var ErrorHandle = {
                     break;
                 default:
                     sError = oError.AlertErrorByAction(InputAction);
-                    alert(sError);
-                    window.location = '/ui/index.html';
+                    alert(sError);                    
+                    window.location = '/ui/Logout.html';
             }
             return bAuth;
         };
@@ -57,6 +61,15 @@ var ErrorHandle = {
                     break;
                 case ActionStatus.SetIP:
                     sError = "Error : Ajax Set IP Error";
+                    break;
+                case ActionStatus.SystemListVersion:
+                    sError = "Error : Ajax List Version Error";
+                    break;
+                case ActionStatus.SystemCheckNewVersion:
+                    sError = "Error : Ajax Check New Version Error";
+                    break;
+                case ActionStatus.SystemCheckUpdate:
+                    sError = "Error : Ajax Check Update Error";
                     break;
             }
             return sError;

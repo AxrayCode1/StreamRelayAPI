@@ -42,7 +42,7 @@ and open the template in the editor.
         <script type='text/javascript' src="/js/jquery-1.7.2.min.js"></script>
         <script type='text/javascript' src='/js/jquery-ui-1.11.1.min.js'></script>
         <!--<script type='text/javascript' src="/js/jquery.simplemodal.js"></script>-->
-        <script type='text/javascript' src="/js/jquery.blockUI.js"></script>
+        <!--<script type='text/javascript' src="/js/jquery.blockUI.js"></script>-->
         <script type='text/javascript' src="/js/tvcloud.js"></script>
         <script type='text/javascript' src="/js/sha512.js"></script>
         <script type='text/javascript' src="/js/Structure.js"></script>
@@ -90,9 +90,9 @@ and open the template in the editor.
         	<img src="/img/config.png" height="20" width="20" align="center" /> Sys. Setup
             </div>
     
-<!--            <div id="sup" class="FunctionControl" style="position: absolute; z-index:2; left: 510px; width: 150px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('sup');" onmouseout="mouseout_b('sup');">
+            <div id="sup" class="FunctionControl" style="position: absolute; z-index:2; left: 510px; width: 150px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('sup');" onmouseout="mouseout_b('sup');">
                 <img src="/img/performance.png" height="20" width="20" align="center" /> Sys. Upgrage
-            </div>-->
+            </div>
 
             <!--<div id="per" class="FunctionControl" style="position: absolute; z-index:2; left: 510px; width: 150px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('per');" onmouseout="mouseout_b('per');">
                 <img src="img/performance.png" height="20" width="20" align="center" /> Performance
@@ -212,12 +212,12 @@ and open the template in the editor.
                 <legend>System Upgrade</legend>                            
                 <div class="div_fieldcontent">
                     <label>Now Firmware Version : </label>
-                    <label>AUS-C30</label>
+                    <label id="txt_now_firmware"></label>
                     <br>
                     <br>
                     <label>New Firmware Version : </label>
-                    <label></label>
-                    <a id="btn_check_firmware" href="#" class="btn-light" style="margin-left: 250px">Check New Firmware</a>
+                    <label id="txt_new_firmware" style="color:blue"></label>
+                    <a id="btn_check_firmware" href="#" class="btn-light" >Check New Firmware</a>
                     <br>            
                     <br>
                     <a id="btn_update_firmware" href="#" class="btn-light">Update</a>
