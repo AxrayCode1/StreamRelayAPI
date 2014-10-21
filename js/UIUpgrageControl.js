@@ -5,6 +5,14 @@ var UIUpgradeControl = {
             CanUpdate:0,
             NoNewVersion:1
         };
+        var eUpdateStatus = {
+          UpdateSuccess:0,
+          NoUpdate : 1,
+          Updating : 2,
+          WgetFail : -1,
+          WrongVersion : -2,
+          UpdateFail : -3
+        };
         var CheckStatus;
         var oHtml = oInputHtml;
         var oRelayAjax = oInputRelayAjax;   
@@ -63,32 +71,32 @@ var UIUpgradeControl = {
             request.done(function(msg, statustext, jqxhr) {  
                 switch(msg['Result'])
                 {
-                    case 0:
+                    case eUpdateStatus.UpdateSuccess:
                         window.clearInterval(TimerCheckUpdate);   
                         alert('Successful to upgrage system. Please relogin.');
                         window.location = '/ui/Logout.html';
                         break;
-                    case 1:
+                    case eUpdateStatus.NoUpdate:
                         window.clearInterval(TimerCheckUpdate);   
                         oUIUpgradeContorl.bCheckUpdateFlag = true;
                         oHtml.stopPage();
                         break;
-                    case 2:                        
+                    case eUpdateStatus.Updating:                        
                         oHtml.ChangeblockMsg('Please Wait. System is updating.');                        
                         break;
-                    case -1:
+                    case eUpdateStatus.WgetFail:
                         window.clearInterval(TimerCheckUpdate);   
                         alert('Failed to upgrage system. Please check your network configuration.');
                         oHtml.stopPage();
                         oUIUpgradeContorl.bCheckUpdateFlag = true;
                         break;                       
-                    case -2:
+                    case eUpdateStatus.WrongVersion:
                         window.clearInterval(TimerCheckUpdate);   
                         alert('Failed to upgrage system. New firmware version is not right.');
                         oHtml.stopPage();
                         oUIUpgradeContorl.bCheckUpdateFlag = true;
                         break;
-                    case -3:
+                    case eUpdateStatus.UpdateFail:
                         window.clearInterval(TimerCheckUpdate);   
                         alert('Failed to upgrage system.');
                         oHtml.stopPage();
