@@ -40,7 +40,7 @@ if($oLogin->DB_Connection() == LoginStatus::DBConnectSuccess)
     <!-- Begin Page Content -->
     <div id="login">
         <div id="title">
-            TV Relay Server
+            TV Relay Station
         </div>
         <div id="container">
             <form action="/ui/Login.html" method="post" name="login_form">

@@ -30,9 +30,10 @@ html, body {
 }
 
 #login {
-    position: fixed;
+    position:relative;
     width: 340px;
     /*height: 370px;*/
+    height:100%;
     text-align: center;
     /*background: #ba0b0b;*/
     top: 15%;
@@ -44,7 +45,8 @@ html, body {
     position: relative;
     width: 340px;
     margin: auto;
-    font-size: 40px;
+    font-size: 35px;
+    color:#007acc;
     /*height: 232px;*/
     /*left: 50%;*/
     /*margin-top: 30px;*/
@@ -57,7 +59,7 @@ html, body {
     /*height: 232px;*/
     /*top: 50%;*/
     /*left: 50%;*/
-    margin-top: 40px;
+    margin-top: 18px;
     /*margin-left: -170px;*/
     background: #fff;
     border-radius: 3px;
@@ -71,7 +73,7 @@ form {
 }
 
 label {
-    color: #555;
+    color: #007acc;
     display: inline-block;
     margin-left: 18px;
     padding-top: 10px;
@@ -103,7 +105,7 @@ input {
 
     input[type=text],
     input[type=password] {
-        color: #777;
+        color:#777;
         padding-left: 10px;
         margin: 10px;
         margin-top: 12px;
