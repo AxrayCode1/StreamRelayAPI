@@ -41,7 +41,7 @@ if($oLogin->DB_Connection() == LoginStatus::DBConnectSuccess)
 			
         <form action="/ui/Login.html" method="post" name="login_form">
 
-                <label for="username">Username:</label>
+                <label class="LabelHead" for="username">Username:</label>
 
                 <input type="text" id="username" name="username">
 

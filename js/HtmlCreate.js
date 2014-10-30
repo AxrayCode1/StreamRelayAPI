@@ -134,14 +134,16 @@ var CreateHtml = {
             var rtnhtml = '<fieldset ';
             if (bmarge)
                 rtnhtml += 'style="margin-top:10px"';
-            rtnhtml += '><legend style="">' + displayname + '</legend><div class="div_fieldcontent">IP : <input id="IP' + id + '" type="text" class="iptext" value="' + ip + '"><br><br>Mask : <input class="iptext" id="IPMask' + id + '" type="text" value="' + mask + '"><br></div></fieldset>';
+            rtnhtml += '><legend style="">' + displayname 
+                    + '</legend><div class="div_fieldcontent"><label class="LabelIPHead">IP : </label><input id="IP' + id + '" type="text" class="iptext" value="' + ip 
+                    + '"><br><br><label class="LabelIPHead">Mask : </label><input class="iptext" id="IPMask' + id + '" type="text" value="' + mask + '"><br></div></fieldset>';
             return rtnhtml;
         };
         createobj.CreateGatewayHtml = function(id, ip, bindport) {
             var rtnhtml = '<fieldset ';
             rtnhtml += 'style="margin-top:10px"';
-            rtnhtml += '><legend>Gateway</legend><div class="div_fieldcontent">IP : <input id="Gateway' + id + '" type="text" class="iptext" value="' + ip + '"><br><br>';
-            rtnhtml += 'Bind NIC Port : <select id="GatewaySelect' + id + '">';
+            rtnhtml += '><legend>Gateway</legend><div class="div_fieldcontent"><label class="LabelIPHead">IP : </label><input id="Gateway' + id + '" type="text" class="iptext" value="' + ip + '"><br><br>';
+            rtnhtml += '<label class="LabelIPHead">Bind NIC Port : </label><select id="GatewaySelect' + id + '">';
             $.each(IPList, function(ipindex, ipelement) {
                 if (bindport === '' && ipindex === 0) {
                     rtnhtml += '<option value="' + ipelement['name'] + '" selected=true>' + ipelement['displayname'] + '</option>';
@@ -156,7 +158,7 @@ var CreateHtml = {
         createobj.CreateDNSHtml = function(id, ip) {
             var rtnhtml = '<fieldset ';
             rtnhtml += 'style="margin-top:10px"';
-            rtnhtml += '><legend>DNS</legend><div class="div_fieldcontent">IP : <input id="DNS' + id + '" type="text" class="iptext" value="' + ip + '"><br></div</fieldset>';
+            rtnhtml += '><legend>DNS</legend><div class="div_fieldcontent"><label class="LabelIPHead">IP : </label><input id="DNS' + id + '" type="text" class="iptext" value="' + ip + '"><br></div</fieldset>';
             return rtnhtml;
         };        
         createobj.EmptyMassEntryResultTable = function(){

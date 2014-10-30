@@ -332,3 +332,27 @@ input:-ms-input-placeholder {
 .OptionUnSelect{
     background-image: linear-gradient( to bottom , #F8FF3B 0%, #EFDF00 100%);
 }
+
+.LabelHead{
+    display: inline-block;
+    width: 250px;
+}
+
+.LabelRelayHead{
+    display: inline-block;
+    width: 250px;
+}
+
+.LabelIPHead{
+    display: inline-block;
+    width: 160px;
+}
+
+.InputText{
+    width: 180px;
+}
+
+.InputRelay{
+    height: 20px;
+    width: 250px;
+}

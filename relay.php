@@ -107,7 +107,10 @@ and open the template in the editor.
             </div>                          
         </div>
         <div id="div_relay_control">
-            <div id="div_relay_table">
+            <div style="position: absolute;right: 10px">
+                        <a id="btn_refresh"  href="#" class="btn-light">Refresh</a>
+            </div>
+            <div id="div_relay_table" style="position: absolute;top: 40px">
                 <table id="table_relay" style="width: 100%">
                     <tr>
                         <th width="3%">Item</th>                        
@@ -120,45 +123,41 @@ and open the template in the editor.
                         <th width="17%">Action</th>
                     </tr>               
                 </table>
-            </div>
-            <div id="div_control_table">  
-                <div style="position: relative;top: 10px" >
-                    <div style="position: absolute; right: 0px">
-                        <a id="btn_refresh"  href="#" class="btn-light">Refresh</a>
-                    </div>
+                <div id="div_control_table">  
+                <div style="position: relative;top: 10px" >                    
                     <div style="position: absolute;left: 10px; top: 30px">
                         <fieldset>
                             <legend>Create</legend>
                             <div class="div_fieldcontent">
-                                <label>Source Url : </label>
-                                <input id="Source"  style="height: 20px;width: 250px" class="inputs" value="" type="text">
+                                <label class="LabelRelayHead">Source Url : </label>
+                                <input id="Source"  class="InputRelay" value="" type="text">
                                 <br>
                                 <br>                                
-                                <label>Destination Port : </label>
-                                <input id="Port" style="height: 20px;width: 60px" class="inputs" value="" type="text">
+                                <label class="LabelRelayHead">Destination Port : </label>
+                                <input id="Port" class="InputRelay" value="" type="text">
                                 <br>
                                 <br>
-                                <label">Destination Name : </label>
-                                <input id="DestinationName" style="height: 20px;width: 100px" class="inputs" value="" type="text">
+                                <label class="LabelRelayHead">Destination Name : </label>
+                                <input id="DestinationName" class="InputRelay" value="" type="text">
                                 <br>
                                 <br>
-                                <label>Channel Number : </label>
-                                <input id="ChannelNumber"  style="height: 20px;width: 120px" class="inputs" value="" type="text">
+                                <label class="LabelRelayHead">Channel Number : </label>
+                                <input id="ChannelNumber"  class="InputRelay" value="" type="text">
                                 <br>
                                 <br>
-                                <label>Name : </label>
-                                <input id="Name"  style="height: 20px;width: 120px" class="inputs" value="" type="text">
+                                <label class="LabelRelayHead">Name : </label>
+                                <input id="Name"  class="InputRelay" value="" type="text">
                                 <br>
                                 <br>
-                                <label>Description : </label>
-                                <input id="Description"  style="height: 20px;width: 120px" class="inputs" value="" type="text">
+                                <label class="LabelRelayHead">Description : </label>
+                                <input id="Description"  class="InputRelay" value="" type="text">
                                 <br>
                                 <br>
                                 <a id="btn_create" href="#" class="btn-light">Create</a>
                             </div>
                         </fieldset>
                     </div>
-                    <div style="position: absolute;left:450px; top: 30px">
+                    <div style="position: absolute;left:610px; top: 30px">
                         <fieldset>
                             <legend>Mass Entry</legend>                            
                             <div class="div_fieldcontent">
@@ -177,6 +176,8 @@ and open the template in the editor.
                     </div>
                 </div>
             </div>
+            </div>
+            
         </div>
         <div id="div_ip_control">
             <div id="div_ip_field">            
@@ -190,16 +191,16 @@ and open the template in the editor.
             <fieldset>
                 <legend>Change Password</legend>                            
                 <div class="div_fieldcontent">                                        
-                    <label>Current Password : </label>                    
-                    <input id="CurPWD"  style="height: 20px;width: 150px" class="inputs" value="" type="password">
+                    <label class="LabelHead">Current Password : </label>                    
+                    <input id="CurPWD" class="InputText"  style="height: 20px"  value="" type="password">
                     <br>    
                     <br>
-                    <label>New Password : </label>                    
-                    <input id="NewPWD" style="height: 20px;width: 150px" class="inputs" value="" type="password">
+                    <label class="LabelHead">New Password : </label>                    
+                    <input id="NewPWD" class="InputText" style="height: 20px" value="" type="password">
                     <br>
                     <br>
-                    <label>Confirm New Password : </label>                    
-                    <input id="ConfNewPWD" style="height: 20px;width: 150px" class="inputs" value="" type="password">                    
+                    <label class="LabelHead">Confirm New Password : </label>                    
+                    <input id="ConfNewPWD" class="InputText" style="height: 20px" value="" type="password">                    
                     <br>
                     <br>
                     <a id="btn_chg_pwd" href="#" class="btn-light">Confirm</a>

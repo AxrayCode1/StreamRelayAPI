@@ -49,7 +49,7 @@ var UIUpgradeControl = {
                     alert('Please Click "Check New Firmware" to check new vesion.');
                     break
                 case eCheckStatus.NoNewVersion:
-                    alert('No new vesion can be updated.');
+                    alert('No new vesion can be upgraded.');
                     break;
                 case eCheckStatus.CanUpdate:
                     var request = oRelayAjax.updatenewversion();
@@ -58,7 +58,7 @@ var UIUpgradeControl = {
             }
         };
         oUIUpgradeContorl.CallBackUpdate = function(request){     
-            oHtml.blockPageMsg('Please Wait. System is updating.');
+            oHtml.blockPageMsg('Please Wait. System is upgrading.');
             oUIUpgradeContorl.CheckUpdate();
             TimerCheckUpdate = setInterval(function(){oUIUpgradeContorl.CheckUpdate();}, 8000);
         };
@@ -82,7 +82,7 @@ var UIUpgradeControl = {
                         oHtml.stopPage();
                         break;
                     case eUpdateStatus.Updating:                        
-                        oHtml.ChangeblockMsg('Please Wait. System is updating.');                        
+                        oHtml.ChangeblockMsg('Please Wait. System is upgrading.');                        
                         break;
                     case eUpdateStatus.WgetFail:
                         window.clearInterval(TimerCheckUpdate);   

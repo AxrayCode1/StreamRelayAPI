@@ -35,7 +35,6 @@ class Process_System_API
             $json_arr['Result'] = '-99';
         }
         return $json_arr;
-//        $output_decode = json_decode($output);
     }
     
     function Update()
@@ -43,7 +42,7 @@ class Process_System_API
         $exu_str = "sudo ".UpdateRootPath."update_button_action.sh".' >/dev/null 2>&1 &';
         $pipe = popen($exu_str,"r");
         pclose($pipe);
-        $json_arr['Result'] = '-99';                
+        $json_arr['Result'] = '0';                
         return $json_arr;
     }
     
