@@ -1,6 +1,7 @@
 html, body{
     margin:0;
     padding:0;
+    width: 100%;
     min-width: 1024px; /* this is the important part*/
 }
 div.Logo{
@@ -87,7 +88,7 @@ div#sup{
     position: absolute; 
     z-index:2; 
     left: 600px; 
-    width: 150px; 
+    width: 170px; 
     height: 30px; 
     text-align:center; 
     line-height:30px; 
@@ -370,7 +371,7 @@ input:-ms-input-placeholder {
 
 .LabelHead{
     display: inline-block;
-    width: 200px;
+    width: 210px;
 }
 
 .LabelRelayHead{
@@ -380,7 +381,7 @@ input:-ms-input-placeholder {
 
 .LabelIPHead{
     display: inline-block;
-    width: 120px;
+    width: 130px;
 }
 
 .InputText{
@@ -390,4 +391,9 @@ input:-ms-input-placeholder {
 .InputRelay{
     height: 20px;
     width: 250px;
+}
+
+.LabelVersionHead{
+    display: inline-block;
+    width: 230px;
 }

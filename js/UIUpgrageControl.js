@@ -49,7 +49,7 @@ var UIUpgradeControl = {
                     alert('Please Click "Check New Firmware" to check new vesion.');
                     break
                 case eCheckStatus.NoNewVersion:
-                    alert('No new vesion can be upgraded.');
+                    alert('No new vesion can be updated.');
                     break;
                 case eCheckStatus.CanUpdate:
                     var request = oRelayAjax.updatenewversion();
@@ -58,7 +58,7 @@ var UIUpgradeControl = {
             }
         };
         oUIUpgradeContorl.CallBackUpdate = function(request){     
-            oHtml.blockPageMsg('Please Wait. System is upgrading.');
+            oHtml.blockPageMsg('Please Wait. System is updating.');
             oUIUpgradeContorl.CheckUpdate();
             TimerCheckUpdate = setInterval(function(){oUIUpgradeContorl.CheckUpdate();}, 8000);
         };
@@ -73,7 +73,7 @@ var UIUpgradeControl = {
                 {
                     case eUpdateStatus.UpdateSuccess:
                         window.clearInterval(TimerCheckUpdate);   
-                        alert('Successful to upgrage system. Please relogin.');
+                        alert('Successful to update system. Please relogin.');
                         window.location = '/ui/Logout.html';
                         break;
                     case eUpdateStatus.NoUpdate:
@@ -82,29 +82,29 @@ var UIUpgradeControl = {
                         oHtml.stopPage();
                         break;
                     case eUpdateStatus.Updating:                        
-                        oHtml.ChangeblockMsg('Please Wait. System is upgrading.');                        
+                        oHtml.ChangeblockMsg('Please Wait. System is updating.');                        
                         break;
                     case eUpdateStatus.WgetFail:
                         window.clearInterval(TimerCheckUpdate);   
-                        alert('Failed to upgrage system. Please check your network configuration.');
+                        alert('Failed to update system. Please check your network configuration.');
                         oHtml.stopPage();
                         oUIUpgradeContorl.bCheckUpdateFlag = true;
                         break;                       
                     case eUpdateStatus.WrongVersion:
                         window.clearInterval(TimerCheckUpdate);   
-                        alert('Failed to upgrage system. New firmware version is not right.');
+                        alert('Failed to update system. New firmware version is not right.');
                         oHtml.stopPage();
                         oUIUpgradeContorl.bCheckUpdateFlag = true;
                         break;
                     case eUpdateStatus.UpdateFail:
                         window.clearInterval(TimerCheckUpdate);   
-                        alert('Failed to upgrage system.');
+                        alert('Failed to update system.');
                         oHtml.stopPage();
                         oUIUpgradeContorl.bCheckUpdateFlag = true;
                         break;
                     default:
                         window.clearInterval(TimerCheckUpdate);   
-                        alert('Failed to upgrage system. Unknow Error.');
+                        alert('Failed to update system. Unknow Error.');
                         oHtml.stopPage();
                         oUIUpgradeContorl.bCheckUpdateFlag = true;
                         break;

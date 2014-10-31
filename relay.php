@@ -86,7 +86,7 @@ and open the template in the editor.
             </div>
 
             <div id="sup" class="FunctionControl" onmouseover="mouseon_b('sup');" onmouseout="mouseout_b('sup');">
-                <img src="/img/performance.png" height="20" width="20" align="center" /> Sys. Upgrage
+                <img src="/img/performance.png" height="20" width="20" align="center" /> Sys. Update
             </div>
 
         <!--<div id="per" class="FunctionControl" style="position: absolute; z-index:2; left: 510px; width: 150px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('per');" onmouseout="mouseout_b('per');">
@@ -107,17 +107,17 @@ and open the template in the editor.
             <div style="position: absolute;right: 10px">
                         <a id="btn_refresh"  href="#" class="btn-light">Refresh</a>
             </div>
-            <div id="div_relay_table" style="position: absolute;top: 40px">
+            <div id="div_relay_table" style="position: absolute;top: 40px;width: 100%">
                 <table id="table_relay" style="width: 100%">
                     <tr>
-                        <th width="3%">Item</th>                        
-                        <th id="source" class="relayth" width="20%">Source</th>
-                        <th id="fulldest" class="relayth" width="20%">Destination</th>
-                        <th id="status" class="relayth" width="8%">Status</th>
-                        <th id="channelnumber" class="relayth" width="10%">Channel Number</th>
-                        <th id="name" class="relayth" width="8%">Name</th>
+                        <th width="2%">Item</th>                        
+                        <th id="source" class="relayth" width="18%">Source</th>
+                        <th id="fulldest" class="relayth" width="18%">Destination</th>
+                        <th id="status" class="relayth" width="7%">Status</th>
+                        <th id="channelnumber" class="relayth" width="11%">Channel Number</th>
+                        <th id="name" class="relayth" width="12%">Channel Name</th>
                         <th id="description" class="relayth" width="14%">Description</th>                        
-                        <th width="17%">Action</th>
+                        <th width="18%">Action</th>
                     </tr>               
                 </table>
                 <div id="div_control_table">  
@@ -142,7 +142,7 @@ and open the template in the editor.
                                     <input id="ChannelNumber"  class="InputRelay" value="" type="text">
                                     <br>
                                     <br>
-                                    <label class="LabelRelayHead">Name : </label>
+                                    <label class="LabelRelayHead">Channel Name : </label>
                                     <input id="Name"  class="InputRelay" value="" type="text">
                                     <br>
                                     <br>
@@ -171,9 +171,9 @@ and open the template in the editor.
                                 </div>
                             </fieldset>
                         </div>
-                        <div style="position: absolute;right:10px; top: 350px">
+<!--                        <div style="position: absolute;right:10px; top: 350px">
                             Copyright © 2014 AcroRed Technologies, Inc. All rights reserved.
-                        </div>
+                        </div>-->
                     </div>
                 </div>
                
@@ -188,9 +188,9 @@ and open the template in the editor.
                 <a id="btn_ip_confirm" href="#" class="btn-light">Confirm</a>
                 <a style="margin-left: 10px" id="btn_ip_cancel" href="#" class="btn-light">Cancel</a>
             </div>
-            <div style="margin-top: 10px;text-align: right;margin-right: 10px">
+<!--            <div style="margin-top: 10px;text-align: right;margin-right: 10px">
                             Copyright © 2014 AcroRed Technologies, Inc. All rights reserved.
-            </div>
+            </div>-->
         </div>
         
         <div id="div_sys_config">
@@ -212,20 +212,20 @@ and open the template in the editor.
                     <a id="btn_chg_pwd" href="#" class="btn-light">Confirm</a>
                 </div>
             </fieldset>
-            <div style="margin-top: 10px;text-align: right;margin-right: 10px">
+<!--            <div style="margin-top: 10px;text-align: right;margin-right: 10px">
                 Copyright © 2014 AcroRed Technologies, Inc. All rights reserved.
-            </div>
+            </div>-->
         </div>
         
         <div id="div_upgrade_control">
             <fieldset>
-                <legend>System Upgrade</legend>                            
+                <legend>System Update</legend>                            
                 <div class="div_fieldcontent">
-                    <label>Now Firmware Version : </label>
+                    <label class="LabelVersionHead">Current Firmware Version : </label>
                     <label id="txt_now_firmware"></label>
                     <br>
                     <br>
-                    <label>New Firmware Version : </label>
+                    <label class="LabelVersionHead">New Firmware Version : </label>
                     <label id="txt_new_firmware" style="color:blue"></label>                            
                     <br>            
                     <br>
@@ -233,9 +233,9 @@ and open the template in the editor.
                     <a id="btn_update_firmware" href="#" class="btn-light">Update</a>
                 </div>
             </fieldset>
-            <div style="margin-top: 10px;text-align: right;margin-right: 10px">
+<!--            <div style="margin-top: 10px;text-align: right;margin-right: 10px">
                 Copyright © 2014 AcroRed Technologies, Inc. All rights reserved.
-            </div>
+            </div>-->
         </div>
         
         <div id="modal_update_progress_content">

@@ -46,7 +46,7 @@ var CreateHtml = {
                 append_str += '<td>' + element['SourceUrl'] + '</td>';
                 append_str += '<td>' + element['Dest'] + '</td>';
                 append_str += '<td>' + createobj.GetRelayStatusStr(element['Status']) + '</td>';
-                append_str += '<td>' + element['ChannelNumber'] + '</td>';
+                append_str += '<td style="text-align:right">' + element['ChannelNumber'] + '</td>';
                 append_str += '<td>' + element['Name'] + '</td>';
                 append_str += '<td>' + element['Description'] + '</td>';
                 append_str += '<td>';
