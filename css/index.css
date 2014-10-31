@@ -195,6 +195,7 @@ th{
      background: #96f8ff;
     font-weight:bolder;
     height: 25px;
+    cursor:default
 }
 th, td {    
    

@@ -44,9 +44,15 @@ switch (count($url))
                 switch($_SERVER['REQUEST_METHOD'])
                 {
                     case 'GET':
-                        $rtn_arr = $proc_api -> listdata();
+//                        $rtn_arr = $proc_api -> listdata();
+//                        header('Content-Type: application/json; charset=utf-8');  
+//                        echo json_encode($rtn_arr);
+                        $rtn_json = $proc_api ->listdatajson();
                         header('Content-Type: application/json; charset=utf-8');  
-                        echo json_encode($rtn_arr);
+                        if($rtn_json != null)
+                            echo $rtn_json;
+                        else
+                            http_response_code(503);
                         break;
                     default :
                         http_response_code(404);

@@ -105,10 +105,10 @@ and open the template in the editor.
 
         <div id="div_relay_control">
             <div style="position: absolute;right: 10px">
-                        <a id="btn_refresh"  href="#" class="btn-light">Refresh</a>
+                <a id="btn_refresh"  href="#" class="btn-light">Refresh</a>
             </div>
             <div id="div_relay_table" style="position: absolute;top: 40px;width: 100%">
-                <table id="table_relay" style="width: 100%">
+                <table id="table_relay">
                     <tr>
                         <th width="2%">Item</th>                        
                         <th id="source" class="relayth" width="18%">Source</th>

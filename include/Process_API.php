@@ -66,6 +66,16 @@ class Process_API
         return $ouputarr;
     }
     
+    function listdatajson()
+    {   
+        $output = null;
+        $exu_str = 'sudo /var/www/html/relay.exe listjson';            
+        exec($exu_str,$output);        
+        if(json_decode($output[0]) == null)
+            $output = null;
+        return $output[0];
+    }
+    
     function listip()
     {
         $outputarr = array();

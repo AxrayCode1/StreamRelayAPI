@@ -14,21 +14,60 @@ var CreateHtml = {
                     autoOpen: false,
                     dialogClass: "no-close",
                     height:140,
-                    width:300               
+                    width:350               
             });           
             $(".ui-dialog-titlebar").hide();
         };
         createobj.clearTable = function() {
             table_relay.find("tr:gt(0)").remove();
         };
+//        createobj.appendTable = function(relay_list) {
+//            var tmp_relay_item;
+//            var dest_temp;
+//            var port;
+//            var dest_name;
+//            relayList = [];
+//            $.each(relay_list, function(index, element) {                
+//                dest_temp = element['Dest'].split(':');
+//                port = '';
+//                dest_name = '';
+//                if (typeof(dest_temp[2]) !== 'undefined') {
+//                    dest_temp = dest_temp[2].split('/');
+//                    port = dest_temp[0];
+//                    channelname = dest_temp[1];
+//                }
+//                tmp_relay_item = new relayClass(element['id'], element['SourceUrl']
+//                , port, dest_name,element['ChannelNumber'],element['Name']
+//                ,element['Description'],element['Dest'],element['Status']);
+//                relayList[index] = tmp_relay_item;
+//                var append_str = '';
+//                append_str += '<tr>';
+//                append_str += '<td style="text-align:center">' + (index + 1) + '</td>';
+//                append_str += '<td>' + element['SourceUrl'] + '</td>';
+//                append_str += '<td>' + element['Dest'] + '</td>';
+//                append_str += '<td>' + createobj.GetRelayStatusStr(element['Status']) + '</td>';
+//                append_str += '<td style="text-align:right">' + element['ChannelNumber'] + '</td>';
+//                append_str += '<td>' + element['Name'] + '</td>';
+//                append_str += '<td>' + element['Description'] + '</td>';
+//                append_str += '<td>';
+//                append_str += '<a href="#" class="btn-light delete" id="' + index + '">Delete</a>';
+//                if (port !== '')
+//                    append_str += '<a href="#" style="margin-left:10px" class="btn-light resume" id="' + index + '">Resume</a>';
+//                append_str += '</td>';
+//                append_str += '</tr>';
+//                table_relay.append(append_str);
+//            });
+//        };
         createobj.appendTable = function(relay_list) {
             var tmp_relay_item;
             var dest_temp;
             var port;
             var dest_name;
+            var atmpSourceUrl;
+            var otmpSourceUrl;
             relayList = [];
-            $.each(relay_list, function(index, element) {                
-                dest_temp = element['Dest'].split(':');
+            $.each(relay_list, function(relayindex, relayelement) {               
+                dest_temp = relayelement['dest'].split(':');
                 port = '';
                 dest_name = '';
                 if (typeof(dest_temp[2]) !== 'undefined') {
@@ -36,37 +75,62 @@ var CreateHtml = {
                     port = dest_temp[0];
                     channelname = dest_temp[1];
                 }
-                tmp_relay_item = new relayClass(element['id'], element['SourceUrl']
-                , port, dest_name,element['ChannelNumber'],element['Name']
-                ,element['Description'],element['Dest'],element['Status']);
-                relayList[index] = tmp_relay_item;
+                atmpSourceUrl = [];
+                $.each(relayelement['Source'],function(sourceindex,sourceelement){
+                    otmpSourceUrl = new relaySourceClass(sourceelement['idSource'],sourceelement['flag'],sourceelement['urlSource']);
+                    atmpSourceUrl[sourceindex] = otmpSourceUrl;
+                });
+                tmp_relay_item = new relayClass(relayelement['idChannel'], atmpSourceUrl
+                , port, dest_name,relayelement['numChannel'],relayelement['nameChannel']
+                ,relayelement['descChannel'],relayelement['dest'],relayelement['status']);
+                relayList[relayindex] = tmp_relay_item;
                 var append_str = '';
                 append_str += '<tr>';
-                append_str += '<td style="text-align:center">' + (index + 1) + '</td>';
-                append_str += '<td>' + element['SourceUrl'] + '</td>';
-                append_str += '<td>' + element['Dest'] + '</td>';
-                append_str += '<td>' + createobj.GetRelayStatusStr(element['Status']) + '</td>';
-                append_str += '<td style="text-align:right">' + element['ChannelNumber'] + '</td>';
-                append_str += '<td>' + element['Name'] + '</td>';
-                append_str += '<td>' + element['Description'] + '</td>';
+                append_str += '<td style="text-align:center">' + (relayindex + 1) + '</td>';
+                append_str += '<td>' + atmpSourceUrl[0]['url'] + '</td>';
+                append_str += '<td>' + relayelement['dest'] + '</td>';
+                append_str += '<td>' + createobj.GetRelayStatusStr(relayelement['status']) + '</td>';
+                append_str += '<td style="text-align:right">' + relayelement['numChannel'] + '</td>';
+                append_str += '<td>' + relayelement['nameChannel'] + '</td>';
+                append_str += '<td>' + relayelement['descChannel'] + '</td>';
                 append_str += '<td>';
-                append_str += '<a href="#" class="btn-light delete" id="' + index + '">Delete</a>';
+                append_str += '<a href="#" class="btn-light delete" id="' + relayindex + '">Delete</a>';
                 if (port !== '')
-                    append_str += '<a href="#" style="margin-left:10px" class="btn-light resume" id="' + index + '">Resume</a>';
+                    append_str += '<a href="#" style="margin-left:10px" class="btn-light resume" id="' + relayindex + '">Resume</a>';
                 append_str += '</td>';
                 append_str += '</tr>';
                 table_relay.append(append_str);
             });
         };
+//        createobj.appendTablebyList = function() {
+//            $.each(relayList, function(index, element) {                
+//                var append_str = '';
+//                append_str += '<tr>';
+//                append_str += '<td style="text-align:center">' + (index + 1) + '</td>';
+//                append_str += '<td>' + element['source'] + '</td>';
+//                append_str += '<td>' + element['fulldest'] + '</td>';
+//                append_str += '<td>' + createobj.GetRelayStatusStr(element['status']) + '</td>';
+//                append_str += '<td style="text-align:right">' + element['channelnumber'] + '</td>';
+//                append_str += '<td>' + element['name'] + '</td>';
+//                append_str += '<td>' + element['description'] + '</td>';
+//                append_str += '<td>';
+//                append_str += '<a href="#" class="btn-light delete" id="' + index + '">Delete</a>';
+//                if (element['port'] !== '')
+//                    append_str += '<a href="#" style="margin-left:10px" class="btn-light resume" id="' + index + '">Resume</a>';
+//                append_str += '</td>';
+//                append_str += '</tr>';
+//                table_relay.append(append_str);
+//            });
+//        };
         createobj.appendTablebyList = function() {
             $.each(relayList, function(index, element) {                
                 var append_str = '';
                 append_str += '<tr>';
                 append_str += '<td style="text-align:center">' + (index + 1) + '</td>';
-                append_str += '<td>' + element['source'] + '</td>';
+                append_str += '<td>' + element['source'][0]['url'] + '</td>';
                 append_str += '<td>' + element['fulldest'] + '</td>';
                 append_str += '<td>' + createobj.GetRelayStatusStr(element['status']) + '</td>';
-                append_str += '<td>' + element['channelnumber'] + '</td>';
+                append_str += '<td style="text-align:right">' + element['channelnumber'] + '</td>';
                 append_str += '<td>' + element['name'] + '</td>';
                 append_str += '<td>' + element['description'] + '</td>';
                 append_str += '<td>';

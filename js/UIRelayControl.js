@@ -34,30 +34,30 @@ var UIRelayControl = {
             $('#btn_mass_create').click(function() {                        
                 oUIRelayContorl.MassFileCreateAction();        
             });
-//            $('.relayth').click(function(){
-//               var th = $(this);
-//               var eSortType = SortType.String;
-//               var eSortDirection = SortDirection.ASC;
-//               if(th.attr('id') === "channelnumber")
-//                   eSortType = SortType.Num;
-//               if(th.hasClass('asc')){
-//                   th.removeClass('asc');
-//                   th.addClass('desc');
-//                   eSortDirection = SortDirection.Desc;
-//               }
-//               else{
-//                   th.removeClass('desc');
-//                   th.addClass('asc');
-//                   eSortDirection = SortDirection.ASC;
-//               }
-//               SortRelayList(eSortDirection,eSortType,th.attr('id'));
-//               oHtml.clearTable();
-//               oHtml.appendTablebyList();
-//            });
+            $('.relayth').click(function(){
+               var th = $(this);
+               var eSortType = SortType.String;
+               var eSortDirection = SortDirection.ASC;
+               if(th.attr('id') === "channelnumber")
+                   eSortType = SortType.Num;
+               if(th.hasClass('asc')){
+                   th.removeClass('asc');
+                   th.addClass('desc');
+                   eSortDirection = SortDirection.Desc;
+               }
+               else{
+                   th.removeClass('desc');
+                   th.addClass('asc');
+                   eSortDirection = SortDirection.ASC;
+               }
+               SortRelayList(eSortDirection,eSortType,th.attr('id'));
+               oHtml.clearTable();
+               oHtml.appendTablebyList();
+            });
         };
         
         function SortRelayList(eSortDirection,eSortType,sSortVariable)
-        {        
+        {                    
             switch ( eSortDirection )
             {
                 case SortDirection.ASC:
@@ -72,7 +72,10 @@ var UIRelayControl = {
                         case SortType.String:
                             relayList.sort( function(a,b)
                             {
-                                return a[sSortVariable].toUpperCase() < b[sSortVariable].toUpperCase() ? -1 : ( a[sSortVariable].toUpperCase() > b[sSortVariable].toUpperCase() ? 1 : 0 );
+                                if(sSortVariable === 'source')
+                                    return a[sSortVariable][0]['url'].toUpperCase() < b[sSortVariable][0]['url'].toUpperCase() ? -1 : ( a[sSortVariable][0]['url'].toUpperCase() > b[sSortVariable][0]['url'].toUpperCase() ? 1 : 0 );
+                                else
+                                    return a[sSortVariable].toUpperCase() < b[sSortVariable].toUpperCase() ? -1 : ( a[sSortVariable].toUpperCase() > b[sSortVariable].toUpperCase() ? 1 : 0 );
                             });
                             break;
                     }
@@ -90,14 +93,16 @@ var UIRelayControl = {
                         case SortType.String:
                             relayList.sort( function(a,b)
                             {
-                                return a[sSortVariable].toUpperCase() > b[sSortVariable].toUpperCase() ? -1 : ( a[sSortVariable].toUpperCase() < b[sSortVariable].toUpperCase() ? 1 : 0 );
+                                if(sSortVariable === 'source')
+                                    return a[sSortVariable][0]['url'].toUpperCase() > b[sSortVariable][0]['url'].toUpperCase() ? -1 : ( a[sSortVariable][0]['url'].toUpperCase() < b[sSortVariable][0]['url'].toUpperCase() ? 1 : 0 );
+                                else
+                                    return a[sSortVariable].toUpperCase() > b[sSortVariable].toUpperCase() ? -1 : ( a[sSortVariable].toUpperCase() < b[sSortVariable].toUpperCase() ? 1 : 0 );
                             });
                             break;
                     }
                     break;               
             }          
-        }
-        
+        }        
         oUIRelayContorl.InitMassEntryDialog = function(){
             $( "#modal_update_progress_content" ).dialog({
                     title: "Mass Entry",
