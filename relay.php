@@ -97,7 +97,7 @@ and open the template in the editor.
             <img src="img/log.png" height="20" width="20" align="center" /> Event Log.
         </div>--> 
 
-            <div id="lo" class="FunctionControl" style="right: 10px;top:40px;position: absolute; z-index:2; width: 100px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('lo');" onmouseout="mouseout_b('lo');" onclick='window.location="/ui/Logout.html"'>
+            <div id="lo" class="FunctionControl" onmouseover="mouseon_b('lo');" onmouseout="mouseout_b('lo');" onclick='window.location="/ui/Logout.html"'>
                 <img src="/img/logout-512.png" height="20" width="20" align="center" /> Logout
             </div>                          
             
