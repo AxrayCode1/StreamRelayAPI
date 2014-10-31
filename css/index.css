@@ -9,13 +9,13 @@ div.Logo{
     left: 0px; 
     top:0px; 
     width: 180px; 
-    height: 40px; 
+    height: 70px; 
     font-style:italic; 
     font-weight:900; 
     font-size:xx-large; 
     color:red; 
     text-align:center; 
-    line-height:40px; 
+    line-height:70px; 
     background-image: linear-gradient( to bottom , #FFFFFF 0%, #BDBDBD 100%); 
     box-shadow: #666 0px 2px 3px;
 }
@@ -44,7 +44,7 @@ div.Version{
     color:white; 
     text-align:right;
 }
-div.OptionBar{
+div.OptionBar{    
     position: absolute; 
     z-index:2; 
     left: 0px; 
@@ -54,9 +54,9 @@ div.OptionBar{
     box-shadow: #666 0px 2px 3px;
 }
 div#rl{
-    position: absolute; 
+    position: absolute;    
     z-index:2; 
-    left: 120px; 
+    left: 180px; 
     width: 130px; 
     height: 30px; 
     text-align:center; 
@@ -66,17 +66,19 @@ div#rl{
 div#ise{
     position: absolute; 
     z-index:2; 
-    left: 250px; 
+    left: 320px; 
     width: 130px; 
     height: 30px; 
     text-align:center; 
     line-height:25px; 
     font-size: larger;
 }
-#div_relay_create_control{position: relative;height: 42px;width: 100%;}
+#rl{position: relative;height: 60px;width: 100%;}
 #div_option{position: relative;height: 40px;width: 100%;}
-#div_relay_control{position: relative; width: 100%}
-#div_ip_control{position: relative; width: 100%}
+#div_relay_control{position: relative; width: 100%;top:40px}
+#div_ip_control{position: relative; width: 100%;top:40px}
+#div_sys_config{position: relative; width: 100%;top:40px}
+#div_upgrade_control{position: relative; width: 100%;top:40px}
 /*#div_relay_table{margin: 20px auto;width: 1024px}*/
 /*#div_control_table{margin-top: 10px}*/
 a {text-decoration: none;}
@@ -335,17 +337,17 @@ input:-ms-input-placeholder {
 
 .LabelHead{
     display: inline-block;
-    width: 250px;
+    width: 200px;
 }
 
 .LabelRelayHead{
     display: inline-block;
-    width: 250px;
+    width: 170px;
 }
 
 .LabelIPHead{
     display: inline-block;
-    width: 160px;
+    width: 120px;
 }
 
 .InputText{

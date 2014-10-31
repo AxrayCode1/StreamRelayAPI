@@ -27,7 +27,7 @@ var CreateHtml = {
             var port;
             var dest_name;
             relayList = [];
-            $.each(relay_list, function(index, element) {
+            $.each(relay_list, function(index, element) {                
                 dest_temp = element['Dest'].split(':');
                 port = '';
                 dest_name = '';
@@ -37,7 +37,8 @@ var CreateHtml = {
                     channelname = dest_temp[1];
                 }
                 tmp_relay_item = new relayClass(element['id'], element['SourceUrl']
-                , port, dest_name,element['ChannelNumber'],element['Name'],element['Description']);
+                , port, dest_name,element['ChannelNumber'],element['Name']
+                ,element['Description'],element['Dest'],element['Status']);
                 relayList[index] = tmp_relay_item;
                 var append_str = '';
                 append_str += '<tr>';
@@ -51,6 +52,26 @@ var CreateHtml = {
                 append_str += '<td>';
                 append_str += '<a href="#" class="btn-light delete" id="' + index + '">Delete</a>';
                 if (port !== '')
+                    append_str += '<a href="#" style="margin-left:10px" class="btn-light resume" id="' + index + '">Resume</a>';
+                append_str += '</td>';
+                append_str += '</tr>';
+                table_relay.append(append_str);
+            });
+        };
+        createobj.appendTablebyList = function() {
+            $.each(relayList, function(index, element) {                
+                var append_str = '';
+                append_str += '<tr>';
+                append_str += '<td style="text-align:center">' + (index + 1) + '</td>';
+                append_str += '<td>' + element['source'] + '</td>';
+                append_str += '<td>' + element['fulldest'] + '</td>';
+                append_str += '<td>' + createobj.GetRelayStatusStr(element['status']) + '</td>';
+                append_str += '<td>' + element['channelnumber'] + '</td>';
+                append_str += '<td>' + element['name'] + '</td>';
+                append_str += '<td>' + element['description'] + '</td>';
+                append_str += '<td>';
+                append_str += '<a href="#" class="btn-light delete" id="' + index + '">Delete</a>';
+                if (element['port'] !== '')
                     append_str += '<a href="#" style="margin-left:10px" class="btn-light resume" id="' + index + '">Resume</a>';
                 append_str += '</td>';
                 append_str += '</tr>';

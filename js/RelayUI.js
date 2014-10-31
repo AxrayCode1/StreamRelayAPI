@@ -8,6 +8,14 @@ var oUIRelay = {};
 var oUIIP = {};
 var oUISystem = {};
 var oUIUpgrade = {};
+var SortDirection = {
+    ASC:0,
+    Desc:1
+};
+var SortType={
+    Num:0,
+    String:1
+};
 //function MyError(message) {
 //    this.message = message || "Default Message";
 //    alert(this.message);
