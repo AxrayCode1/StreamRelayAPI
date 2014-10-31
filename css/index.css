@@ -60,7 +60,7 @@ div#rl{
     width: 130px; 
     height: 30px; 
     text-align:center; 
-    line-height:25px; 
+    line-height:30px; 
     font-size: larger;    
 }
 div#ise{
@@ -70,15 +70,46 @@ div#ise{
     width: 130px; 
     height: 30px; 
     text-align:center; 
-    line-height:25px; 
+    line-height:30px; 
+    font-size: larger;
+}
+div#ss{
+    position: absolute; 
+    z-index:2; 
+    left: 460px; 
+    width: 130px; 
+    height: 30px; 
+    text-align:center; 
+    line-height:30px; 
+    font-size: larger;
+}
+div#sup{
+    position: absolute; 
+    z-index:2; 
+    left: 600px; 
+    width: 150px; 
+    height: 30px; 
+    text-align:center; 
+    line-height:30px; 
+    font-size: larger;
+}
+div#lo{
+    right: 10px;
+    position: absolute; 
+    z-index:2; 
+    width: 100px; 
+    height: 30px; 
+    text-align:center; 
+    line-height:30px; 
     font-size: larger;
 }
 #rl{position: relative;height: 60px;width: 100%;}
-#div_option{position: relative;height: 40px;width: 100%;}
-#div_relay_control{position: relative; width: 100%;top:40px}
-#div_ip_control{position: relative; width: 100%;top:40px}
-#div_sys_config{position: relative; width: 100%;top:40px}
-#div_upgrade_control{position: relative; width: 100%;top:40px}
+#div_relay_header{position: relative;width: 100%;}
+/*#div_option{position: relative;height: 40px;width: 100%;}*/
+#div_relay_control{position: relative; width: 100%;top:80px}
+#div_ip_control{position: relative; width: 100%;top:80px}
+#div_sys_config{position: relative; width: 100%;top:80px}
+#div_upgrade_control{position: relative; width: 100%;top:80px}
 /*#div_relay_table{margin: 20px auto;width: 1024px}*/
 /*#div_control_table{margin-top: 10px}*/
 a {text-decoration: none;}
@@ -324,7 +355,9 @@ input:-ms-input-placeholder {
 }
 
 .FunctionControl{
+    position: absolute;
     cursor: pointer;
+    top:40px;
 }
 
 .OptionSelect{
