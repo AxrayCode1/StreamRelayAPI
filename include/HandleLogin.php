@@ -16,7 +16,7 @@ class Login{
     {
         // if connection already exists
         if ($this->PDODB != null) {
-            return LoginStatus::DBConnectSuccess;
+            return APIStatus::DBConnectSuccess;
         } else {
             try {
                 // Generate a database connection, using the PDO connector
@@ -25,14 +25,15 @@ class Login{
                 // @see http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers#Connecting_to_MySQL says:
                 // "Adding the charset to the DSN is very important for security reasons,
                 // most examples you'll see around leave it out. MAKE SURE TO INCLUDE THE CHARSET!"
-                $this->PDODB = new PDO('mysql:host='. DB_HOST .';dbname='. DB_NAME . ';charset=utf8', DB_USER, DB_PASS);
-                return LoginStatus::DBConnectSuccess;
+                $this->PDODB = new PDO('mysql:host='. DB_HOST .';dbname='. DB_NAME . ';charset=utf8'
+                        , DB_USER, DB_PASS, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
+                return APIStatus::DBConnectSuccess;
             } catch (PDOException $e) {
-                return LoginStatus::DBConnectFail;
+                return APIStatus::DBConnectFail;
             }
         }
         // default return
-        return LoginStatus::DBConnectFail;
+        return APIStatus::DBConnectFail;
     }
     
     public function Sec_Session_Start() {
@@ -93,7 +94,7 @@ SQL;
                     $_SESSION['LoginString'] = hash('sha512', $sPassword . $sUserBrowser);                    
                     // Login successful. 
                     setcookie("CheckKey", $sInputPassword);
-                    return LoginStatus::LoginSuccess;
+                    return APIStatus::LoginSuccess;
                 } else {
                     // Password is not correct 
                     // We record this attempt in the database 
@@ -104,18 +105,18 @@ SQL;
 //                        exit();
 //                    }
 
-                    return LoginStatus::LoginFail;
+                    return APIStatus::LoginFail;
                 }
 //            }
             } 
             else {
                 // No user exists. 
-                return LoginStatus::LoginFail;
+                return APIStatus::LoginFail;
             }
         } 
         else {
             // Could not create a prepared statement
-            return LoginStatus::DBPrepareFail;
+            return APIStatus::DBPrepareFail;
         }
     }
     
@@ -149,24 +150,24 @@ SQL;
 
                         if ($Stmt->rowCount() == 1 || $Stmt->rowCount() == 0) {     
                             $this->SessionDestroy();
-                            return LoginStatus::ChangePWDSuccess;                    
+                            return APIStatus::ChangePWDSuccess;                    
                         } else {                    
-                            return LoginStatus::ChangePWDFail;
+                            return APIStatus::ChangePWDFail;
                         }
                     } else {
                         // Could not prepare statement                        
-                        return LoginStatus::DBPrepareFail;
+                        return APIStatus::DBPrepareFail;
                     }
                 }
                 else {                    
-                    return LoginStatus::ChangePWDFail;
+                    return APIStatus::ChangePWDFail;
                 }
             } else {
                 // Could not prepare statement
-                return LoginStatus::DBPrepareFail;
+                return APIStatus::DBPrepareFail;
             }
         } else {            
-            return LoginStatus::ChangePWDFail;
+            return APIStatus::ChangePWDFail;
         }
     }
     
@@ -195,22 +196,22 @@ SQL;
 
                     if ($sLoginCheck == $sLoginString) {
                         // Logged In!!!! 
-                        return LoginStatus::LoginSuccess;
+                        return APIStatus::LoginSuccess;
                     } else {
                         // Not logged in 
-                        return LoginStatus::LoginFail;
+                        return APIStatus::LoginFail;
                     }
                 } else {
                     // Not logged in 
-                    return LoginStatus::LoginFail;
+                    return APIStatus::LoginFail;
                 }
             } else {
                 // Could not prepare statement
-                return LoginStatus::DBPrepareFail;
+                return APIStatus::DBPrepareFail;
             }
         } else {
             // Not logged in 
-            return LoginStatus::LoginFail;
+            return APIStatus::LoginFail;
         }
     }        
 

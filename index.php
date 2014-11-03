@@ -2,9 +2,9 @@
 include_once '/var/www/html/include/HandleLogin.php';
 $oLogin = new Login();
 $oLogin->Sec_Session_Start();
-if($oLogin->DB_Connection() == LoginStatus::DBConnectSuccess)
+if($oLogin->DB_Connection() == APIStatus::DBConnectSuccess)
 {
-    if($oLogin->Login_Check() == LoginStatus::LoginSuccess)
+    if($oLogin->Login_Check() == APIStatus::LoginSuccess)
     {
         header("Location: /ui/relay.html");
         exit();      

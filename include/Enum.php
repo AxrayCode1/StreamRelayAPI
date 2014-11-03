@@ -1,5 +1,5 @@
 <?php
-abstract class LoginStatus
+abstract class APIStatus
 {
     const DBConnectFail = 0;
     const DBPrepareFail = 1;
@@ -8,5 +8,6 @@ abstract class LoginStatus
     const LoginSuccess = 4;
     const ChangePWDSuccess = 5;
     const ChangePWDFail = 6;
+    const ListLogSuccess = 11;
 }
 ?>

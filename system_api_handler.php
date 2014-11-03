@@ -6,10 +6,10 @@ function ResponseChangePassword($Result)
 {
     switch ($Result)
     {
-        case LoginStatus::ChangePWDFail:
+        case APIStatus::ChangePWDFail:
             http_response_code(400);
             exit();
-        case LoginStatus::DBPrepareFail:
+        case APIStatus::DBPrepareFail:
             http_response_code(503);
             exit();
     }

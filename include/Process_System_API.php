@@ -4,7 +4,7 @@ class Process_System_API
 {
     function ChangePassword($JsonData,$oLogin)
     {               
-        $Result = LoginStatus::ChangePWDFail;
+        $Result = APIStatus::ChangePWDFail;
         $InputJson = json_decode($JsonData,true);        
         if(strlen($InputJson['PWD']) > 0)
         {

@@ -2,6 +2,7 @@ var IPList;
 var GatewayList;
 var DNSList;
 var relayList;
+var LogList;
 var oRelayAjax = {};
 var oHtmlCreate = {};
 var oUIRelay = {};
@@ -31,11 +32,13 @@ function main() {
     oUIIP = UIIPControl.createNew(oHtmlCreate,oRelayAjax);
     oUISystem = UISystemControl.createNew(oHtmlCreate,oRelayAjax);
     oUIUpgrade = UIUpgradeControl.createNew(oHtmlCreate,oRelayAjax);
+    oUILog = UILogControl.createNew(oHtmlCreate,oRelayAjax); 
     oHtmlCreate.HideAllOption();
     oHtmlCreate.InitWaitDialog();
     oUIIP.Init();
     oUISystem.Init();    
     oUIUpgrade.Init();
+    oUILog.Init();
     TimerCheckUpdateFlag = setInterval(function(){CheckUpdateFlag();}, 500);
 //    oUIRelay.Init();   
 }

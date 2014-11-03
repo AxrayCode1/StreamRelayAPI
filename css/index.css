@@ -94,6 +94,16 @@ div#sup{
     line-height:30px; 
     font-size: larger;
 }
+div#el{
+    left: 780px; 
+    position: absolute; 
+    z-index:2; 
+    width: 140px; 
+    height: 30px; 
+    text-align:center; 
+    line-height:30px; 
+    font-size: larger;
+}
 div#lo{
     right: 10px;
     position: absolute; 
@@ -111,6 +121,7 @@ div#lo{
 #div_ip_control{position: relative; width: 100%;top:80px}
 #div_sys_config{position: relative; width: 100%;top:80px}
 #div_upgrade_control{position: relative; width: 100%;top:80px}
+#div_log_control{position: relative; width: 100%;top:80px}
 /*#div_relay_table{margin: 20px auto;width: 1024px}*/
 /*#div_control_table{margin-top: 10px}*/
 a {text-decoration: none;}

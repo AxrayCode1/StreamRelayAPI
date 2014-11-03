@@ -60,6 +60,10 @@ var Relay = {
             var request = relayobj.CallAjax("/system/update/checkupdate", "GET", '', "json");
             return request;            
         };
+        relayobj.listlog = function() {
+            var request = relayobj.CallAjax("/log/list", "GET", '', "json");
+            return request;            
+        };
         relayobj.CallAjaxNoAsync = function(url, method, data, datatype) {
             var request = $.ajax({
                 type: method,

@@ -3,14 +3,14 @@ include_once('/var/www/html/include/api_global_function.php');
 include_once '/var/www/html/include/HandleLogin.php';
 $oLogin = new Login();
 $oLogin->Sec_Session_Start();
-if($oLogin->DB_Connection() == LoginStatus::DBConnectSuccess)
+if($oLogin->DB_Connection() == APIStatus::DBConnectSuccess)
 {
     $eLoginStatus = $oLogin->Login_Check();
-    if($eLoginStatus != LoginStatus::LoginSuccess)
+    if($eLoginStatus != APIStatus::LoginSuccess)
     {
         switch ($eLoginStatus)
         {
-            case LoginStatus::DBPrepareFail:
+            case APIStatus::DBPrepareFail:
                 http_response_code(503);
                 echo "<h1>Error 503 DBPrepareFail</h1>";                
                 break;
@@ -54,6 +54,7 @@ and open the template in the editor.
         <script type='text/javascript' src="/js/UIRelayControl.js"></script>
         <script type='text/javascript' src="/js/UISystemControl.js"></script>
         <script type='text/javascript' src="/js/UIUpgrageControl.js"></script>
+        <script type='text/javascript' src="/js/UILogControl.js"></script>
         <script type='text/javascript' src="/js/RelayUI.js"></script>        
         <link type='text/css' href="/css/index.css" rel="stylesheet">
         <link type='text/css' href='/css/jquery-ui.min.css' rel='stylesheet'/>
@@ -91,11 +92,11 @@ and open the template in the editor.
 
         <!--<div id="per" class="FunctionControl" style="position: absolute; z-index:2; left: 510px; width: 150px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('per');" onmouseout="mouseout_b('per');">
             <img src="img/performance.png" height="20" width="20" align="center" /> Performance
-        </div>
-
-        <div id="el" class="FunctionControl" style="position: absolute; z-index:2; left: 660px; width: 130px; height: 30px; text-align:center; line-height:25px; font-size: larger;" onmouseover="mouseon_b('el');" onmouseout="mouseout_b('el');">
-            <img src="img/log.png" height="20" width="20" align="center" /> Event Log.
         </div>--> 
+
+            <div id="el" class="FunctionControl"  onmouseover="mouseon_b('el');" onmouseout="mouseout_b('el');">
+                <img src="/img/log.png" height="20" width="20" align="center" /> Event Log
+            </div>
 
             <div id="lo" class="FunctionControl" onmouseover="mouseon_b('lo');" onmouseout="mouseout_b('lo');" onclick='window.location="/ui/Logout.html"'>
                 <img src="/img/logout-512.png" height="20" width="20" align="center" /> Logout
@@ -236,6 +237,26 @@ and open the template in the editor.
 <!--            <div style="margin-top: 10px;text-align: right;margin-right: 10px">
                 Copyright © 2014 AcroRed Technologies, Inc. All rights reserved.
             </div>-->
+        </div>
+        
+        <div id="div_log_control">
+            <a href="/ui/download_log.html" style="position :absolute;left: 5px;text-decoration: underline;" download>Click Here to Export Log</a>
+            <div style="position: absolute;right: 10px">
+                <a id="btn_log_refresh"  href="#" class="btn-light">Refresh</a>
+            </div>
+            <div id="div_log_table" style="position: absolute;top: 40px;width: 100%">
+                <table id="table_log">
+                    <tr>
+                        <th width="2%">Item</th>                        
+                        <th id="type" class="logth" width="10%">Type</th>
+                        <th id="source" class="logth" width="18%">Source</th>
+                        <th id="fulldest" class="logth" width="18%">Destination</th>    
+                        <th id="name" class="logth" width="15%">Channel Name</th>
+                        <th id="description" class="logth" width="19%">Description</th>                        
+                        <th id="time" class="logth" width="18%">Time</th>
+                    </tr>               
+                </table>
+            </div>
         </div>
         
         <div id="modal_update_progress_content">

@@ -4,14 +4,14 @@ include_once('/var/www/html/include/api_global_function.php');
 include_once '/var/www/html/include/HandleLogin.php';
 $oLogin = new Login();
 $oLogin->Sec_Session_Start();
-if($oLogin->DB_Connection() == LoginStatus::DBConnectSuccess)
+if($oLogin->DB_Connection() == APIStatus::DBConnectSuccess)
 {
     $eLoginStatus = $oLogin->Login_Check();
-    if($eLoginStatus != LoginStatus::LoginSuccess)
+    if($eLoginStatus != APIStatus::LoginSuccess)
     {
         switch ($eLoginStatus)
         {
-            case LoginStatus::DBPrepareFail:
+            case APIStatus::DBPrepareFail:
                 http_response_code(503);
                 break;
             default :

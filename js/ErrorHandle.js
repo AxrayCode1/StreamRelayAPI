@@ -9,7 +9,8 @@ var ActionStatus = {
     SystemListVersion:42,
     SystemCheckNewVersion:43,
     SystemUpdate:44,
-    SystemCheckUpdate:45
+    SystemCheckUpdate:45,
+    ListLog:51
 };
 var ErrorHandle = {
     createNew: function() {                        
@@ -71,9 +72,12 @@ var ErrorHandle = {
                 case ActionStatus.SystemCheckUpdate:
                     sError = "Error : Ajax Check Update Error";
                     break;
+                case ActionStatus.ListLog:
+                    sError = "Error : Ajax List Log Error";
+                    break;
             }
             return sError;
-        }        
+        };        
         return oError;
     }
 };

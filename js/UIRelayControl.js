@@ -9,7 +9,16 @@ var UIRelayControl = {
         var sPortCheck = '';
         var sNameCheck = '';
         var sChannelNumberCheck = '';
-        var oError = {};      
+        var oError = {};     
+        var PollingTime = 10000;
+        var RelayColumn = {
+            Source: 1,
+            Destination: 2,
+            Status: 3,
+            ChannelNumber:4,
+            ChannelName:5,
+            Description:6           
+        };
         oUIRelayContorl.Init = function(){   
             oError = ErrorHandle.createNew();            
             oHtml.HideAllOption();
@@ -54,6 +63,7 @@ var UIRelayControl = {
                oHtml.clearTable();
                oHtml.appendTablebyList();
             });
+            PollingRelayList();
         };
         
         function SortRelayList(eSortDirection,eSortType,sSortVariable)
@@ -102,7 +112,8 @@ var UIRelayControl = {
                     }
                     break;               
             }          
-        }        
+        }     
+        
         oUIRelayContorl.InitMassEntryDialog = function(){
             $( "#modal_update_progress_content" ).dialog({
                     title: "Mass Entry",
@@ -132,6 +143,40 @@ var UIRelayControl = {
         oUIRelayContorl.CheckNum = function(str){
             return str.match(/^[0-9]*$/);
         };
+                
+        function PollingRelayList()
+        {
+            var request = oRelayAjax.getRelayList();
+            CallBackPollingGetRelay(request);
+        }
+        
+        function CallBackPollingGetRelay(request)
+        {
+            var otmpSourceUrl;
+            request.done(function(msg, statustext, jqxhr) {
+                $.each(msg, function(relayindex, relayelement) {     
+                    if(typeof(relayList[relayelement['idChannel']]) !== 'undefined'){
+                        if(relayelement['status'] !== relayList[relayelement['idChannel']]['status']){                                                      
+                            relayList[relayelement['idChannel']]['status'] = relayelement['status'];
+                            $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Status).text(oHtml.GetRelayStatusStr(relayelement['status']));
+                        };
+                        if(relayelement['Source'][0]['urlSource'] !== relayList[relayelement['idChannel']]['source'][0]['url'])
+                        {
+                            relayList[relayelement['idChannel']]['source'] = [];
+                            $.each(relayelement['Source'],function(sourceindex,sourceelement){
+                                otmpSourceUrl = new relaySourceClass(sourceelement['idSource'],sourceelement['flag'],sourceelement['urlSource']);
+                                relayList[relayelement['idChannel']]['source'][sourceindex] = otmpSourceUrl;
+                            });
+                            $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Source).text(relayelement['Source'][0]['urlSource']);
+                        };
+                    }
+                });
+                setTimeout(function(){PollingRelayList();}, PollingTime);
+            });
+            request.fail(function(jqxhr, textStatus) {
+                setTimeout(function(){PollingRelayList();}, PollingTime);
+            });
+        }
                 
         oUIRelayContorl.GetRelayList = function(){
             oHtml.blockPage();
@@ -250,7 +295,9 @@ var UIRelayControl = {
                 return false;
             };            
             iChannelNumber = parseInt(iChannelNumber);
-            $.each(relayList, function(index, element) {                
+//            $.each(relayList, function(index, element) {   
+            for(var key in relayList){ 
+                var element = relayList[key];
                 if (String(iDestPort) === element['port']) {
                     flag = false;
                     alert("Error : DUPLICATE PORT NUMBER !");
@@ -266,7 +313,7 @@ var UIRelayControl = {
                     alert("Error : DUPLICATE Channel Number !");
                     return false;
                 }  
-            });
+            };
             if (!flag)
                 return false;
             oUIRelayContorl.CreatRelay(iChannelNumber,sName, sDescription, sSourceUrl, iDestPort, sDestName);
@@ -346,11 +393,13 @@ var UIRelayControl = {
             sPortCheck = ",";
             sNameCheck = ",";
             sChannelNumberCheck = ",";
-            $.each(relayList, function(index, element) {                
-                           sPortCheck += element['port'] + ',';      
-                           sNameCheck += element['name'] + ',';
-                           sChannelNumberCheck += element['channelnumber'] + ',';
-                       });
+//            $.each(relayList, function(index, element) {     
+            for(var key in relayList){ 
+                var element = relayList[key];
+                sPortCheck += element['port'] + ',';      
+                sNameCheck += element['name'] + ',';
+                sChannelNumberCheck += element['channelnumber'] + ',';
+            };
             progressLabel.text("0/" + iTotalCreate);            
             oHtml.EmptyMassEntryResultTable();
             $( "#progressbar" ).progressbar('option','value',0);

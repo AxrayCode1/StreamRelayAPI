@@ -1,17 +1,17 @@
 <?php
-include_once('/var/www/html/include/Process_API.php');
+include_once('/var/www/html/include/Process_Log_API.php');
 include_once('/var/www/html/include/api_global_function.php');
 include_once '/var/www/html/include/HandleLogin.php';
 $oLogin = new Login();
 $oLogin->Sec_Session_Start();
-if($oLogin->DB_Connection() == LoginStatus::DBConnectSuccess)
+if($oLogin->DB_Connection() == APIStatus::DBConnectSuccess)
 {
     $eLoginStatus = $oLogin->Login_Check();
-    if($eLoginStatus != LoginStatus::LoginSuccess)
+    if($eLoginStatus != APIStatus::LoginSuccess)
     {
         switch ($eLoginStatus)
         {
-            case LoginStatus::DBPrepareFail:
+            case APIStatus::DBPrepareFail:
                 http_response_code(503);
                 break;
             default :
@@ -37,8 +37,16 @@ switch (count($url))
                 switch($_SERVER['REQUEST_METHOD'])
                 {
                     case 'GET':
-                        $outputarr = $proc_api ->ListLog();  
-                        echo json_encode($outputarr);
+                        $eStauts = $proc_api ->ListLog($oLogin->PDODB,$outputarr);  
+                        switch ($eStauts)
+                        {
+                            case APIStatus::DBPrepareFail:
+                                http_response_code(503);
+                                break;
+                            default :
+                                echo json_encode($outputarr);
+                                break;
+                        }                        
                         break;
                     default :
                         http_response_code(404);

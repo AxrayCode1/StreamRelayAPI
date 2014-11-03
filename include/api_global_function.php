@@ -67,14 +67,14 @@ function CheckAuth()
 {
     $oLogin = new Login();
     $oLogin->Sec_Session_Start();
-    if($oLogin->DB_Connection() == LoginStatus::DBConnectSuccess)
+    if($oLogin->DB_Connection() == APIStatus::DBConnectSuccess)
     {
         $eLoginStatus = $oLogin->Login_Check();
-        if($eLoginStatus != LoginStatus::LoginSuccess)
+        if($eLoginStatus != APIStatus::LoginSuccess)
         {
             switch ($eLoginStatus)
             {
-                case LoginStatus::DBPrepareFail:
+                case APIStatus::DBPrepareFail:
                     $oLogin->SessionDestroy();
                     http_response_code(503);
                     break;

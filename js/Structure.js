@@ -15,6 +15,14 @@ var relayClass = function(id, source, port, destname,channelnumber,name,descript
     this.fulldest = fulldest;
     this.status = status;
 };
+var LogClass = function(type,source,fulldest,name,time,description){
+    this.type = type;
+    this.source = source;
+    this.fulldest = fulldest;
+    this.name = name;
+    this.time = time;
+    this.description = description;
+};
 var IPClass = function(id, displayname, name, ip, mask) {
     this.id = id;
     this.displayname = displayname;

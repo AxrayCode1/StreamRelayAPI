@@ -4,9 +4,9 @@ $oLogin = new Login();
 $oLogin->Sec_Session_Start();
 if(isset($_POST['username']) && isset($_POST['p']))
 {
-    if($oLogin->DB_Connection() == LoginStatus::DBConnectSuccess)
+    if($oLogin->DB_Connection() == APIStatus::DBConnectSuccess)
     {
-        if($oLogin->Login_By_Data($_POST['username'],$_POST['p']) == LoginStatus::LoginSuccess)
+        if($oLogin->Login_By_Data($_POST['username'],$_POST['p']) == APIStatus::LoginSuccess)
         {            
             header("Location: /ui/relay.html");
             exit();      
