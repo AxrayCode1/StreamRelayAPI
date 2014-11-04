@@ -25,6 +25,9 @@ var SortType={
 //MyError.prototype = new Error();
 //MyError.prototype.constructor = MyError;
 var TimerCheckUpdateFlag;
+$( document ).ready(function() {
+    main();
+});
 function main() {    
     oRelayAjax = Relay.createNew();
     oHtmlCreate = CreateHtml.createNew();

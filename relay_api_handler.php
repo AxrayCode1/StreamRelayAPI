@@ -82,6 +82,16 @@ switch (count($url))
                         http_response_code(404);
                 }
                 break;
+            case 'source':
+                switch ($url[1]){
+                    case "add":
+                        break;
+                    case "delete":
+                        break;
+                    case "modify":
+                        break;
+                }
+                break;
             default :
                 http_response_code(404);
                 break;

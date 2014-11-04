@@ -3,6 +3,8 @@ var CreateHtml = {
         var table_relay = $('#table_relay');
         var table_log = $('#table_log');
         var ip_field = $('#div_ip_field');
+        var source_area = $('#UrlArea');
+        var modify_source_area = $('#ModifySourceArea');
         var Table_Result_Mass_Entry = $('#MassEntryResulTable');
         var createobj = {};
         createobj.InitWaitDialog = function(){
@@ -25,43 +27,6 @@ var CreateHtml = {
         createobj.clearLogTable = function() {
             table_log.find("tr:gt(0)").remove();
         };
-//        createobj.appendTable = function(relay_list) {
-//            var tmp_relay_item;
-//            var dest_temp;
-//            var port;
-//            var dest_name;
-//            relayList = [];
-//            $.each(relay_list, function(index, element) {                
-//                dest_temp = element['Dest'].split(':');
-//                port = '';
-//                dest_name = '';
-//                if (typeof(dest_temp[2]) !== 'undefined') {
-//                    dest_temp = dest_temp[2].split('/');
-//                    port = dest_temp[0];
-//                    channelname = dest_temp[1];
-//                }
-//                tmp_relay_item = new relayClass(element['id'], element['SourceUrl']
-//                , port, dest_name,element['ChannelNumber'],element['Name']
-//                ,element['Description'],element['Dest'],element['Status']);
-//                relayList[index] = tmp_relay_item;
-//                var append_str = '';
-//                append_str += '<tr>';
-//                append_str += '<td style="text-align:center">' + (index + 1) + '</td>';
-//                append_str += '<td>' + element['SourceUrl'] + '</td>';
-//                append_str += '<td>' + element['Dest'] + '</td>';
-//                append_str += '<td>' + createobj.GetRelayStatusStr(element['Status']) + '</td>';
-//                append_str += '<td style="text-align:right">' + element['ChannelNumber'] + '</td>';
-//                append_str += '<td>' + element['Name'] + '</td>';
-//                append_str += '<td>' + element['Description'] + '</td>';
-//                append_str += '<td>';
-//                append_str += '<a href="#" class="btn-light delete" id="' + index + '">Delete</a>';
-//                if (port !== '')
-//                    append_str += '<a href="#" style="margin-left:10px" class="btn-light resume" id="' + index + '">Resume</a>';
-//                append_str += '</td>';
-//                append_str += '</tr>';
-//                table_relay.append(append_str);
-//            });
-//        };
         createobj.appendTable = function(relay_list) {
             var tmp_relay_item;
             var dest_temp;
@@ -82,7 +47,8 @@ var CreateHtml = {
                 }
                 atmpSourceUrl = [];
                 $.each(relayelement['Source'],function(sourceindex,sourceelement){
-                    otmpSourceUrl = new relaySourceClass(sourceelement['idSource'],sourceelement['flag'],sourceelement['urlSource']);
+                    otmpSourceUrl = new relaySourceClass(sourceelement['idSource'],sourceelement['state']
+                    ,sourceelement['urlSource'],sourceelement['prior']);
                     atmpSourceUrl[sourceindex] = otmpSourceUrl;
                 });
                 tmp_relay_item = new relayClass(relayelement['idChannel'], atmpSourceUrl
@@ -92,7 +58,8 @@ var CreateHtml = {
                 var append_str = '';
                 append_str += '<tr id="tr' + relayelement['idChannel'] +'">';
                 append_str += '<td style="text-align:center">' + i + '</td>';
-                append_str += '<td>' + atmpSourceUrl[0]['url'] + '</td>';
+                var sourceurl = atmpSourceUrl.length > 0 ? atmpSourceUrl[0]['url'] : ''; 
+                append_str += '<td>' + sourceurl + '</td>';
                 append_str += '<td>' + relayelement['dest'] + '</td>';
                 append_str += '<td>' + createobj.GetRelayStatusStr(relayelement['status']) + '</td>';
                 append_str += '<td style="text-align:right">' + relayelement['numChannel'] + '</td>';
@@ -102,41 +69,22 @@ var CreateHtml = {
                 append_str += '<a href="#" class="btn-light delete" id="' + relayelement['idChannel'] + '">Delete</a>';
                 if (port !== '')
                     append_str += '<a href="#" style="margin-left:10px" class="btn-light resume" id="' + relayelement['idChannel'] + '">Resume</a>';
+                append_str += '<a href="#" style="margin-left:10px" class="btn-light ModifySource" id="' + relayelement['idChannel'] + '">Edit Source</a>';
                 append_str += '</td>';
                 append_str += '</tr>';
                 ++i;
                 table_relay.append(append_str);
             });
         };
-//        createobj.appendTablebyList = function() {
-//            $.each(relayList, function(index, element) {                
-//                var append_str = '';
-//                append_str += '<tr>';
-//                append_str += '<td style="text-align:center">' + (index + 1) + '</td>';
-//                append_str += '<td>' + element['source'] + '</td>';
-//                append_str += '<td>' + element['fulldest'] + '</td>';
-//                append_str += '<td>' + createobj.GetRelayStatusStr(element['status']) + '</td>';
-//                append_str += '<td style="text-align:right">' + element['channelnumber'] + '</td>';
-//                append_str += '<td>' + element['name'] + '</td>';
-//                append_str += '<td>' + element['description'] + '</td>';
-//                append_str += '<td>';
-//                append_str += '<a href="#" class="btn-light delete" id="' + index + '">Delete</a>';
-//                if (element['port'] !== '')
-//                    append_str += '<a href="#" style="margin-left:10px" class="btn-light resume" id="' + index + '">Resume</a>';
-//                append_str += '</td>';
-//                append_str += '</tr>';
-//                table_relay.append(append_str);
-//            });
-//        };
         createobj.appendTablebyList = function() {
             var i = 1;
-//            $.each(relayList, function(index, element) {     
             for(var key in relayList){ 
                 var element = relayList[key];
                 var append_str = '';
                 append_str += '<tr id="tr' + key +'">';
                 append_str += '<td style="text-align:center">' + i + '</td>';
-                append_str += '<td>' + element['source'][0]['url'] + '</td>';
+                var sourceurl = element['source'].length > 0 ? element['source'][0]['url'] : '' ; 
+                append_str += '<td>' + sourceurl + '</td>';
                 append_str += '<td>' + element['fulldest'] + '</td>';
                 append_str += '<td>' + createobj.GetRelayStatusStr(element['status']) + '</td>';
                 append_str += '<td style="text-align:right">' + element['channelnumber'] + '</td>';
@@ -152,16 +100,131 @@ var CreateHtml = {
                 table_relay.append(append_str);
             };
         };
+        createobj.EmptySoucreArea = function(){
+            source_area.empty();
+        };
+        createobj.EmptyModifySourceArea = function(){
+            modify_source_area.empty();
+        };
+        createobj.AppendSourceArea = function(source_url_list){
+            var max_create_count =4;
+            var append_str = '';
+            var i =0;
+            if(source_url_list.length === 0){
+                append_str += '<div>';
+                append_str += '<label class="LabelRelayHead">Order 1 : </label>';
+                append_str += '<input id="AddSourceUrl" class="InputRelay" value="" type="text">';
+                append_str += '<a href="#" class="btn-light AddSource" style="margin-left:5px">Add</a>';
+                append_str += '</div>';
+            }
+            else{
+//                $.each(source_url_list,function(index,element){
+                for(var key in source_url_list){ 
+                    var element = source_url_list[key];
+                    switch(i)
+                    {
+                        case 0:
+                            append_str += '<div>';
+                            append_str += '<label class="LabelRelayHead">Order ' + (i+1) + ': </label>';                            
+                            append_str += '<label class="LabelSource">' + element['url'] + '</label>';
+                            append_str += '<a  href="#" class="btn-light DeleteSource" style="margin-left:5px" id="' + key + '">Delete</a>';
+                            if(source_url_list.length >= 2)                                                                                            
+                                append_str += '<a  href="#" class="btn-light DownSource" style="margin-left:5px" id="' + key +'">Down</a>';                                                            
+                            append_str += '</div>';                            
+                            break;
+                        default:
+                            append_str += '<div style="margin-top: 5px">';
+                            append_str += '<label class="LabelRelayHead">Order ' + (i+1) + ': </label>';                             
+                            append_str += '<label class="LabelSource">' + element['url'] + '</label>';
+                            append_str += '<a  href="#" class="btn-light DeleteSource" style="margin-left:5px" id="' + key +'">Delete</a>';
+                            if(i < source_url_list.length -1)
+                            {                                
+                                append_str += '<a  href="#" class="btn-light UpSource" style="margin-left:5px" id="' + key +'">Up</a>';
+                                append_str += '<a  href="#" class="btn-light DownSource" style="margin-left:5px"id="' + key +'">Down</a>';
+                            }
+                            else
+                                append_str += '<a  href="#" class="btn-light UpSource" style="margin-left:5px" id="' + key +'">Up</a>';
+                            append_str += '</div>';
+                            break;
+                    }
+                    ++i;
+                };                
+                if(source_url_list.length < max_create_count){
+                    append_str += '<div style="margin-top: 5px">';
+                    append_str += '<label class="LabelRelayHead">Order ' + (i+1) + ': </label>';;
+                    append_str += '<input id="AddSourceUrl" class="InputRelay" value="" type="text">';
+                    append_str += '<a  href="#" class="btn-light AddSource" style="margin-left:5px">Add</a>';
+                    append_str += '</div>';
+                }
+            }     
+            source_area.append(append_str);
+        };
+        createobj.AppendModfiySourceArea = function(source_url_list){
+            var max_create_count =4;
+            var append_str = '';
+            var i =0;
+            if(source_url_list.length === 0){
+                append_str += '<div>';
+                append_str += '<label class="LabelRelayHead">Order 1 : </label>';
+                append_str += '<input id="AddSourceUrl" class="InputRelay" value="" type="text">';
+                append_str += '<a href="#" class="btn-light ModifyAddSource" style="margin-left:5px">Add</a>';
+                append_str += '</div>';
+            }
+            else{
+//                $.each(source_url_list,function(index,element){
+                for(var key in source_url_list){ 
+                    var element = source_url_list[key];
+                    switch(i)
+                    {
+                        case 0:
+                            append_str += '<div>';
+                            append_str += '<label class="LabelRelayHead">Order ' + (i+1) + ': </label>';                            
+                            append_str += '<label class="LabelSource">' + element['url'] + '</label>';                            
+                            if(source_url_list.length >= 2){
+                                append_str += '<a  href="#" class="btn-light ModifyDeleteSource" style="margin-left:5px" id="' + key + '">Delete</a>';
+                                append_str += '<a  href="#" class="btn-light ModifyDownSource" style="margin-left:5px" id="' + key +'">Down</a>';                                                            
+                            }
+                            append_str += '</div>';                            
+                            break;
+                        default:
+                            append_str += '<div style="margin-top: 5px">';
+                            append_str += '<label class="LabelRelayHead">Order ' + (i+1) + ': </label>';                             
+                            append_str += '<label class="LabelSource">' + element['url'] + '</label>';
+                            append_str += '<a  href="#" class="btn-light ModifyDeleteSource" style="margin-left:5px" id="' + key +'">Delete</a>';
+                            if(i < source_url_list.length -1)
+                            {                                
+                                append_str += '<a  href="#" class="btn-light ModifyUpSource" style="margin-left:5px" id="' + key +'">Up</a>';
+                                append_str += '<a  href="#" class="btn-light ModifyDownSource" style="margin-left:5px"id="' + key +'">Down</a>';
+                            }
+                            else
+                                append_str += '<a  href="#" class="btn-light ModifyUpSource" style="margin-left:5px" id="' + key +'">Up</a>';
+                            append_str += '</div>';
+                            break;
+                    }
+                    ++i;
+                };                
+                if(source_url_list.length < max_create_count){
+                    append_str += '<div style="margin-top: 5px">';
+                    append_str += '<label class="LabelRelayHead">Order ' + (i+1) + ': </label>';;
+                    append_str += '<input id="AddSourceUrl" class="InputRelay" value="" type="text">';
+                    append_str += '<a  href="#" class="btn-light ModifyAddSource" style="margin-left:5px">Add</a>';
+                    append_str += '</div>';
+                }
+            }     
+            modify_source_area.append(append_str);
+        };
         createobj.appendLogTable = function(log_list) {
             var tmp_log_item;
+            var i =1;
             LogList = [];
-            $.each(log_list, function(logindex, loglement) {    
+            for(var key in log_list) {  
+                var loglement = log_list[key];
                 tmp_log_item = new LogClass(loglement['LogType'], loglement['SouceURL'], loglement['Dest'],
                 loglement['ChannelName'],loglement['CreateTime'],loglement['Description']);
-                LogList[logindex]=tmp_log_item;
+                LogList[key]=tmp_log_item;
                 var append_str = '';
                 append_str += '<tr>';
-                append_str += '<td style="text-align:center">' + (logindex + 1) + '</td>';
+                append_str += '<td style="text-align:center">' + i + '</td>';
                 append_str += '<td>' + loglement['LogType'] + '</td>';
                 append_str += '<td>' + loglement['SouceURL'] + '</td>';
                 append_str += '<td>' + loglement['Dest'] + '</td>';
@@ -169,14 +232,17 @@ var CreateHtml = {
                 append_str += '<td>' + loglement['Description'] + '</td>';
                 append_str += '<td>' + loglement['CreateTime'] + '</td>';                                
                 append_str += '</tr>';
+                ++i;
                 table_log.append(append_str);
-            });
+            };
         };
         createobj.appendLogTablebyList = function() {
-            $.each(LogList, function(index, element) {                
+            var i =1;
+            for(var key in LogList) {    
+                var element = LogList[key];
                 var append_str = '';
                 append_str += '<tr>';
-                append_str += '<td style="text-align:center">' + (index + 1) + '</td>';
+                append_str += '<td style="text-align:center">' + i + '</td>';
                 append_str += '<td>' + element['type'] + '</td>';
                 append_str += '<td>' + element['source'] + '</td>';
                 append_str += '<td>' + element['fulldest'] + '</td>';
@@ -184,13 +250,17 @@ var CreateHtml = {
                 append_str += '<td>' + element['description'] + '</td>';
                 append_str += '<td>' + element['time'] + '</td>';       
                 append_str += '</tr>';
+                ++i;
                 table_log.append(append_str);
-            });
+            };
         };
         createobj.GetRelayStatusStr = function(sStatus){
             iStatus = parseInt(sStatus);
             switch(iStatus)
             {
+                case -1:
+                    return 'Preparing';
+                    break;
                 case 0:
                     return 'Not Ready';
                     break;
@@ -200,7 +270,10 @@ var CreateHtml = {
                 case 2:
                     return 'Initializing';                    
                     break;
-                defalue:
+                case 3 :
+                    return 'Stop';                    
+                    break;
+                default:
                     return 'Unknow('+sStatus + ')';
             }
         };

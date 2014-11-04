@@ -5,11 +5,16 @@ class Process_API
     {
         $result = false;
         $inputjson = json_decode($jsondata,true);
-        if(!(strlen($inputjson['SourceUrl']) <=0 || strlen($inputjson['DestPort']) <=0 || strlen($inputjson['ChannelNumber']) <=0 || strlen($inputjson['Name']) <=0))
+        if(!(count($inputjson['SourceUrl']) ==0 || strlen($inputjson['DestPort']) <=0 || strlen($inputjson['ChannelNumber']) <=0 || strlen($inputjson['Name']) <=0))
         {
-            $exu_str = 'sudo /var/www/html/relay.exe "';
-            $exu_str.=$inputjson['SourceUrl'];
-            $exu_str.='" ';
+            $exu_str = 'sudo /var/www/html/relay.exe create ';
+            foreach ($inputjson['SourceUrl'] as $key => $value)
+            {
+                $exu_str.='"';
+                $exu_str.=$value;
+                $exu_str.='",';
+            }            
+            $exu_str.=' ';
             $exu_str.=$inputjson['DestPort'];
             $exu_str.=' -nf="';
             $exu_str.=$inputjson['DestName'];
@@ -29,7 +34,7 @@ class Process_API
     
     function deldata($id)
     {
-        $exu_str = "sudo /var/www/html/relay.exe stop $id";
+        $exu_str = "sudo /var/www/html/relay.exe delete $id";
         exec($exu_str,$output);
 //        var_dump($output);       
     }
@@ -69,7 +74,7 @@ class Process_API
     function listdatajson()
     {   
         $output = null;
-        $exu_str = 'sudo /var/www/html/relay.exe listjson';            
+        $exu_str = 'sudo /var/www/html/relay.exe list';            
         exec($exu_str,$output);        
         if(json_decode($output[0]) == null)
             $output = null;

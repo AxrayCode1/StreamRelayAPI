@@ -1,8 +1,9 @@
-var relaySourceClass = function(id,flag,url)
+var relaySourceClass = function(id,flag,url,prior)
 {
     this.id = id;
     this.flag = flag;
     this.url = url;
+    this.prior = prior;
 };
 var relayClass = function(id, source, port, destname,channelnumber,name,description,fulldest,status) {
     this.id = id;

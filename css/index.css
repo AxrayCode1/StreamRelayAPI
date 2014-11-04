@@ -409,3 +409,8 @@ input:-ms-input-placeholder {
     display: inline-block;
     width: 230px;
 }
+
+.LabelSource{
+    display: inline-block;
+    width: 255px;
+}

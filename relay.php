@@ -117,8 +117,8 @@ and open the template in the editor.
                         <th id="status" class="relayth" width="7%">Status</th>
                         <th id="channelnumber" class="relayth" width="11%">Channel Number</th>
                         <th id="name" class="relayth" width="12%">Channel Name</th>
-                        <th id="description" class="relayth" width="14%">Description</th>                        
-                        <th width="18%">Action</th>
+                        <th id="description" class="relayth" width="12%">Description</th>                        
+                        <th width="20%">Action</th>
                     </tr>               
                 </table>
                 <div id="div_control_table">  
@@ -127,10 +127,28 @@ and open the template in the editor.
                             <fieldset>
                                 <legend>Create</legend>
                                 <div class="div_fieldcontent">
-                                    <label class="LabelRelayHead">Source Url : </label>
-                                    <input id="Source"  class="InputRelay" value="" type="text">
-                                    <br>
-                                    <br>                                
+                                    <label>Source Url : </label>
+                                    <div id="UrlArea" style="margin-top: 10px;margin-left: -5px; 
+                                         padding: 5px;border: 1px solid rgba(0, 0, 0,.2);">
+                                        <div>
+                                            <label class="LabelRelayHead">Order 1 : </label>
+                                            <label class="LabelSource">http://192.168.88.18:8082</label>
+                                            <a  href="#" class="btn-light">Delete</a>
+                                            <a  href="#" class="btn-light">Down</a>
+                                        </div>
+                                        <div style="margin-top: 5px">
+                                            <label class="LabelRelayHead">Order 2 : </label>
+                                            <label class="LabelSource">http://192.168.88.18:8082</label>
+                                            <a  href="#" class="btn-light">Delete</a>
+                                            <a  href="#" class="btn-light">Up</a>                                            
+                                        </div>
+                                        <div style="margin-top: 5px">
+                                            <label class="LabelRelayHead">Order 3 : </label>
+                                            <input class="InputRelay" value="" type="text">
+                                            <a  href="#" class="btn-light">Add</a>                                      
+                                        </div>
+                                    </div>                                    
+                                    <br>                                                                    
                                     <label class="LabelRelayHead">Destination Port : </label>
                                     <input id="Port" class="InputRelay" value="" type="text">
                                     <br>
@@ -155,7 +173,7 @@ and open the template in the editor.
                                 </div>
                             </fieldset>
                         </div>
-                        <div style="position: absolute;left:610px; top: 30px">
+                        <div style="position: absolute;left:710px; top: 30px">
                             <fieldset>
                                 <legend>Mass Entry</legend>                            
                                 <div class="div_fieldcontent">
@@ -279,11 +297,21 @@ and open the template in the editor.
                 <a id="closedialog" href="#" class="btn-light">Close</a>
             </div>
         </div>
+        
+        <div id="modal_modify_source_content">                        
+            <div id="ModifySourceArea">
+                
+            </div>
+            <div style="position: absolute;right: 10px;bottom: 10px">
+                <a id="closemodifydialog" href="#" class="btn-light">Close</a>
+            </div>
+        </div>
+        
         <div id="dialog_wait">
             <h2 id="dialog_msg" style="text-align: center;top:50%">Please Wait...</h2>
         </div>            
         <script type="text/javascript">            
-            main();
+            //main();
         </script>
     </body>
 </html>

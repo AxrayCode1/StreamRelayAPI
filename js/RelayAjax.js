@@ -10,8 +10,8 @@ var Relay = {
             var jsonrequest = '{"ChannelNumber":'+ channelnumber 
                     +',"Name":"' + name 
                     + '","Description":"' + description 
-                    + '","SourceUrl":"' + source 
-                    + '","DestPort":' + destport 
+                    + '","SourceUrl":[' + source 
+                    + '],"DestPort":' + destport 
                     + ',"DestName":"' + destname + '"}';            
             var request = relayobj.CallAjax("/relay/create", "POST", jsonrequest, "json");
             return request;            
