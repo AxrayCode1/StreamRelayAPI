@@ -39,7 +39,7 @@ and open the template in the editor.
         <title>AcroRed TV Relay Station</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script type='text/javascript' src="/js/jquery-1.7.2.min.js"></script>
+        <script type='text/javascript' src="/js/jquery-1.7.2.min.js"></script>        
         <script type='text/javascript' src='/js/jquery-ui-1.11.1.min.js'></script>
         <!--<script type='text/javascript' src="/js/jquery.simplemodal.js"></script>-->
         <!--<script type='text/javascript' src="/js/jquery.blockUI.js"></script>-->
@@ -113,12 +113,13 @@ and open the template in the editor.
                     <tr>
                         <th width="2%">Item</th>                        
                         <th id="source" class="relayth" width="18%">Source</th>
-                        <th id="fulldest" class="relayth" width="18%">Destination</th>
+                        <th id="sourcecount" class="relayth" width="10%">Source Counter</th>
+                        <th id="fulldest" class="relayth" width="8%">Destination</th>
                         <th id="status" class="relayth" width="7%">Status</th>
-                        <th id="channelnumber" class="relayth" width="11%">Channel Number</th>
-                        <th id="name" class="relayth" width="12%">Channel Name</th>
-                        <th id="description" class="relayth" width="12%">Description</th>                        
-                        <th width="20%">Action</th>
+                        <th id="channelnumber" class="relayth" width="13%">Channel Number</th>
+                        <th id="name" class="relayth" width="10%">Channel Name</th>
+                        <th id="description" class="relayth" width="14%">Description</th>                        
+                        <th width="18%">Action</th>
                     </tr>               
                 </table>
                 <div id="div_control_table">  
@@ -299,11 +300,37 @@ and open the template in the editor.
         </div>
         
         <div id="modal_modify_source_content">                        
-            <div id="ModifySourceArea">
-                
+            <div id="ModifySourceArea">                
             </div>
             <div style="position: absolute;right: 10px;bottom: 10px">
                 <a id="closemodifydialog" href="#" class="btn-light">Close</a>
+            </div>
+        </div>
+        
+        <div id="modal_modify_channel_content">                        
+            <label class="LabelRelayHead">Destination Port : </label>
+            <input id="ModfiyPort" class="InputRelay" value="" type="text">
+            <br>
+            <br>
+            <label class="LabelRelayHead">Destination Name : </label>
+            <input id="ModfiyDestinationName" class="InputRelay" value="" type="text">
+            <br>
+            <br>
+            <label class="LabelRelayHead">Channel Number : </label>
+            <input id="ModfiyChannelNumber"  class="InputRelay" value="" type="text">
+            <br>
+            <br>
+            <label class="LabelRelayHead">Channel Name : </label>
+            <input id="ModfiyName"  class="InputRelay" value="" type="text">
+            <br>
+            <br>
+            <label class="LabelRelayHead">Description : </label>
+            <input id="ModfiyDescription"  class="InputRelay" value="" type="text">
+            <br>
+            <br>
+            <div style="position: absolute;right: 10px;bottom: 10px">
+                <a id="btn_modify_channel" href="#" class="btn-light">Confirm</a>
+                <a id="btn_close_modify_channel" href="#" class="btn-light">Close</a>
             </div>
         </div>
         

@@ -3,6 +3,9 @@ var ActionStatus = {
     CreateRelay: 1,
     DeleteRealy: 2,
     ResumeRelay:3,
+    AddSource :4,
+    ModifyChannel : 5,
+    StopRelay : 6,
     GetIP:24,
     SetIP:25,
     SystemChangePWD:41,
@@ -22,11 +25,11 @@ var ErrorHandle = {
             {
                 case 503:
                     alert('Error : DB service is unavaliable.');
-                    window.location = '/ui/index.html';
+                    window.location = '/ui/Logout.html';
                     break;
                 case 401:
                     alert('Error : Authorization Error.');
-                    window.location = '/ui/index.html';
+                    window.location = '/ui/Logout.html';
                     break;
                 case 200:
                     bAuth = true;
@@ -56,6 +59,15 @@ var ErrorHandle = {
                     break;
                 case ActionStatus.ResumeRelay:
                     sError = "Error : Ajax Resume Relay Error";
+                    break;                
+                case ActionStatus.ModifyChannel:
+                    sError = "Error : Ajax Modify Channel Error";
+                    break;
+                case ActionStatus.StopRelay:
+                    sError = "Error : Ajax Stop Relay Error";
+                    break;
+                case ActionStatus.AddSource:
+                    sError = "Error : Ajax Add Source to Channel Error";
                     break;
                 case ActionStatus.GetIP:
                     sError = "Error : Ajax Get IP Error";

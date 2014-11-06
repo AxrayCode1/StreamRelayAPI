@@ -32,6 +32,31 @@ class Process_API
         return $result;
     }
     
+    function modify_channel($channelid,$jsondata)
+    {
+        $result = false;
+        $inputjson = json_decode($jsondata,true);
+        if(!(strlen($inputjson['DestPort']) <=0 || strlen($inputjson['ChannelNumber']) <=0 || strlen($inputjson['Name']) <=0))
+        {
+            $exu_str = "sudo /var/www/html/relay.exe modify $channelid ";   
+            $exu_str.='-Hp=';
+            $exu_str.=$inputjson['DestPort'];
+            $exu_str.=' -nf="';
+            $exu_str.=$inputjson['DestName'];
+            $exu_str.='" -cn="';
+            $exu_str.=$inputjson['Name'];
+            $exu_str.='" -cd="';
+            $exu_str.=$inputjson['Description'];
+            $exu_str.='" -nc=';
+            $exu_str.=$inputjson['ChannelNumber'];
+            $exu_str.=' >/dev/null 2>&1 &';            
+            $pipe = popen($exu_str,"r");               
+            pclose($pipe);
+            $result = true;
+        }
+        return $result;
+    }
+    
     function deldata($id)
     {
         $exu_str = "sudo /var/www/html/relay.exe delete $id";
@@ -52,6 +77,12 @@ class Process_API
             $result = true;
         }
         return $result;
+    }
+    
+    function stop($id)
+    {
+        $exu_str = "sudo /var/www/html/relay.exe stop $id";
+        exec($exu_str,$output);
     }
     
     function listdata()
@@ -225,10 +256,7 @@ class Process_API
     }
     
     function valiate_ip_gateway_same_lan($gateway,$ip,$mask)
-    {                   
-        $gatewayarr = explode('.',$gateway);
-        $iparr = explode('.',$ip);
-        $maskarr = explode('.',$mask);
+    {                           
         if((ip2long($gateway) & ip2long($mask)) == (ip2long($ip) & ip2long($mask)))
             return true;
         else

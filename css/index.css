@@ -414,3 +414,7 @@ input:-ms-input-placeholder {
     display: inline-block;
     width: 255px;
 }
+
+div.ui-tooltip {
+    max-width: 500px;
+}

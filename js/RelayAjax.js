@@ -20,6 +20,10 @@ var Relay = {
             var request = relayobj.CallAjax("/relay/delete/" + deleteID, "DELETE", "", "json");
             return request;           
         };
+        relayobj.stopRelay = function(stopID) {
+            var request = relayobj.CallAjax("/relay/stop/" + stopID, "PUT", "", "json");
+            return request;           
+        };
         relayobj.resumeRelay = function(id, source, port, channelname) {
             try {
                 var jsonrequest = '{"Source":"' + source + '","Port":' + port + ',"ChannelName":"' + channelname + '","ID":"' + id + '"}';
@@ -64,6 +68,60 @@ var Relay = {
             var request = relayobj.CallAjax("/log/list", "GET", '', "json");
             return request;            
         };
+        relayobj.AddChannelSource = function(channelid,asourceurl) {
+            var jsonrequest = '{"ChannelID":'+ channelid + ',"AddSource":[';
+            for(var i = 0; i < asourceurl.length; i++)
+            {
+                jsonrequest += '{"URL":"' + asourceurl[i]['url'] + '","Order":' + asourceurl[i]['prior'];
+                if(i === asourceurl.length - 1)
+                    jsonrequest += '}';
+                else
+                    jsonrequest += '},';
+            }
+            jsonrequest += ']}';            
+            var request = relayobj.CallAjax("/relay/source/add", "POST", jsonrequest, "json");
+            return request;            
+        };
+        relayobj.DeleteChannelSource = function(channelid,asourceurl) {
+            var jsonrequest = '{"ChannelID":'+ channelid + ',"DeleteSource":[';
+            for(var i = 0; i < asourceurl.length; i++)
+            {
+                jsonrequest += asourceurl[i]['id'];
+                if(i === asourceurl.length - 1)
+                    jsonrequest += '';
+                else
+                    jsonrequest += ',';
+            }
+            jsonrequest += ']}';         
+            var request = relayobj.CallAjax("/relay/source/delete", "POST", jsonrequest, "json");
+            return request;            
+        };
+        relayobj.ReOrderChannelSource = function(channelid,asourceurl) {
+            var jsonrequest = '{"ChannelID":'+ channelid + ',"ReorderSource":[';
+            for(var i = 0; i < asourceurl.length; i++)
+            {
+                jsonrequest += '{"ID":';
+                jsonrequest += asourceurl[i]['id'];
+                jsonrequest += ',"Order":';
+                jsonrequest += asourceurl[i]['prior'];
+                if(i === asourceurl.length - 1)
+                    jsonrequest += '}';
+                else
+                    jsonrequest += '},';
+            }
+            jsonrequest += ']}';                     
+            var request = relayobj.CallAjax("/relay/source/reorder", "POST", jsonrequest, "json");
+            return request;            
+        };
+        relayobj.ModifyChannel = function(idchannel,channelnumber,name, description, destport, destname) {
+            var jsonrequest = '{"ChannelNumber":'+ channelnumber 
+                    +',"Name":"' + name 
+                    + '","Description":"' + description                    
+                    + '","DestPort":' + destport 
+                    + ',"DestName":"' + destname + '"}';            
+            var request = relayobj.CallAjax("/relay/modify/" + idchannel, "PUT", jsonrequest, "json");
+            return request;            
+        };
         relayobj.CallAjaxNoAsync = function(url, method, data, datatype) {
             var request = $.ajax({
                 type: method,
@@ -74,7 +132,7 @@ var Relay = {
                 async: false
             });
             return request;
-        };
+        };        
         relayobj.CallAjax = function(url, method, data, datatype) {
             var request = $.ajax({
                 type: method,

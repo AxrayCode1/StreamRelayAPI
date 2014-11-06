@@ -43,7 +43,7 @@ var CreateHtml = {
                 if (typeof(dest_temp[2]) !== 'undefined') {
                     dest_temp = dest_temp[2].split('/');
                     port = dest_temp[0];
-                    channelname = dest_temp[1];
+                    dest_name = dest_temp[1];
                 }
                 atmpSourceUrl = [];
                 $.each(relayelement['Source'],function(sourceindex,sourceelement){
@@ -56,22 +56,8 @@ var CreateHtml = {
                 ,relayelement['descChannel'],relayelement['dest'],relayelement['status']);
                 relayList[relayelement['idChannel']] = tmp_relay_item;
                 var append_str = '';
-                append_str += '<tr id="tr' + relayelement['idChannel'] +'">';
-                append_str += '<td style="text-align:center">' + i + '</td>';
                 var sourceurl = atmpSourceUrl.length > 0 ? atmpSourceUrl[0]['url'] : ''; 
-                append_str += '<td>' + sourceurl + '</td>';
-                append_str += '<td>' + relayelement['dest'] + '</td>';
-                append_str += '<td>' + createobj.GetRelayStatusStr(relayelement['status']) + '</td>';
-                append_str += '<td style="text-align:right">' + relayelement['numChannel'] + '</td>';
-                append_str += '<td>' + relayelement['nameChannel'] + '</td>';
-                append_str += '<td>' + relayelement['descChannel'] + '</td>';
-                append_str += '<td>';
-                append_str += '<a href="#" class="btn-light delete" id="' + relayelement['idChannel'] + '">Delete</a>';
-                if (port !== '')
-                    append_str += '<a href="#" style="margin-left:10px" class="btn-light resume" id="' + relayelement['idChannel'] + '">Resume</a>';
-                append_str += '<a href="#" style="margin-left:10px" class="btn-light ModifySource" id="' + relayelement['idChannel'] + '">Edit Source</a>';
-                append_str += '</td>';
-                append_str += '</tr>';
+                append_str = CreateRelayHtml(i,sourceurl,tmp_relay_item);
                 ++i;
                 table_relay.append(append_str);
             });
@@ -81,24 +67,48 @@ var CreateHtml = {
             for(var key in relayList){ 
                 var element = relayList[key];
                 var append_str = '';
-                append_str += '<tr id="tr' + key +'">';
-                append_str += '<td style="text-align:center">' + i + '</td>';
                 var sourceurl = element['source'].length > 0 ? element['source'][0]['url'] : '' ; 
-                append_str += '<td>' + sourceurl + '</td>';
-                append_str += '<td>' + element['fulldest'] + '</td>';
-                append_str += '<td>' + createobj.GetRelayStatusStr(element['status']) + '</td>';
-                append_str += '<td style="text-align:right">' + element['channelnumber'] + '</td>';
-                append_str += '<td>' + element['name'] + '</td>';
-                append_str += '<td>' + element['description'] + '</td>';
-                append_str += '<td>';
-                append_str += '<a href="#" class="btn-light delete" id="' + key + '">Delete</a>';
-                if (element['port'] !== '')
-                    append_str += '<a href="#" style="margin-left:10px" class="btn-light resume" id="' + key + '">Resume</a>';
-                append_str += '</td>';
-                append_str += '</tr>';
+                append_str = CreateRelayHtml(i  ,sourceurl,element);
                 ++i;
                 table_relay.append(append_str);
             };
+        };
+        createobj.GetTooltip = function(index){
+            var ListSource = relayList[index]['source'];
+            var TooltipHtml = '';
+            TooltipHtml += '<div style="width:460px">';
+            for(var key in ListSource){                     
+                TooltipHtml += '<label style="display:inline-block;width:80px">Order ' + ListSource[key]['prior'] + '</label>' ;
+                TooltipHtml += '<label style="display:inline-block;width:280px">' + ListSource[key]['url'] + '</label>';
+                TooltipHtml += '<label style="display:inline-block">' + GetSourceStatusStr(ListSource[key]['flag']) + '</label>'; 
+                TooltipHtml += '<br>';                
+            };
+            TooltipHtml += '</div>';
+            return TooltipHtml;
+        };
+        function CreateRelayHtml(index,sourceurl,element){
+            var append_str = '';
+            append_str += '<tr id="tr' + element['id'] +'">';
+            append_str += '<td style="text-align:center">' + index + '</td>';              
+            append_str += '<td>' + sourceurl;
+            append_str += '<img src="/img/log.png" style="margin-left:5px" height="20" width="20" align="center" class="DetailSource" id="' + element['id'] + '">';
+            append_str += '</td>';
+            append_str += '<td style="text-align:right">' + element['source'].length + '</td>';  
+            append_str += '<td>' + element['fulldest'] + '</td>';
+            append_str += '<td>' + createobj.GetRelayStatusStr(element['status']) + '</td>';
+            append_str += '<td style="text-align:right">' + element['channelnumber'] + '</td>';
+            append_str += '<td>' + element['name'] + '</td>';
+            append_str += '<td>' + element['description'] + '</td>';
+            append_str += '<td>';
+            append_str += '<a href="#" class="btn-light delete" id="' + element['id'] + '">Delete</a>';
+            append_str += '<a href="#" style="margin-left:10px" class="btn-light stop" id="' + element['id'] + '">Stop</a>';
+            if (element['port'] !== '')
+                append_str += '<a href="#" style="margin-left:10px" class="btn-light resume" id="' + element['id'] + '">Resume</a>';
+            append_str += '<a href="#" style="margin-top:5px" class="btn-light ModifySource" id="' + element['id'] + '">Edit Source</a>';
+            append_str += '<a href="#" style="margin-top:5px;margin-left:10px" class="btn-light ModifyChannel" id="' + element['id'] + '">Edit Channel</a>';
+            append_str += '</td>';
+            append_str += '</tr>';
+            return append_str;
         };
         createobj.EmptySoucreArea = function(){
             source_area.empty();
@@ -166,7 +176,7 @@ var CreateHtml = {
             if(source_url_list.length === 0){
                 append_str += '<div>';
                 append_str += '<label class="LabelRelayHead">Order 1 : </label>';
-                append_str += '<input id="AddSourceUrl" class="InputRelay" value="" type="text">';
+                append_str += '<input id="ModifyAddSourceUrlAddSourceUrl" class="InputRelay" value="" type="text">';
                 append_str += '<a href="#" class="btn-light ModifyAddSource" style="margin-left:5px">Add</a>';
                 append_str += '</div>';
             }
@@ -206,7 +216,7 @@ var CreateHtml = {
                 if(source_url_list.length < max_create_count){
                     append_str += '<div style="margin-top: 5px">';
                     append_str += '<label class="LabelRelayHead">Order ' + (i+1) + ': </label>';;
-                    append_str += '<input id="AddSourceUrl" class="InputRelay" value="" type="text">';
+                    append_str += '<input id="ModifyAddSourceUrl" class="InputRelay" value="" type="text">';
                     append_str += '<a  href="#" class="btn-light ModifyAddSource" style="margin-left:5px">Add</a>';
                     append_str += '</div>';
                 }
@@ -255,7 +265,7 @@ var CreateHtml = {
             };
         };
         createobj.GetRelayStatusStr = function(sStatus){
-            iStatus = parseInt(sStatus);
+            var iStatus = parseInt(sStatus);
             switch(iStatus)
             {
                 case -1:
@@ -277,6 +287,26 @@ var CreateHtml = {
                     return 'Unknow('+sStatus + ')';
             }
         };
+        function GetSourceStatusStr(sStatus){
+            var iStatus = parseInt(sStatus);
+            switch(iStatus)
+            {
+                case -1:
+                    return 'Offline';
+                    break;
+                case 0:
+                    return 'Standby';
+                    break;
+                case 1:
+                    return 'Initializing';                    
+                    break;
+                case 2 :
+                    return 'Active';                    
+                    break;
+                default:
+                    return 'Unknow('+sStatus + ')';
+            }
+        }
         createobj.EmptyIPDiv = function() {
             ip_field.empty();
         };
