@@ -105,6 +105,9 @@ and open the template in the editor.
         </div>
 
         <div id="div_relay_control">
+<!--            <div style="position: absolute;left: 10px">
+                <a id="btn_add"  href="#" class="btn-light">Add</a>
+            </div>-->
             <div style="position: absolute;right: 10px">
                 <a id="btn_refresh"  href="#" class="btn-light">Refresh</a>
             </div>
@@ -130,24 +133,7 @@ and open the template in the editor.
                                 <div class="div_fieldcontent">
                                     <label>Source Url : </label>
                                     <div id="UrlArea" style="margin-top: 10px;margin-left: -5px; 
-                                         padding: 5px;border: 1px solid rgba(0, 0, 0,.2);">
-                                        <div>
-                                            <label class="LabelRelayHead">Order 1 : </label>
-                                            <label class="LabelSource">http://192.168.88.18:8082</label>
-                                            <a  href="#" class="btn-light">Delete</a>
-                                            <a  href="#" class="btn-light">Down</a>
-                                        </div>
-                                        <div style="margin-top: 5px">
-                                            <label class="LabelRelayHead">Order 2 : </label>
-                                            <label class="LabelSource">http://192.168.88.18:8082</label>
-                                            <a  href="#" class="btn-light">Delete</a>
-                                            <a  href="#" class="btn-light">Up</a>                                            
-                                        </div>
-                                        <div style="margin-top: 5px">
-                                            <label class="LabelRelayHead">Order 3 : </label>
-                                            <input class="InputRelay" value="" type="text">
-                                            <a  href="#" class="btn-light">Add</a>                                      
-                                        </div>
+                                         padding: 5px;border: 1px solid rgba(0, 0, 0,.2);">                                        
                                     </div>                                    
                                     <br>                                                                    
                                     <label class="LabelRelayHead">Destination Port : </label>
@@ -332,6 +318,49 @@ and open the template in the editor.
                 <a id="btn_modify_channel" href="#" class="btn-light">Confirm</a>
                 <a id="btn_close_modify_channel" href="#" class="btn-light">Close</a>
             </div>
+        </div>
+        
+        <div id="modal_create_channel_content">
+<!--            <div style="position: relative" >                    
+                <div style="position: absolute;left: 10px; top: 10px">                   
+                    <div>
+                        <label>Source Url : </label>
+                        <div id="UrlArea" style="margin-top: 10px;margin-left: -5px; 
+                             padding: 5px;border: 1px solid rgba(0, 0, 0,.2);">                           
+                        </div>                                    
+                        <br>                                                                    
+                        <label class="LabelRelayHead">Destination Port : </label>
+                        <input id="Port" class="InputRelay" value="" type="text">
+                        <br>
+                        <br>
+                        <label class="LabelRelayHead">Destination Name : </label>
+                        <input id="DestinationName" class="InputRelay" value="" type="text">
+                        <br>
+                        <br>
+                        <label class="LabelRelayHead">Channel Number : </label>
+                        <input id="ChannelNumber"  class="InputRelay" value="" type="text">
+                        <br>
+                        <br>
+                        <label class="LabelRelayHead">Channel Name : </label>
+                        <input id="Name"  class="InputRelay" value="" type="text">
+                        <br>
+                        <br>
+                        <label class="LabelRelayHead">Description : </label>
+                        <input id="Description"  class="InputRelay" value="" type="text">
+                        <br>
+                        <br>
+                        <a id="btn_create" href="#" class="btn-light">Create</a>
+                    </div>                    
+                </div>
+            </div>-->
+        </div>
+        
+        <div id="modal_mass_entry_content">
+            
+        </div>
+        
+        <div id="moadl_modify_content">
+            
         </div>
         
         <div id="dialog_wait">

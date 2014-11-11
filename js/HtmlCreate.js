@@ -79,7 +79,7 @@ var CreateHtml = {
             TooltipHtml += '<div style="width:460px">';
             for(var key in ListSource){                     
                 TooltipHtml += '<label style="display:inline-block;width:80px">Order ' + ListSource[key]['prior'] + '</label>' ;
-                TooltipHtml += '<label style="display:inline-block;width:280px">' + ListSource[key]['url'] + '</label>';
+                TooltipHtml += '<label class="TooltipURL">' + ListSource[key]['url'] + '</label>';
                 TooltipHtml += '<label style="display:inline-block">' + GetSourceStatusStr(ListSource[key]['flag']) + '</label>'; 
                 TooltipHtml += '<br>';                
             };
@@ -90,9 +90,9 @@ var CreateHtml = {
             var append_str = '';
             append_str += '<tr id="tr' + element['id'] +'">';
             append_str += '<td style="text-align:center">' + index + '</td>';              
-            append_str += '<td>' + sourceurl;
+            append_str += '<td><div class="wrapword">' + sourceurl;
             append_str += '<img src="/img/log.png" style="margin-left:5px" height="20" width="20" align="center" class="DetailSource" id="' + element['id'] + '">';
-            append_str += '</td>';
+            append_str += '<div></td>';
             append_str += '<td style="text-align:right">' + element['source'].length + '</td>';  
             append_str += '<td>' + element['fulldest'] + '</td>';
             append_str += '<td>' + createobj.GetRelayStatusStr(element['status']) + '</td>';
@@ -110,6 +110,15 @@ var CreateHtml = {
             append_str += '</tr>';
             return append_str;
         };
+        createobj.CreateTdSourceText = function(ChannelID){
+            var atmpSourceUrl=relayList[ChannelID]['source'];
+            var sourceurl = atmpSourceUrl.length > 0 ? atmpSourceUrl[0]['url'] : ''; 
+            var append_str = '';
+            append_str += '<div class="wrapword">' + sourceurl;
+            append_str += '<img src="/img/log.png" style="margin-left:5px" height="20" width="20" align="center" class="DetailSource" id="' + ChannelID + '">';
+            append_str += '</div>';
+            return append_str;
+        };        
         createobj.EmptySoucreArea = function(){
             source_area.empty();
         };
@@ -136,7 +145,7 @@ var CreateHtml = {
                         case 0:
                             append_str += '<div>';
                             append_str += '<label class="LabelRelayHead">Order ' + (i+1) + ': </label>';                            
-                            append_str += '<label class="LabelSource">' + element['url'] + '</label>';
+                            append_str += '<label class="LabelSource">' + element['url'] + '</label>';                            
                             append_str += '<a  href="#" class="btn-light DeleteSource" style="margin-left:5px" id="' + key + '">Delete</a>';
                             if(source_url_list.length >= 2)                                                                                            
                                 append_str += '<a  href="#" class="btn-light DownSource" style="margin-left:5px" id="' + key +'">Down</a>';                                                            

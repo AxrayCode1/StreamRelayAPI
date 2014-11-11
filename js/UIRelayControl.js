@@ -46,13 +46,17 @@ var UIRelayControl = {
             oHtml.AppendSourceArea(CreateSourceList);
             RebindAllControlSourceEvent();
             oUIRelayContorl.InitMassEntryDialog();
+            InitAddChannelDialog();
             InitModifySourceDialog();
             InitModifyChannelDialog();
-            oUIRelayContorl.GetRelayList();              
+            oUIRelayContorl.GetRelayList();
+            $('#btn_add').click(function(){
+                $( "#modal_create_channel_content" ).dialog('open');
+            });
             $('#btn_refresh').click(function() {
                 oUIRelayContorl.GetRelayList();
             });
-            $('#btn_create').click(function() {    
+            $('#btn_create').click(function(event) {    
                 event.preventDefault();
                 oUIRelayContorl.CreateRelayAction();                       
             });            
@@ -69,24 +73,33 @@ var UIRelayControl = {
                 oUIRelayContorl.MassFileCreateAction();        
             });
             $('.relayth').click(function(){
-               var th = $(this);
-               var eSortType = SortType.String;
-               var eSortDirection = SortDirection.ASC;
-               if(th.attr('id') === "channelnumber" || th.attr('id') === "sourcecount")
-                   eSortType = SortType.Num;
-               if(th.hasClass('asc')){
-                   th.removeClass('asc');
-                   th.addClass('desc');
-                   eSortDirection = SortDirection.Desc;
-               }
-               else{
-                   th.removeClass('desc');
-                   th.addClass('asc');
-                   eSortDirection = SortDirection.ASC;
-               }
-               SortRelayList(eSortDirection,eSortType,th.attr('id'));
-               oHtml.clearTable();
-               oHtml.appendTablebyList();
+                var th = $(this);
+                var eSortType = SortType.String;
+                var eSortDirection = SortDirection.ASC;
+                if(th.attr('id') === "channelnumber" || th.attr('id') === "sourcecount")
+                    eSortType = SortType.Num;
+                if(th.hasClass('asc')){
+                    th.removeClass('asc');
+                    th.addClass('desc');
+                    eSortDirection = SortDirection.Desc;
+                }
+                else{
+                    th.removeClass('desc');
+                    th.addClass('asc');
+                    eSortDirection = SortDirection.ASC;
+                }
+                SortRelayList(eSortDirection,eSortType,th.attr('id'));                
+                oHtml.clearTable();
+                oHtml.appendTablebyList();
+                RebindAllRelayEvent(); 
+                ReCreateRelayList();
+                $('.DetailSource').tooltip({    
+                    items: "img ",
+                    content: function() {  
+                         var tooltip = oHtml.GetTooltip($(this).attr('id'));
+                         return tooltip;
+                    }
+                });
             });
             PollingRelayList();
         };
@@ -144,6 +157,17 @@ var UIRelayControl = {
                     break;               
             }          
         }     
+        
+        function ReCreateRelayList()
+        {
+            var TmpRelayList = [];
+            for(var index in relayList)
+            {
+                TmpRelayList[relayList[index]['id']] = relayList[index];                
+            }
+            relayList = [];
+            relayList = TmpRelayList;
+        }
         
         oUIRelayContorl.InitMassEntryDialog = function(){
             $( "#modal_update_progress_content" ).dialog({
@@ -209,7 +233,25 @@ var UIRelayControl = {
                 oUIRelayContorl.GetRelayList();
             });
         };
-                
+             
+        function InitAddChannelDialog(){
+            $( "#modal_create_channel_content" ).dialog({
+                    title: "Add",
+                    modal: true,
+                    resizable: false,
+                    draggable: false,
+                    closeOnEscape: false,
+                    autoOpen: false,
+                    dialogClass: "no-close",
+                    height:550,
+                    width:680               
+            });                 
+//            $('#btn_close_modify_channel').click(function () {	                
+//                $( "#modal_modify_channel_content" ).dialog('close');
+//                oUIRelayContorl.GetRelayList();
+//            });
+        };
+        
         oUIRelayContorl.CheckNum = function(str){
             return str.match(/^[0-9]*$/);
         };
@@ -295,15 +337,22 @@ var UIRelayControl = {
                             relayList[relayelement['idChannel']]['status'] = relayelement['status'];
                             $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Status).text(oHtml.GetRelayStatusStr(relayelement['status']));
                         };
-                        if(relayelement['Source'].length > 0 && relayelement['Source'][0]['urlSource'] !== relayList[relayelement['idChannel']]['source'][0]['url'])
-                        {
+//                        if(relayelement['Source'].length > 0 && relayelement['Source'][0]['urlSource'] !== relayList[relayelement['idChannel']]['source'][0]['url'])
+//                        {
                             relayList[relayelement['idChannel']]['source'] = [];
                             $.each(relayelement['Source'],function(sourceindex,sourceelement){
-                                otmpSourceUrl = new relaySourceClass(sourceelement['idSource'],sourceelement['flag'],sourceelement['urlSource']);
+                                otmpSourceUrl = new relaySourceClass(sourceelement['idSource'],sourceelement['state'],sourceelement['urlSource'],sourceelement['prior']);
                                 relayList[relayelement['idChannel']]['source'][sourceindex] = otmpSourceUrl;
                             });
-                            $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Source).text(relayelement['Source'][0]['urlSource']);
-                        };
+                            $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Source).html(oHtml.CreateTdSourceText(relayelement['idChannel']));
+//                        };
+                    }
+                });
+                $('.DetailSource').tooltip({    
+                    items: "img ",
+                    content: function() {  
+                        var tooltip = oHtml.GetTooltip($(this).attr('id'));
+                        return tooltip;
                     }
                 });
                 setTimeout(function(){PollingRelayList();}, PollingTime);
@@ -562,10 +611,7 @@ var UIRelayControl = {
                 oUIRelayContorl.MassCreatRelay(RowNum,aMassCreateItem);
             });
             request.fail(function(jqxhr, textStatus) {                
-//                oHtml.AppendMassEntryResultTable(RowNum,'Ajax Create Relay Error.');
-//                ++RowNum;
-//                oUIRelayContorl.MassCreatRelay(RowNum,aMassCreateItem);
-                  oError.CheckAuth(jqxhr.status,ActionStatus.CreateRelay);
+                oError.CheckAuth(jqxhr.status,ActionStatus.CreateRelay);
             });
         };        
         
