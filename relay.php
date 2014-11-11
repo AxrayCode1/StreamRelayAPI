@@ -39,8 +39,9 @@ and open the template in the editor.
         <title>AcroRed TV Relay Station</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script type='text/javascript' src="/js/jquery-1.7.2.min.js"></script>        
+        <script type='text/javascript' src="/js/jquery-1.11.1.min.js"></script>        
         <script type='text/javascript' src='/js/jquery-ui-1.11.1.min.js'></script>
+        <script type="text/javascript" src="/js/jquery.dropdown.min.js"></script>
         <!--<script type='text/javascript' src="/js/jquery.simplemodal.js"></script>-->
         <!--<script type='text/javascript' src="/js/jquery.blockUI.js"></script>-->
         <script type='text/javascript' src="/js/tvcloud.js"></script>
@@ -60,6 +61,7 @@ and open the template in the editor.
         <link type='text/css' href='/css/jquery-ui.min.css' rel='stylesheet'/>
         <link type='text/css' href='/css/jquery-ui.structure.min.css' rel='stylesheet'/>
         <link type='text/css' href='/css/jquery-ui.theme.min.css' rel='stylesheet'/>
+        <link type='text/css' href='/css/jquery.dropdown.css' rel='stylesheet'/>
     </head>
     <body>        
         <div id="div_relay_header">                
@@ -102,27 +104,27 @@ and open the template in the editor.
                 <img src="/img/logout-512.png" height="20" width="20" align="center" /> Logout
             </div>                          
             
-        </div>
-
+        </div>        
         <div id="div_relay_control">
 <!--            <div style="position: absolute;left: 10px">
                 <a id="btn_add"  href="#" class="btn-light">Add</a>
-            </div>-->
+            </div>-->            
+            <a href="#" class="btn-light" data-dropdown="#dropdown-1">Create&nbsp;&darr;</a>            
             <div style="position: absolute;right: 10px">
                 <a id="btn_refresh"  href="#" class="btn-light">Refresh</a>
             </div>
             <div id="div_relay_table" style="position: absolute;top: 40px;width: 100%">
                 <table id="table_relay">
                     <tr>
-                        <th width="2%">Item</th>                        
-                        <th id="source" class="relayth" width="18%">Source</th>
-                        <th id="sourcecount" class="relayth" width="10%">Source Counter</th>
-                        <th id="fulldest" class="relayth" width="8%">Destination</th>
-                        <th id="status" class="relayth" width="7%">Status</th>
-                        <th id="channelnumber" class="relayth" width="13%">Channel Number</th>
-                        <th id="name" class="relayth" width="10%">Channel Name</th>
-                        <th id="description" class="relayth" width="14%">Description</th>                        
-                        <th width="18%">Action</th>
+                        <th width="80px">Item</th>                        
+                        <th id="channelnumber" class="relayth" width="100px">Channel No.</th>
+                        <th id="name" class="relayth" width="100px">Channel Name</th>
+                        <th id="source" class="relayth" width="250px">Channel Source</th>
+                        <th id="sourcecount" class="relayth" width="100px">Source Qty.</th>
+                        <th id="fulldest" class="relayth" width="250px">Channel Destination</th>
+                        <th id="status" class="relayth" width="80px">Status</th>                        
+                        <th id="description" class="relayth" width="120px">Description</th>                        
+                        <th width="240px">Action</th>
                     </tr>               
                 </table>
                 <div id="div_control_table">  
@@ -135,14 +137,6 @@ and open the template in the editor.
                                     <div id="UrlArea" style="margin-top: 10px;margin-left: -5px; 
                                          padding: 5px;border: 1px solid rgba(0, 0, 0,.2);">                                        
                                     </div>                                    
-                                    <br>                                                                    
-                                    <label class="LabelRelayHead">Destination Port : </label>
-                                    <input id="Port" class="InputRelay" value="" type="text">
-                                    <br>
-                                    <br>
-                                    <label class="LabelRelayHead">Destination Name : </label>
-                                    <input id="DestinationName" class="InputRelay" value="" type="text">
-                                    <br>
                                     <br>
                                     <label class="LabelRelayHead">Channel Number : </label>
                                     <input id="ChannelNumber"  class="InputRelay" value="" type="text">
@@ -152,6 +146,14 @@ and open the template in the editor.
                                     <input id="Name"  class="InputRelay" value="" type="text">
                                     <br>
                                     <br>
+                                    <label class="LabelRelayHead">Destination Port : </label>
+                                    <input id="Port" class="InputRelay" value="" type="text">
+                                    <br>
+                                    <br>
+                                    <label class="LabelRelayHead">Destination Name : </label>
+                                    <input id="DestinationName" class="InputRelay" value="" type="text">
+                                    <br>
+                                    <br>                                    
                                     <label class="LabelRelayHead">Description : </label>
                                     <input id="Description"  class="InputRelay" value="" type="text">
                                     <br>
@@ -253,7 +255,7 @@ and open the template in the editor.
                 <table id="table_log">
                     <tr>
                         <th width="2%">Item</th>                        
-                        <th id="type" class="logth" width="10%">Type</th>
+                        <th id="type" class="logth" width="10%">Operator</th>
                         <th id="source" class="logth" width="18%">Source</th>
                         <th id="fulldest" class="logth" width="18%">Destination</th>    
                         <th id="name" class="logth" width="15%">Channel Name</th>
@@ -288,7 +290,7 @@ and open the template in the editor.
         <div id="modal_modify_source_content">                        
             <div id="ModifySourceArea">                
             </div>
-            <div style="position: absolute;right: 10px;bottom: 10px">
+            <div style="position: absolute;right: 10px">
                 <a id="closemodifydialog" href="#" class="btn-light">Close</a>
             </div>
         </div>
@@ -314,11 +316,19 @@ and open the template in the editor.
             <input id="ModfiyDescription"  class="InputRelay" value="" type="text">
             <br>
             <br>
-            <div style="position: absolute;right: 10px;bottom: 10px">
+            <div style="position: absolute;right: 10px">
                 <a id="btn_modify_channel" href="#" class="btn-light">Confirm</a>
                 <a id="btn_close_modify_channel" href="#" class="btn-light">Close</a>
             </div>
         </div>
+        
+        <div id="dropdown-1" class="dropdown dropdown-tip RealyEdit">
+                <ul class="dropdown-menu">
+                    <li><a href="#1">Delete</a></li>
+                    <li><a href="#2">Edit Source</a></li>
+                    <li><a href="#3">Edit Channel</a></li>                                        
+                </ul>
+            </div>
         
         <div id="modal_create_channel_content">
 <!--            <div style="position: relative" >                    

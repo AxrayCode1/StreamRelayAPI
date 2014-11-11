@@ -24,11 +24,12 @@ var UIRelayControl = {
         var PollingTime = 10000;
         var iModifyChannelID;
         var RelayColumn = {
-            Source: 1,
-            Destination: 3,
-            Status: 4,
-            ChannelNumber:5,
-            ChannelName:6,
+            ChannelNumber:1,
+            ChannelName:2,
+            Source: 3,
+            SourceQtp: 4,
+            Destination: 5,
+            Status: 6,            
             Description:7           
         };
         var ChannelVerifyAction = {
@@ -38,6 +39,29 @@ var UIRelayControl = {
         var CreateSourceList;
         var ModifySourceList;
         oUIRelayContorl.Init = function(){   
+//            $("#demo_drop1").jui_dropdown({
+//            launcher_id: 'launcher1',
+//            launcher_container_id: 'launcher1_container',
+//            menu_id: 'menu1',
+//            containerClass: 'container1',
+//            menuClass: 'menu1',
+//            onSelect: function(event, data) {
+//              $("#result").text('index: ' + data.index + ' (id: ' + data.id + ')');
+//            }
+//            });
+//            $("#demo_drop2").jui_dropdown({
+//            launcher_id: 'launcher2',
+//            launcher_container_id: 'launcher2_container',
+//            menu_id: 'menu2',
+//            containerClass: 'container2',
+//            menuClass: 'menu2',
+//            onSelect: function(event, data) {
+//              $("#result").text('index: ' + data.index + ' (id: ' + data.id + ')');
+//            }
+//            });
+$('.RealyEdit').on('show', function(event, dropdownData) {
+    alert($(this).attr('id'));
+});
             CreateSourceList = [];
             oError = ErrorHandle.createNew();            
             oHtml.HideAllOption();
@@ -76,7 +100,7 @@ var UIRelayControl = {
                 var th = $(this);
                 var eSortType = SortType.String;
                 var eSortDirection = SortDirection.ASC;
-                if(th.attr('id') === "channelnumber" || th.attr('id') === "sourcecount")
+                if(th.attr('id') === "channelnumber" || th.attr('id') === "sourcecount" || th.attr('id') === "status")
                     eSortType = SortType.Num;
                 if(th.hasClass('asc')){
                     th.removeClass('asc');
@@ -101,7 +125,7 @@ var UIRelayControl = {
                     }
                 });
             });
-            PollingRelayList();
+            PollingRelayList(true);
         };
         
         function SortRelayList(eSortDirection,eSortType,sSortVariable)
@@ -204,12 +228,14 @@ var UIRelayControl = {
                     closeOnEscape: false,
                     autoOpen: false,
                     dialogClass: "no-close",
-                    height:450,
+                    height:400,
                     width:650               
             });                
-            $('#closemodifydialog').click(function () {	                
+            $('#closemodifydialog').click(function (event) {
+                event.preventDefault();
                 $( "#modal_modify_source_content" ).dialog('close');
-                oUIRelayContorl.GetRelayList();
+//                oUIRelayContorl.GetRelayList();
+                    setTimeout(function(){GetRelayNoRefresh();}, 200);
             });
         };        
         
@@ -225,12 +251,14 @@ var UIRelayControl = {
                     height:400,
                     width:600               
             });     
-            $('#btn_modify_channel').click(function () {	                
-               ModifyChannel();
+            $('#btn_modify_channel').click(function (event) {	
+                event.preventDefault();
+                ModifyChannel();
             });
-            $('#btn_close_modify_channel').click(function () {	                
+            $('#btn_close_modify_channel').click(function (event) {
+                 event.preventDefault();
                 $( "#modal_modify_channel_content" ).dialog('close');
-                oUIRelayContorl.GetRelayList();
+                setTimeout(function(){GetRelayNoRefresh();}, 200);
             });
         };
              
@@ -323,43 +351,89 @@ var UIRelayControl = {
             });
         };               
         
-        function PollingRelayList(){
+        function GetRelayNoRefresh(){
+            oHtml.blockPage();
             var request = oRelayAjax.getRelayList();
-            CallBackPollingGetRelay(request);
+            CallBackPollingGetRelay(request,false);
         }
         
-        function CallBackPollingGetRelay(request){
-            var otmpSourceUrl;
+        function PollingRelayList(bIsPolling){
+            var request = oRelayAjax.getRelayList();
+            CallBackPollingGetRelay(request,bIsPolling);
+        }
+        
+        function CallBackPollingGetRelay(request,bIsPolling){            
             request.done(function(msg, statustext, jqxhr) {
-                $.each(msg, function(relayindex, relayelement) {     
-                    if(typeof(relayList[relayelement['idChannel']]) !== 'undefined'){
-                        if(relayelement['status'] !== relayList[relayelement['idChannel']]['status']){                                                      
-                            relayList[relayelement['idChannel']]['status'] = relayelement['status'];
-                            $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Status).text(oHtml.GetRelayStatusStr(relayelement['status']));
-                        };
-//                        if(relayelement['Source'].length > 0 && relayelement['Source'][0]['urlSource'] !== relayList[relayelement['idChannel']]['source'][0]['url'])
-//                        {
-                            relayList[relayelement['idChannel']]['source'] = [];
-                            $.each(relayelement['Source'],function(sourceindex,sourceelement){
-                                otmpSourceUrl = new relaySourceClass(sourceelement['idSource'],sourceelement['state'],sourceelement['urlSource'],sourceelement['prior']);
-                                relayList[relayelement['idChannel']]['source'][sourceindex] = otmpSourceUrl;
-                            });
-                            $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Source).html(oHtml.CreateTdSourceText(relayelement['idChannel']));
-//                        };
-                    }
-                });
-                $('.DetailSource').tooltip({    
-                    items: "img ",
-                    content: function() {  
-                        var tooltip = oHtml.GetTooltip($(this).attr('id'));
-                        return tooltip;
-                    }
-                });
-                setTimeout(function(){PollingRelayList();}, PollingTime);
+                ChangeRelayContentNoFresh(msg);
+                if(bIsPolling)
+                    setTimeout(function(){PollingRelayList();}, PollingTime);
+                else
+                    oHtml.stopPage();
             });
             request.fail(function(jqxhr, textStatus) {
-                setTimeout(function(){PollingRelayList();}, PollingTime);
+                if(bIsPolling)
+                    setTimeout(function(){PollingRelayList();}, PollingTime);
+                else{
+                    oHtml.stopPage();
+                    oError.CheckAuth(jqxhr.status,ActionStatus.GetRelay);
+                }                    
             });
+        }
+                
+        function ChangeRelayContentNoFresh(msg)
+        {
+            var otmpSourceUrl;
+            $.each(msg, function(relayindex, relayelement) {     
+               if(typeof(relayList[relayelement['idChannel']]) !== 'undefined'){
+                   if(relayelement['status'] !== relayList[relayelement['idChannel']]['status']){                                                      
+                       relayList[relayelement['idChannel']]['status'] = relayelement['status'];
+                       $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Status).text(oHtml.GetRelayStatusStr(relayelement['status']));
+                   };
+                   if(relayelement['numChannel'] !== relayList[relayelement['idChannel']]['channelnumber']){                                                      
+                       relayList[relayelement['idChannel']]['channelnumber'] = relayelement['numChannel'];
+                       $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.ChannelNumber).text(relayelement['numChannel']);
+                   };
+                   if(relayelement['nameChannel'] !== relayList[relayelement['idChannel']]['name']){                                                      
+                       relayList[relayelement['idChannel']]['name'] = relayelement['nameChannel'];
+                       $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.ChannelName).text(relayelement['nameChannel']);
+                   };
+                   if(relayelement['dest'] !== relayList[relayelement['idChannel']]['fulldest']){                                                      
+                        var dest_temp = relayelement['dest'].split(':');
+                        var port = '';
+                        var dest_name = '';
+                        if (typeof(dest_temp[2]) !== 'undefined') {
+                            dest_temp = dest_temp[2].split('/');
+                            port = dest_temp[0];
+                            dest_name = dest_temp[1];
+                        }
+                        relayList[relayelement['idChannel']]['destname'] = dest_name;
+                        relayList[relayelement['idChannel']]['port'] = port;
+                        relayList[relayelement['idChannel']]['fulldest'] = relayelement['dest'];
+                        $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Destination).text(relayelement['dest']);
+                   };
+                   if(relayelement['descChannel'] !== relayList[relayelement['idChannel']]['description']){                        
+                        relayList[relayelement['idChannel']]['description'] = relayelement['descChannel'];
+                        $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Description).text(relayelement['descChannel']);
+                   };
+//                        if(relayelement['Source'].length > 0 && relayelement['Source'][0]['urlSource'] !== relayList[relayelement['idChannel']]['source'][0]['url'])
+//                        {
+                       relayList[relayelement['idChannel']]['source'] = [];
+                       $.each(relayelement['Source'],function(sourceindex,sourceelement){
+                           otmpSourceUrl = new relaySourceClass(sourceelement['idSource'],sourceelement['state'],sourceelement['urlSource'],sourceelement['prior']);
+                           relayList[relayelement['idChannel']]['source'][sourceindex] = otmpSourceUrl;
+                       });
+                       $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Source).html(oHtml.CreateTdSourceText(relayelement['idChannel']));
+                       $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.SourceQtp).text(relayelement['Source'].length);
+//                        };
+               }
+           });
+           $('.DetailSource').tooltip({    
+               items: "img ",
+               content: function() {  
+                   var tooltip = oHtml.GetTooltip($(this).attr('id'));
+                   return tooltip;
+               }
+           });
         }
                 
         oUIRelayContorl.GetRelayList = function(){
@@ -710,7 +784,7 @@ var UIRelayControl = {
         }               
                 
         function RebindStopEvent() {
-            $(stop_class).click(function() {
+            $(stop_class).click(function(event) {
                 event.preventDefault();
                 var thisitem = $(this);                
                 StopRelay(relayList[thisitem.attr('id')]['id']);
@@ -725,7 +799,7 @@ var UIRelayControl = {
         
         function CallBackStopRelay(request){            
             request.done(function(msg, statustext, jqxhr) {                
-                setTimeout(function(){oUIRelayContorl.GetRelayList();}, 200);
+                setTimeout(function(){GetRelayNoRefresh();}, 200);
             });
             request.fail(function(jqxhr, textStatus) {
                 oHtml.stopPage();
@@ -733,8 +807,8 @@ var UIRelayControl = {
             });
         };
         
-        function RebindDeleteEvent() {
-            $(delete_class).click(function() {
+        function RebindDeleteEvent(event) {
+            $(delete_class).click(function(event) {
                 event.preventDefault();
                 var thisitem = $(this);                
                 DeleteRelay(relayList[thisitem.attr('id')]['id']);
@@ -758,7 +832,7 @@ var UIRelayControl = {
         };
         
         function RebindResumeEvent() {
-            $(resume_class).click(function() {
+            $(resume_class).click(function(event) {
                 event.preventDefault();
                 var thisitem = $(this);                
                 var index = thisitem.attr('id');
@@ -774,7 +848,8 @@ var UIRelayControl = {
         
         function CallBackResumeRelay(request){            
             request.done(function(msg, statustext, jqxhr) {                
-                setTimeout(function(){oUIRelayContorl.GetRelayList();}, 1000);
+//                setTimeout(function(){oUIRelayContorl.GetRelayList();}, 1000);
+                setTimeout(function(){GetRelayNoRefresh();}, 200);
             });
             request.fail(function(jqxhr, textStatus) {
                 oHtml.stopPage();
@@ -783,7 +858,8 @@ var UIRelayControl = {
         };                
         
         function RebindModifySourceEvent(){
-            $(modify_source_class).click(function() {
+            $(modify_source_class).click(function(event) {
+                event.preventDefault();
                 var channelid = parseInt($(this).attr('id'));
                 ModifySourceList = [];
                 ModifySourceList = relayList[channelid]['source'];
@@ -799,7 +875,8 @@ var UIRelayControl = {
         };
         
         function RebindModifyChannelEvent(){
-            $(modify_channel_class).click(function() {
+            $(modify_channel_class).click(function(event) {
+                event.preventDefault();
                 var channelid = parseInt($(this).attr('id'));
                 iModifyChannelID = channelid;
                 $('#btn_modify_channel').attr('id',channelid);
@@ -835,7 +912,8 @@ var UIRelayControl = {
         {            
             request.done(function(msg, statustext, jqxhr) {    
                 $( "#modal_modify_channel_content" ).dialog('close');
-                setTimeout(function(){oUIRelayContorl.GetRelayList();}, 1000);
+//                setTimeout(function(){oUIRelayContorl.GetRelayList();}, 1000);
+                setTimeout(function(){GetRelayNoRefresh();}, 200);
             });
             request.fail(function(jqxhr, textStatus) {
                 oHtml.stopPage();

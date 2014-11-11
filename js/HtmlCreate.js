@@ -76,9 +76,9 @@ var CreateHtml = {
         createobj.GetTooltip = function(index){
             var ListSource = relayList[index]['source'];
             var TooltipHtml = '';
-            TooltipHtml += '<div style="width:460px">';
+            TooltipHtml += '<div style="width:550px">';
             for(var key in ListSource){                     
-                TooltipHtml += '<label style="display:inline-block;width:80px">Order ' + ListSource[key]['prior'] + '</label>' ;
+                TooltipHtml += '<label style="display:inline-block;width:100px">Priority ' + ListSource[key]['prior'] + '</label>' ;
                 TooltipHtml += '<label class="TooltipURL">' + ListSource[key]['url'] + '</label>';
                 TooltipHtml += '<label style="display:inline-block">' + GetSourceStatusStr(ListSource[key]['flag']) + '</label>'; 
                 TooltipHtml += '<br>';                
@@ -90,14 +90,14 @@ var CreateHtml = {
             var append_str = '';
             append_str += '<tr id="tr' + element['id'] +'">';
             append_str += '<td style="text-align:center">' + index + '</td>';              
+            append_str += '<td style="text-align:right">' + element['channelnumber'] + '</td>';
+            append_str += '<td>' + element['name'] + '</td>';
             append_str += '<td><div class="wrapword">' + sourceurl;
-            append_str += '<img src="/img/log.png" style="margin-left:5px" height="20" width="20" align="center" class="DetailSource" id="' + element['id'] + '">';
+            append_str += '<img src="/img/Info.png" style="margin-left:5px" height="20" width="20" align="center" class="DetailSource" id="' + element['id'] + '">';
             append_str += '<div></td>';
             append_str += '<td style="text-align:right">' + element['source'].length + '</td>';  
             append_str += '<td>' + element['fulldest'] + '</td>';
-            append_str += '<td>' + createobj.GetRelayStatusStr(element['status']) + '</td>';
-            append_str += '<td style="text-align:right">' + element['channelnumber'] + '</td>';
-            append_str += '<td>' + element['name'] + '</td>';
+            append_str += '<td>' + createobj.GetRelayStatusStr(element['status']) + '</td>';            
             append_str += '<td>' + element['description'] + '</td>';
             append_str += '<td>';
             append_str += '<a href="#" class="btn-light delete" id="' + element['id'] + '">Delete</a>';
@@ -108,6 +108,7 @@ var CreateHtml = {
             append_str += '<a href="#" style="margin-top:5px;margin-left:10px" class="btn-light ModifyChannel" id="' + element['id'] + '">Edit Channel</a>';
             append_str += '</td>';
             append_str += '</tr>';
+            //<a href="#" class="btn-light" data-dropdown="#dropdown-1">Create&nbsp;&darr;</a>   
             return append_str;
         };
         createobj.CreateTdSourceText = function(ChannelID){
@@ -115,7 +116,7 @@ var CreateHtml = {
             var sourceurl = atmpSourceUrl.length > 0 ? atmpSourceUrl[0]['url'] : ''; 
             var append_str = '';
             append_str += '<div class="wrapword">' + sourceurl;
-            append_str += '<img src="/img/log.png" style="margin-left:5px" height="20" width="20" align="center" class="DetailSource" id="' + ChannelID + '">';
+            append_str += '<img src="/img/Info.png" style="margin-left:5px" height="20" width="20" align="center" class="DetailSource" id="' + ChannelID + '">';
             append_str += '</div>';
             return append_str;
         };        
@@ -131,7 +132,7 @@ var CreateHtml = {
             var i =0;
             if(source_url_list.length === 0){
                 append_str += '<div>';
-                append_str += '<label class="LabelRelayHead">Order 1 : </label>';
+                append_str += '<label class="LabelRelayHead">Priority 1 : </label>';
                 append_str += '<input id="AddSourceUrl" class="InputRelay" value="" type="text">';
                 append_str += '<a href="#" class="btn-light AddSource" style="margin-left:5px">Add</a>';
                 append_str += '</div>';
@@ -144,7 +145,7 @@ var CreateHtml = {
                     {
                         case 0:
                             append_str += '<div>';
-                            append_str += '<label class="LabelRelayHead">Order ' + (i+1) + ': </label>';                            
+                            append_str += '<label class="LabelRelayHead">Priority ' + (i+1) + ': </label>';                            
                             append_str += '<label class="LabelSource">' + element['url'] + '</label>';                            
                             append_str += '<a  href="#" class="btn-light DeleteSource" style="margin-left:5px" id="' + key + '">Delete</a>';
                             if(source_url_list.length >= 2)                                                                                            
@@ -153,7 +154,7 @@ var CreateHtml = {
                             break;
                         default:
                             append_str += '<div style="margin-top: 5px">';
-                            append_str += '<label class="LabelRelayHead">Order ' + (i+1) + ': </label>';                             
+                            append_str += '<label class="LabelRelayHead">Priority ' + (i+1) + ': </label>';                             
                             append_str += '<label class="LabelSource">' + element['url'] + '</label>';
                             append_str += '<a  href="#" class="btn-light DeleteSource" style="margin-left:5px" id="' + key +'">Delete</a>';
                             if(i < source_url_list.length -1)
@@ -170,7 +171,7 @@ var CreateHtml = {
                 };                
                 if(source_url_list.length < max_create_count){
                     append_str += '<div style="margin-top: 5px">';
-                    append_str += '<label class="LabelRelayHead">Order ' + (i+1) + ': </label>';;
+                    append_str += '<label class="LabelRelayHead">Priority ' + (i+1) + ': </label>';;
                     append_str += '<input id="AddSourceUrl" class="InputRelay" value="" type="text">';
                     append_str += '<a  href="#" class="btn-light AddSource" style="margin-left:5px">Add</a>';
                     append_str += '</div>';
@@ -184,7 +185,7 @@ var CreateHtml = {
             var i =0;
             if(source_url_list.length === 0){
                 append_str += '<div>';
-                append_str += '<label class="LabelRelayHead">Order 1 : </label>';
+                append_str += '<label class="LabelRelayHead">Priority 1 : </label>';
                 append_str += '<input id="ModifyAddSourceUrlAddSourceUrl" class="InputRelay" value="" type="text">';
                 append_str += '<a href="#" class="btn-light ModifyAddSource" style="margin-left:5px">Add</a>';
                 append_str += '</div>';
@@ -197,7 +198,7 @@ var CreateHtml = {
                     {
                         case 0:
                             append_str += '<div>';
-                            append_str += '<label class="LabelRelayHead">Order ' + (i+1) + ': </label>';                            
+                            append_str += '<label class="LabelRelayHead">Priority ' + (i+1) + ': </label>';                            
                             append_str += '<label class="LabelSource">' + element['url'] + '</label>';                            
                             if(source_url_list.length >= 2){
                                 append_str += '<a  href="#" class="btn-light ModifyDeleteSource" style="margin-left:5px" id="' + key + '">Delete</a>';
@@ -207,7 +208,7 @@ var CreateHtml = {
                             break;
                         default:
                             append_str += '<div style="margin-top: 5px">';
-                            append_str += '<label class="LabelRelayHead">Order ' + (i+1) + ': </label>';                             
+                            append_str += '<label class="LabelRelayHead">Priority ' + (i+1) + ': </label>';                             
                             append_str += '<label class="LabelSource">' + element['url'] + '</label>';
                             append_str += '<a  href="#" class="btn-light ModifyDeleteSource" style="margin-left:5px" id="' + key +'">Delete</a>';
                             if(i < source_url_list.length -1)
@@ -224,7 +225,7 @@ var CreateHtml = {
                 };                
                 if(source_url_list.length < max_create_count){
                     append_str += '<div style="margin-top: 5px">';
-                    append_str += '<label class="LabelRelayHead">Order ' + (i+1) + ': </label>';;
+                    append_str += '<label class="LabelRelayHead">Priority ' + (i+1) + ': </label>';;
                     append_str += '<input id="ModifyAddSourceUrl" class="InputRelay" value="" type="text">';
                     append_str += '<a  href="#" class="btn-light ModifyAddSource" style="margin-left:5px">Add</a>';
                     append_str += '</div>';
