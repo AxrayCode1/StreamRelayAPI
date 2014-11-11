@@ -109,7 +109,7 @@ and open the template in the editor.
 <!--            <div style="position: absolute;left: 10px">
                 <a id="btn_add"  href="#" class="btn-light">Add</a>
             </div>-->            
-            <a href="#" class="btn-light" data-dropdown="#dropdown-1">Create&nbsp;&darr;</a>            
+            <!--<a href="#" class="btn-light" data-dropdown="#dropdown-1">Create&nbsp;&darr;</a>-->            
             <div style="position: absolute;right: 10px">
                 <a id="btn_refresh"  href="#" class="btn-light">Refresh</a>
             </div>
