@@ -55,6 +55,9 @@ var UIRelayControl = {
             InitModifyChannelDialog();
             InitDetailDialog();
             oUIRelayContorl.GetRelayList();
+            RebindDeleteEvent();
+            RebindModifySourceEvent();
+            RebindModifyChannelEvent();
             $('.btn_add_single').click(function(event){
                 event.preventDefault();
                 CreateSourceList = [];
@@ -233,7 +236,7 @@ var UIRelayControl = {
                     autoOpen: false,
                     dialogClass: "no-close",
                     height:400,
-                    width:650               
+                    width:720               
             });                
             $('#closemodifydialog').click(function (event) {
                 event.preventDefault();
@@ -286,7 +289,7 @@ var UIRelayControl = {
         
         function InitDetailDialog(){
             $( "#modal_detail_content" ).dialog({
-                    title: "Channel Source Information",
+                    title: "Source URL Information",
                     modal: true,
                     resizable: false,
                     draggable: true,
@@ -816,10 +819,10 @@ var UIRelayControl = {
                        
         function RebindAllRelayEvent(){
             RebindStopEvent();
-            RebindDeleteEvent();
+//            RebindDeleteEvent();
             RebindResumeEvent();
-            RebindModifySourceEvent();
-            RebindModifyChannelEvent();
+//            RebindModifySourceEvent();
+//            RebindModifyChannelEvent();
             RebindEditEvent();
             RebindDetailEvent();
         }               

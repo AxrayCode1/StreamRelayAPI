@@ -388,11 +388,11 @@ input:-ms-input-placeholder {
 
 .LabelRelayHead{
     display: inline-block;
-    width: 170px;
+    width: 210px;
 }
 .LabelAddRelayHead{
     display: inline-block;
-    width: 150px;
+    width: 190px;
 }
 .LabelIPHead{
     display: inline-block;
@@ -404,7 +404,7 @@ input:-ms-input-placeholder {
 }
 
 .InputRelay{
-    height: 20px;
+    height: 25px;
     width: 250px;
 }
 
@@ -423,7 +423,7 @@ input:-ms-input-placeholder {
     white-space: -hp-pre-wrap;  /* HP Printers */
     word-wrap: break-word;      /* IE 5+ */
     display: inline-block;    
-    width: 255px;    
+    width: 300px;    
 }
 
 div.ui-tooltip {

@@ -269,8 +269,8 @@ and open the template in the editor.
         
         <div id="modal_update_progress_content">
             <!--h3>Mass Entry</h3>-->
-            <div class="div_fieldcontent">
-                <a href="/MassCreateRelay.txt" style="text-decoration: underline;" download>Download Sample File</a>
+            <!-- <div class="div_fieldcontent">
+               <a href="/MassCreateRelay.txt" style="text-decoration: underline;" download>Download Sample File</a>
                 <div style="margin-top:10px">
                     <input id="uploadFile" type="text" disabled="disabled" placeholder="Choose File">
                     <div class="file-upload btn btn-primary" style="margin-left: 10px">    
@@ -279,7 +279,7 @@ and open the template in the editor.
                         <input id="file_mass_create" accept=".txt" type="file" class="upload" />
                     </div>
                     <a id="btn_mass_create" style="margin-left: 10px" href="#" class="btn-light">Create</a>
-                </div>                                
+                </div>-->                                
                 <div style="position: relative;top:5px;color: black">Progress : <div id="progressbar">
                         <div class="progress-label"></div>                
                     </div>               
@@ -297,7 +297,7 @@ and open the template in the editor.
                 <div style="position: absolute;right: 10px;bottom: 10px">
                     <a id="closedialog" href="#" class="btn-light">Exit</a>
                 </div>
-            </div>
+            <!--</div>-->
         </div>
         
         <div id="modal_modify_source_content">                        
