@@ -32,6 +32,14 @@ var UIRelayControl = {
             Status: 6,            
             Description:7           
         };
+        var MassColumn = {
+            ChannelNumber:0,
+            ChannelName:1,
+            SourceURL:2,
+            Port:3,
+            Name:4,
+            Description:5
+        };
         var ChannelVerifyAction = {
             CreateAction:1,
             ModifyAction:2
@@ -73,6 +81,7 @@ var UIRelayControl = {
                 $('#file_mass_create').val('');
                 $( "#progressbar" ).progressbar('option','value',0);
                 $( ".progress-label").text('');
+                oHtml.EmptyMassEntryResultTable();
                 $( "#modal_update_progress_content").dialog('open');
             });
             $('#btn_resume_all').click(function(event){
@@ -404,7 +413,7 @@ var UIRelayControl = {
             request.done(function(msg, statustext, jqxhr) {
                 ChangeRelayContentNoFresh(msg);
                 if(bIsPolling)
-                    setTimeout(function(){PollingRelayList();}, PollingTime);
+                    setTimeout(function(){PollingRelayList(true);}, PollingTime);
                 else
                     oHtml.stopPage();
             });
@@ -715,7 +724,7 @@ var UIRelayControl = {
             if(oUIRelayContorl.MassEntryVerifyInput(RowNum,aCreateInput))
             {
                 var sSourceUrl = '';
-                var aSourceUrl = aCreateInput[0].trim().split(',');
+                var aSourceUrl = aCreateInput[MassColumn.SourceURL].trim().split(',');
                 for(var i = 0; i< aSourceUrl.length; i++){ 
                     sSourceUrl += '"' +  aSourceUrl[i] ;
                     if(i !== aSourceUrl.length -1)
@@ -723,7 +732,7 @@ var UIRelayControl = {
                     else
                         sSourceUrl += '"';
                 };
-                var request =  oRelayAjax.createRelay(aCreateInput[3], aCreateInput[4], aCreateInput[5], sSourceUrl, aCreateInput[1], aCreateInput[2]);
+                var request =  oRelayAjax.createRelay(aCreateInput[MassColumn.ChannelNumber], aCreateInput[MassColumn.ChannelName], aCreateInput[MassColumn.Description], sSourceUrl, aCreateInput[MassColumn.Port], aCreateInput[MassColumn.Name]);
                 oUIRelayContorl.CallBackMassCreateRelay(RowNum,aMassCreateItem,request);                
             }
             else
@@ -753,35 +762,35 @@ var UIRelayControl = {
                 oHtml.AppendMassEntryResultTable(RowNum,'Number of Input Fields is not match.');
                 return false;
             }
-            if (aCreateInput[0].length <= 2) {
+            if (aCreateInput[MassColumn.SourceURL].length <= 2) {
                 oHtml.AppendMassEntryResultTable(RowNum,"Please input value in Source URL.");
                 return false;
             }
-            if (aCreateInput[1].length === 0) {
+            if (aCreateInput[MassColumn.Port].length === 0) {
                 oHtml.AppendMassEntryResultTable(RowNum,"Please input value in Destination Port.");
                 return false;
             };
-            if (aCreateInput[3].length === 0) {
+            if (aCreateInput[MassColumn.ChannelNumber].length === 0) {
                 oHtml.AppendMassEntryResultTable(RowNum,"Please input value in Channel Number.");
                 return false;
             };
-            if (aCreateInput[4].length <= 2) {
+            if (aCreateInput[MassColumn.ChannelName].length <= 2) {
                 oHtml.AppendMassEntryResultTable(RowNum,"Please input value in Channel Name.");
                 return false;
             };
-            var sSourceUrl = aCreateInput[0];            
+            var sSourceUrl = aCreateInput[MassColumn.SourceURL];            
             var aSourceUrl = sSourceUrl.trim().split(',');
             if(aSourceUrl.length > max_create_count)
             {
                 oHtml.AppendMassEntryResultTable(RowNum,'Count of Source URL is over maximum count(' + max_create_count +').');
                 return false;
             }
-            var sDestinationName = aCreateInput[2].length > 2 ? aCreateInput[2].substring(1,aCreateInput[2].length-1) : '';
-            aCreateInput[2] = sDestinationName;
-            var sName = aCreateInput[4].substring(1,aCreateInput[4].length-1);
-            aCreateInput[4] = sName;
-            var sDescription = aCreateInput[5].length > 2 ? aCreateInput[5].substring(1,aCreateInput[5].length-1) : '';
-            aCreateInput[5] = sDescription;
+            var sDestinationName = aCreateInput[MassColumn.Name].length > 2 ? aCreateInput[MassColumn.Name].substring(1,aCreateInput[MassColumn.Name].length-1) : '';
+            aCreateInput[MassColumn.Name] = sDestinationName;
+            var sName = aCreateInput[MassColumn.ChannelName].substring(1,aCreateInput[MassColumn.ChannelName].length-1);
+            aCreateInput[MassColumn.ChannelName] = sName;
+            var sDescription = aCreateInput[MassColumn.Description].length > 2 ? aCreateInput[MassColumn.Description].substring(1,aCreateInput[MassColumn.Description].length-1) : '';
+            aCreateInput[MassColumn.Description] = sDescription;
             for(var index in aSourceUrl)
             {
                 if (!oUIRelayContorl.VerifyRelayInput(aSourceUrl[index])) {
@@ -801,30 +810,30 @@ var UIRelayControl = {
                 oHtml.AppendMassEntryResultTable(RowNum,"Can't input whitespace and ',' in Description('" + sDescription + "').");
                 return false;
             }                        
-            if (!oUIRelayContorl.CheckNum(aCreateInput[1])){
-                oHtml.AppendMassEntryResultTable(RowNum,"Port('" + aCreateInput[1] + "') must be integer.");   
+            if (!oUIRelayContorl.CheckNum(aCreateInput[MassColumn.Port])){
+                oHtml.AppendMassEntryResultTable(RowNum,"Port('" + aCreateInput[MassColumn.Port] + "') must be integer.");   
                 return false;
             };   
-            aCreateInput[1] = parseInt(aCreateInput[1]);
-            if (!oUIRelayContorl.CheckNum(aCreateInput[3])){
+            aCreateInput[MassColumn.Port] = parseInt(aCreateInput[MassColumn.Port]);
+            if (!oUIRelayContorl.CheckNum(aCreateInput[MassColumn.ChannelNumber])){
                 oHtml.AppendMassEntryResultTable(RowNum,"Channel Number('" + aCreateInput[3] + "') must be integer.");   
                 return false;
             }; 
-            aCreateInput[3] = parseInt(aCreateInput[3]);
-            if(sPortCheck.indexOf(aCreateInput[1]) !== -1){
-                oHtml.AppendMassEntryResultTable(RowNum,"Port('" + aCreateInput[1] + "') is duplicate.");   
+            aCreateInput[MassColumn.ChannelNumber] = parseInt(aCreateInput[MassColumn.ChannelNumber]);
+            if(sPortCheck.indexOf(',' + aCreateInput[MassColumn.Port]+ ',') !== -1){
+                oHtml.AppendMassEntryResultTable(RowNum,"Port('" + aCreateInput[MassColumn.Port] + "') is duplicate.");   
                 return false;
             }  
             if(sNameCheck.indexOf(',' + sName + ',') !== -1){
                 oHtml.AppendMassEntryResultTable(RowNum,"Channel Name('" + sName + "') is duplicate.");   
                 return false;
             }  
-            if(sChannelNumberCheck.indexOf(aCreateInput[3]) !== -1){
-                oHtml.AppendMassEntryResultTable(RowNum,"Channel Number('" + aCreateInput[3] + "') is duplicate.");   
+            if(sChannelNumberCheck.indexOf(',' + aCreateInput[MassColumn.ChannelNumber]+ ',') !== -1){
+                oHtml.AppendMassEntryResultTable(RowNum,"Channel Number('" + aCreateInput[MassColumn.ChannelNumber] + "') is duplicate.");   
                 return false;
             }
-            sPortCheck += aCreateInput[1] + ',';
-            sChannelNumberCheck += aCreateInput[3] + ',';
+            sPortCheck += aCreateInput[MassColumn.Port] + ',';
+            sChannelNumberCheck += aCreateInput[MassColumn.ChanelNumber] + ',';
             sNameCheck += sName + ',';
             return true;
        
