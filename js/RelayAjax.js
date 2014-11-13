@@ -24,14 +24,37 @@ var Relay = {
             var request = relayobj.CallAjax("/relay/stop/" + stopID, "PUT", "", "json");
             return request;           
         };
-        relayobj.resumeRelay = function(id, source, port, channelname) {
+        relayobj.stopMultiRelay = function(arrID) {
+            var jsonrequest = '{"ID":[';
             try {
-                var jsonrequest = '{"Source":"' + source + '","Port":' + port + ',"ChannelName":"' + channelname + '","ID":"' + id + '"}';
-                var request = relayobj.CallAjax("/relay/resume", "POST", jsonrequest, "json");
-                return request;                
+                for(var i = 0; i < arrID.length; i++)
+                {
+                    if(i !== arrID.length -1)
+                        jsonrequest += arrID[i] + ',';
+                    else
+                        jsonrequest += arrID[i];
+                }
             } catch (exception) {
-
             }
+            jsonrequest += ']}';
+            var request = relayobj.CallAjax("/relay/stop/multi", "POST", jsonrequest, "json");
+            return request; 
+        };
+        relayobj.resumeRelay = function(arrID) {
+            var jsonrequest = '{"ID":[';
+            try {
+                for(var i = 0; i < arrID.length; i++)
+                {
+                    if(i !== arrID.length -1)
+                        jsonrequest += arrID[i] + ',';
+                    else
+                        jsonrequest += arrID[i];
+                }
+            } catch (exception) {
+            }
+            jsonrequest += ']}';
+            var request = relayobj.CallAjax("/relay/resume", "POST", jsonrequest, "json");
+            return request; 
         };
         relayobj.listip = function() {
             var request = relayobj.CallAjax("/ip/list", "GET", '', "json");

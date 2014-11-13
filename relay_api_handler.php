@@ -99,16 +99,32 @@ switch (count($url))
                         http_response_code(404);
                 }
                 break;
-            case 'stop':            
-                switch($_SERVER['REQUEST_METHOD'])
+            case 'stop': 
+                switch ($url[1])
                 {
-                    case 'PUT':
-                        $result = $proc_api ->stop($url[1]);
-                        echo '{}';
-                        break;
+                    case 'multi':
+                        switch($_SERVER['REQUEST_METHOD'])
+                        {
+                            case 'POST':
+                                $result = $proc_api ->stopmulti(file_get_contents("php://input"));
+                                echo '{}';
+                                break;
+                            default :
+                                http_response_code(404);
+                        }
+                        break;                    
                     default :
-                        http_response_code(404);
-                }
+                        switch($_SERVER['REQUEST_METHOD'])
+                        {
+                            case 'PUT':
+                                $result = $proc_api ->stop($url[1]);
+                                echo '{}';
+                                break;
+                            default :
+                                http_response_code(404);
+                        }
+                        break;
+                }                
                 break;    
             case 'source':
                 $proc_source_api = new Process_Relay_Source_API();

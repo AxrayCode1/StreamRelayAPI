@@ -67,13 +67,32 @@ class Process_API
     function resume($jsondata)
     {
         $result = false;
-        $inputjson = json_decode($jsondata,true);
-        if(!(strlen($inputjson['Source']) <=0 || strlen($inputjson['Port']) <=0))
+        $inputjson = json_decode($jsondata,true);        
+        if(count($inputjson['ID']) > 0)
         {            
-            $exu_str = "sudo /var/www/html/relay.exe restart ".$inputjson['ID'] .' >/dev/null 2>&1 &';
-            $pipe = popen($exu_str,"r");
-            pclose($pipe);
+            foreach ($inputjson['ID'] as $key => $value)
+            {
+                $exu_str = "sudo /var/www/html/relay.exe restart ".$value.' >/dev/null 2>&1 &';
+                $pipe = popen($exu_str,"r");
+                pclose($pipe);
+            }           
 //            passthru($exu_str,$output);            
+            $result = true;
+        }
+        return $result;
+    }
+    
+    function stopmulti($jsondata)
+    {
+        $result = false;
+        $inputjson = json_decode($jsondata,true);        
+        if(count($inputjson['ID']) > 0)
+        {            
+            foreach ($inputjson['ID'] as $key => $value)
+            {
+                $exu_str = "sudo /var/www/html/relay.exe stop ".$value;
+                exec($exu_str,$output);
+            }                    
             $result = true;
         }
         return $result;

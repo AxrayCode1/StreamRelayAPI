@@ -109,8 +109,12 @@ and open the template in the editor.
             </div>-->            
                         
             <div style="position: relative;">
-                <a style="position: absolute;left: 5px" href="#" class="btn-light" data-dropdown="#dropdown-Add">Create&nbsp;&darr;</a>
-                <a style="position: absolute;right: 10px" id="btn_refresh"  href="#" class="btn-light">Refresh</a>
+                <a style="margin-left: 5px" href="#" class="btn-light" data-dropdown="#dropdown-Add">Create&nbsp;&darr;</a>
+                <div style="position: absolute;top:0px;right: 10px">
+                    <a id="btn_stop_all" href="#" class="btn-light">Stop All</a>
+                    <a id="btn_resume_all" href="#" class="btn-light">Resume All</a>
+                    <a  id="btn_refresh" href="#" class="btn-light">Refresh</a>
+                </div>
             </div>
             <div id="div_relay_table" style="position: absolute;top: 40px;width: 100%">
                 <table id="table_relay">
@@ -125,69 +129,8 @@ and open the template in the editor.
                         <th id="description" class="relayth" width="15%">Description</th>                        
                         <th width="23%">Action</th>
                     </tr>               
-                </table>
-                <div id="div_control_table">  
-                    <div style="position: relative;top: 10px" >                    
-<!--                        <div style="position: absolute;left: 10px; top: 30px">
-                            <fieldset style="height: 350px">
-                                <legend>Create</legend>
-                                <div class="div_fieldcontent">
-                                    <label class="LabelRelayHead">Channel Number : </label>
-                                    <input id="ChannelNumber"  class="InputRelay" value="" type="text">
-                                    <br>
-                                    <br>
-                                    <label class="LabelRelayHead">Channel Name : </label>
-                                    <input id="Name"  class="InputRelay" value="" type="text">
-                                    <br>
-                                    <br>
-                                    <label>Source Url : </label>
-                                    <div id="UrlArea" style="margin-top: 10px;margin-left: -5px; 
-                                         padding: 5px;border: 1px solid rgba(0, 0, 0,.2);">                                        
-                                    </div>                                    
-                                    <br>                                    
-                                    <label class="LabelRelayHead">Destination Port : </label>
-                                    <input id="Port" class="InputRelay" value="" type="text">
-                                    <br>
-                                    <br>
-                                    <label class="LabelRelayHead">Destination Name : </label>
-                                    <input id="DestinationName" class="InputRelay" value="" type="text">
-                                    <br>
-                                    <br>                                    
-                                    <label class="LabelRelayHead">Description : </label>
-                                    <input id="Description"  class="InputRelay" value="" type="text">
-                                    <br>
-                                    <br>
-                                    <div style="position: relative">
-                                        <a id="btn_create" href="#" style="position: absolute;right: 10px" class="btn-light">Confirm</a>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </div>-->
-                        <div style="position: absolute;left:710px; top: 30px">
-                            <fieldset>
-                                <legend>Mass Entry</legend>                            
-                                <div class="div_fieldcontent">
-                                    <a href="/MassCreateRelay.txt" style="text-decoration: underline;" download>Download Sample File</a>
-                                    <div style="margin-top:10px">
-                                        <input id="uploadFile" type="text" disabled="disabled" placeholder="Choose File">
-                                        <div class="file-upload btn btn-primary" style="margin-left: 10px">    
-                                            <span>Select</span>
-                                            <br>
-                                            <input id="file_mass_create" accept=".txt" type="file" class="upload" />
-                                        </div>
-                                        <a id="btn_mass_create" style="margin-left: 10px" href="#" class="btn-light">Create</a>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </div>
-<!--                        <div style="position: absolute;right:10px; top: 350px">
-                            Copyright © 2014 AcroRed Technologies, Inc. All rights reserved.
-                        </div>-->
-                    </div>
-                </div>
-               
+                </table>                               
             </div>
-
         </div>
         
         <div id="div_ip_control">
@@ -268,10 +211,12 @@ and open the template in the editor.
         </div>
         
         <div id="modal_update_progress_content">
-            <!--h3>Mass Entry</h3>-->
-            <!-- <div class="div_fieldcontent">
-               <a href="/MassCreateRelay.txt" style="text-decoration: underline;" download>Download Sample File</a>
-                <div style="margin-top:10px">
+            <div style="position:relative;height: 450px">
+                <!--<a href="/MassCreateRelay.txt" style="text-decoration: underline;" download>Download Sample File</a>-->            
+                <form id="downloadExample" method="get" action="/download_MassEntryExample.php">
+                    <label style="text-decoration: underline;cursor:pointer;color: blue" onclick="$('#downloadExample').submit();">Download Sample File</label>            
+                </form>                
+                <div style="position: absolute;top:40px">                
                     <input id="uploadFile" type="text" disabled="disabled" placeholder="Choose File">
                     <div class="file-upload btn btn-primary" style="margin-left: 10px">    
                         <span>Select</span>
@@ -279,13 +224,13 @@ and open the template in the editor.
                         <input id="file_mass_create" accept=".txt" type="file" class="upload" />
                     </div>
                     <a id="btn_mass_create" style="margin-left: 10px" href="#" class="btn-light">Create</a>
-                </div>-->                                
-                <div style="position: relative;top:5px;color: black">Progress : <div id="progressbar">
+                </div>                               
+                <div style="position: absolute;top:90px;color: black">Progress : <div id="progressbar">
                         <div class="progress-label"></div>                
                     </div>               
                 </div>
-                <div>
-                    <div class="scrollit" style="position: relative;top:20px">
+                <div style="position: absolute;top:120px;width: 530px">
+                    <div class="scrollit">
                         <table id="MassEntryResulTable"  style="width: 100%">
                             <tr>                            
                                 <th style="height: 12px" width="20%">Fail Row</th>
@@ -294,10 +239,10 @@ and open the template in the editor.
                         </table>
                     </div>
                 </div>
-                <div style="position: absolute;right: 10px;bottom: 10px">
+                <div style="position: absolute;right: 0px;bottom: 10px">
                     <a id="closedialog" href="#" class="btn-light">Exit</a>
                 </div>
-            <!--</div>-->
+            </div>
         </div>
         
         <div id="modal_modify_source_content">                        
@@ -309,33 +254,35 @@ and open the template in the editor.
         </div>
         
         <div id="modal_modify_channel_content"> 
-            <label class="LabelRelayHead">*&nbsp;Channel Number : </label>
-            <input id="ModfiyChannelNumber"  class="InputRelay" value="" type="text">
-            <br>
-            <br>
-            <label class="LabelRelayHead">*&nbsp;Channel Name : </label>
-            <input id="ModfiyName"  class="InputRelay" value="" type="text">
-            <br>
-            <br>
-            <label class="LabelRelayHead">&nbsp;&nbsp;Destination URL : </label>
-            <label>http://ServerIP:Port/Name</label>
-            <br>
-            <br> 
-            <label class="LabelRelayHead" style="margin-left: 10px">*&nbsp;Port : </label>
-            <input style="margin-left: -10px" id="ModfiyPort" class="InputRelay" value="" type="text">
-            <br>
-            <br>
-            <label class="LabelRelayHead" style="margin-left: 10px">&nbsp;&nbsp;Name : </label>
-            <input style="margin-left: -10px" id="ModfiyDestinationName" class="InputRelay" value="" type="text">
-            <br>
-            <br>            
-            <label class="LabelRelayHead">&nbsp;&nbsp;Description : </label>
-            <input id="ModfiyDescription"  class="InputRelay" value="" type="text">
-            <br>
-            <br>
-            <div style="position: absolute;right: 10px">
-                <a id="btn_modify_channel" href="#" class="btn-light">Confirm</a>
-                <a id="btn_close_modify_channel" href="#" class="btn-light">Exit</a>
+            <div style="position:relative;height: 320px">
+                <label class="LabelRelayHead">*&nbsp;Channel Number : </label>
+                <input id="ModfiyChannelNumber"  class="InputRelay" value="" type="text">
+                <br>
+                <br>
+                <label class="LabelRelayHead">*&nbsp;Channel Name : </label>
+                <input id="ModfiyName"  class="InputRelay" value="" type="text">
+                <br>
+                <br>
+                <label class="LabelRelayHead">&nbsp;&nbsp;Destination URL : </label>
+                <label>http://ServerIP:Port/Name</label>
+                <br>
+                <br> 
+                <label class="LabelRelayHead" style="margin-left: 10px">*&nbsp;Port : </label>
+                <input style="margin-left: -10px" id="ModfiyPort" class="InputRelay" value="" type="text">
+                <br>
+                <br>
+                <label class="LabelRelayHead" style="margin-left: 10px">&nbsp;&nbsp;Name : </label>
+                <input style="margin-left: -10px" id="ModfiyDestinationName" class="InputRelay" value="" type="text">
+                <br>
+                <br>            
+                <label class="LabelRelayHead">&nbsp;&nbsp;Description : </label>
+                <input id="ModfiyDescription"  class="InputRelay" value="" type="text">
+                <br>
+                <br>
+                <div style="position: absolute;right: 10px">
+                    <a id="btn_modify_channel" href="#" class="btn-light">Confirm</a>
+                    <a id="btn_close_modify_channel" href="#" class="btn-light">Exit</a>
+                </div>
             </div>
         </div>
         
@@ -363,43 +310,45 @@ and open the template in the editor.
         </div>
         
         <div id="modal_create_channel_content">
-            <div class="div_fieldcontent">
-                <label class="LabelRelayHead">*&nbsp;Channel Number : </label>
-                <input id="ChannelNumber"  class="InputRelay SingleCreate" value="" type="text">
-                <br>
-                <br>
-                <label class="LabelRelayHead">*&nbsp;Channel Name : </label>
-                <input id="Name"  class="InputRelay SingleCreate" value="" type="text">
-                <br>
-                <br>
-                <label>*&nbsp;Source URL : </label>
-<!--                <div id="UrlArea" style="margin-top: 10px;margin-left: 20px; 
-                     padding: 5px;border: 1px solid rgba(0, 0, 0,.2);">                                        
-                </div>                                    -->
-                <div id="UrlArea" style="margin-top: 10px;margin-left: 20px; 
-                     padding: 5px;">                                        
-                </div>                                    
-                <br>                      
-                <label class="LabelRelayHead">&nbsp;&nbsp;Destination URL : </label>
-                <label>http://ServerIP:Port/Name</label>
-                <br>
-                <br>                
-                <label class="LabelRelayHead" style="margin-left: 10px">*&nbsp;Port : </label>
-                <input id="Port" style="margin-left: -10px" class="InputRelay SingleCreate" value="" type="text">
-                <br>
-                <br>
-                <label class="LabelRelayHead" style="margin-left: 10px">&nbsp;&nbsp;Name : </label>
-                <input id="DestinationName" style="margin-left: -10px" class="InputRelay SingleCreate" value="" type="text">
-                <br>
-                <br>                                    
-                <label class="LabelRelayHead">&nbsp;&nbsp;Description : </label>
-                <input id="Description"  class="InputRelay SingleCreate" value="" type="text">
-                <br>
-                <br>
-                <label class="LabelRelayHead"></label>
-                <div style="position: absolute;right: 10px">
-                    <a id="btn_create" href="#" class="btn-light">Confirm</a>
-                    <a id="btn_close_create_channel" href="#" class="btn-light">Exit</a>
+            <div style="position:relative;height: 460px">
+                <div class="div_fieldcontent">
+                    <label class="LabelRelayHead">*&nbsp;Channel Number : </label>
+                    <input id="ChannelNumber"  class="InputRelay SingleCreate" value="" type="text">
+                    <br>
+                    <br>
+                    <label class="LabelRelayHead">*&nbsp;Channel Name : </label>
+                    <input id="Name"  class="InputRelay SingleCreate" value="" type="text">
+                    <br>
+                    <br>
+                    <label>*&nbsp;Source URL : </label>
+    <!--                <div id="UrlArea" style="margin-top: 10px;margin-left: 20px; 
+                         padding: 5px;border: 1px solid rgba(0, 0, 0,.2);">                                        
+                    </div>                                    -->
+                    <div id="UrlArea" style="margin-top: 10px;margin-left: 20px; 
+                         padding: 5px;">                                        
+                    </div>                                    
+                    <br>                      
+                    <label class="LabelRelayHead">&nbsp;&nbsp;Destination URL : </label>
+                    <label>http://ServerIP:Port/Name</label>
+                    <br>
+                    <br>                
+                    <label class="LabelRelayHead" style="margin-left: 10px">*&nbsp;Port : </label>
+                    <input id="Port" style="margin-left: -10px" class="InputRelay SingleCreate" value="" type="text">
+                    <br>
+                    <br>
+                    <label class="LabelRelayHead" style="margin-left: 10px">&nbsp;&nbsp;Name : </label>
+                    <input id="DestinationName" style="margin-left: -10px" class="InputRelay SingleCreate" value="" type="text">
+                    <br>
+                    <br>                                    
+                    <label class="LabelRelayHead">&nbsp;&nbsp;Description : </label>
+                    <input id="Description"  class="InputRelay SingleCreate" value="" type="text">
+                    <br>
+                    <br>
+                    <label class="LabelRelayHead"></label>
+                    <div style="position: absolute;right: 10px">
+                        <a id="btn_create" href="#" class="btn-light">Confirm</a>
+                        <a id="btn_close_create_channel" href="#" class="btn-light">Exit</a>
+                    </div>
                 </div>
             </div>
         </div>

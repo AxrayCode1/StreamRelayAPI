@@ -66,8 +66,25 @@ var UIRelayControl = {
                 oHtml.AppendSourceArea(CreateSourceList);
                 RebindAllControlSourceEvent();
                 $( "#modal_create_channel_content" ).dialog('open');
+            });            
+            $('.btn_mass_entry').click(function(event){
+                event.preventDefault();
+                $('#uploadFile').val('');
+                $('#file_mass_create').val('');
+                $( "#progressbar" ).progressbar('option','value',0);
+                $( ".progress-label").text('');
+                $( "#modal_update_progress_content").dialog('open');
             });
-            $('#btn_refresh').click(function() {
+            $('#btn_resume_all').click(function(event){
+                event.preventDefault();
+                ResumeAllRelay();
+            });
+            $('#btn_stop_all').click(function(event){
+                event.preventDefault();
+                StopAllRelay();
+            });
+            $('#btn_refresh').click(function(event) {
+                event.preventDefault();
                 oUIRelayContorl.GetRelayList();
             });
             $('#btn_create').click(function(event) {    
@@ -83,10 +100,7 @@ var UIRelayControl = {
                 event.preventDefault();
                 $('#uploadFile').val($(this).val());
                 oUIRelayContorl.FileBindChangeEvent(event);
-            });
-            $('#').click(function(event){
-//                event.p
-            });
+            });           
             $('#btn_mass_create').click(function(event) {
                 event.preventDefault();
                 oUIRelayContorl.MassFileCreateAction();        
@@ -207,8 +221,7 @@ var UIRelayControl = {
                     draggable: false,
                     closeOnEscape: false,
                     autoOpen: false,
-                    dialogClass: "no-close",
-                    height:450,
+                    dialogClass: "no-close",                    
                     width:560               
             });    
             $( "#progressbar" ).progressbar({                
@@ -278,7 +291,7 @@ var UIRelayControl = {
                     closeOnEscape: false,
                     autoOpen: false,
                     dialogClass: "no-close",
-                    height:550,
+                    height:530,
                     width:720               
             });                 
             $('#btn_close_create_channel').click(function (event) {	    
@@ -647,8 +660,8 @@ var UIRelayControl = {
         };
 
         oUIRelayContorl.MassFileCreateAction = function () {
-            $('#uploadFile').val('');
-            $('#file_mass_create').val('');
+//            $('#uploadFile').val('');
+//            $('#file_mass_create').val('');
             if (window.File && window.FileReader && window.FileList && window.Blob) {
                 if(sMassCreateStr.length === 0)
                 {
@@ -688,7 +701,7 @@ var UIRelayControl = {
             oHtml.EmptyMassEntryResultTable();
             $( "#progressbar" ).progressbar('option','value',0);
             $( "#progressbar" ).progressbar('option','max',iTotalCreate);
-            $( "#modal_update_progress_content" ).dialog('open');
+//            $( "#modal_update_progress_content" ).dialog('open');
             oUIRelayContorl.MassCreatRelay(1,aMassCreateItem);            
         };        
                 
@@ -864,6 +877,20 @@ var UIRelayControl = {
             CallBackStopRelay(request);
         };
         
+        function StopAllRelay(){
+            var i = 0;
+            var arrID = [];
+            for(var key in relayList){ 
+                arrID.push(relayList[key]['id']);
+                ++i;
+            };
+            if(arrID.length > 0)
+            {
+                var request = oRelayAjax.stopMultiRelay(arrID);   
+                CallBackStopRelay(request);
+            }
+        };
+        
         function CallBackStopRelay(request){            
             request.done(function(msg, statustext, jqxhr) {                
                 setTimeout(function(){GetRelayNoRefresh();}, 200);
@@ -909,8 +936,24 @@ var UIRelayControl = {
         
         function ResumeRelay(index){
             oHtml.blockPage();
-            var request = oRelayAjax.resumeRelay(relayList[index]['id'], relayList[index]['source'], relayList[index]['port'], relayList[index]['channelname']);   
+            var arrID = [];
+            arrID.push(relayList[index]['id']);
+            var request = oRelayAjax.resumeRelay(arrID);   
             CallBackResumeRelay(request);
+        };
+        
+        function ResumeAllRelay(){
+            var i = 0;
+            var arrID = [];
+            for(var key in relayList){ 
+                arrID.push(relayList[key]['id']);
+                ++i;
+            };
+            if(arrID.length > 0)
+            {
+                var request = oRelayAjax.resumeRelay(arrID);   
+                CallBackResumeRelay(request);
+            }
         };
         
         function CallBackResumeRelay(request){            
