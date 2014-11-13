@@ -22,7 +22,7 @@ var UIRelayControl = {
         var sChannelNumberCheck = '';
         var oError = {};     
         var PollingTime = 10000;
-        var iModifyChannelID;
+        var iModifyID;
         var RelayColumn = {
             ChannelNumber:1,
             ChannelName:2,
@@ -38,30 +38,10 @@ var UIRelayControl = {
         };
         var CreateSourceList;
         var ModifySourceList;
-        oUIRelayContorl.Init = function(){   
-//            $("#demo_drop1").jui_dropdown({
-//            launcher_id: 'launcher1',
-//            launcher_container_id: 'launcher1_container',
-//            menu_id: 'menu1',
-//            containerClass: 'container1',
-//            menuClass: 'menu1',
-//            onSelect: function(event, data) {
-//              $("#result").text('index: ' + data.index + ' (id: ' + data.id + ')');
-//            }
-//            });
-//            $("#demo_drop2").jui_dropdown({
-//            launcher_id: 'launcher2',
-//            launcher_container_id: 'launcher2_container',
-//            menu_id: 'menu2',
-//            containerClass: 'container2',
-//            menuClass: 'menu2',
-//            onSelect: function(event, data) {
-//              $("#result").text('index: ' + data.index + ' (id: ' + data.id + ')');
-//            }
-//            });
-$('.RealyEdit').on('show', function(event, dropdownData) {
-    alert($(this).attr('id'));
-});
+        var NowSortType;
+        var NowSortDirection;
+        var NowSortDOMID;
+        oUIRelayContorl.Init = function(){              
             CreateSourceList = [];
             oError = ErrorHandle.createNew();            
             oHtml.HideAllOption();
@@ -73,8 +53,15 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
             InitAddChannelDialog();
             InitModifySourceDialog();
             InitModifyChannelDialog();
+            InitDetailDialog();
             oUIRelayContorl.GetRelayList();
-            $('#btn_add').click(function(){
+            $('.btn_add_single').click(function(event){
+                event.preventDefault();
+                CreateSourceList = [];
+                $('.SingleCreate').val('');
+                oHtml.EmptySoucreArea();
+                oHtml.AppendSourceArea(CreateSourceList);
+                RebindAllControlSourceEvent();
                 $( "#modal_create_channel_content" ).dialog('open');
             });
             $('#btn_refresh').click(function() {
@@ -89,14 +76,20 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
                 oHtml.ShowOption(DivRelay);
                 oUIRelayContorl.GetRelayList();
             });            
-            $('#file_mass_create').change(function(event){                
+            $('#file_mass_create').change(function(event){  
+                event.preventDefault();
                 $('#uploadFile').val($(this).val());
                 oUIRelayContorl.FileBindChangeEvent(event);
             });
-            $('#btn_mass_create').click(function() {                        
+            $('#').click(function(event){
+//                event.p
+            });
+            $('#btn_mass_create').click(function(event) {
+                event.preventDefault();
                 oUIRelayContorl.MassFileCreateAction();        
             });
-            $('.relayth').click(function(){
+            $('.relayth').click(function(event){
+                event.preventDefault();
                 var th = $(this);
                 var eSortType = SortType.String;
                 var eSortDirection = SortDirection.ASC;
@@ -112,21 +105,31 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
                     th.addClass('asc');
                     eSortDirection = SortDirection.ASC;
                 }
+                NowSortType = eSortType;
+                NowSortDirection = eSortDirection;
+                NowSortDOMID = th.attr('id');
                 SortRelayList(eSortDirection,eSortType,th.attr('id'));                
                 oHtml.clearTable();
                 oHtml.appendTablebyList();
                 RebindAllRelayEvent(); 
-                ReCreateRelayList();
-                $('.DetailSource').tooltip({    
-                    items: "img ",
-                    content: function() {  
-                         var tooltip = oHtml.GetTooltip($(this).attr('id'));
-                         return tooltip;
-                    }
-                });
+                ReCreateRelayList();                
             });
             PollingRelayList(true);
         };
+        
+        function DefaultSortByChannelNo()
+        {
+            if(typeof(NowSortType)=== 'undefined')
+            {
+                var th = $('#channelnumber');
+                th.removeClass('desc');
+                th.addClass('asc');
+                NowSortDirection = SortDirection.ASC;
+                NowSortType = SortType.Num;
+                NowSortDOMID = th.attr('id');
+            }                        
+            SortRelayList(NowSortDirection,NowSortType,NowSortDOMID); 
+        }
         
         function SortRelayList(eSortDirection,eSortType,sSortVariable)
         {                    
@@ -212,7 +215,8 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
                         $('#closedialog').show();                           
                     }
             });      
-            $('#closedialog').click(function () {	
+            $('#closedialog').click(function (event) {
+                event.preventDefault();
                 sMassCreateStr = '';
                 $( "#modal_update_progress_content" ).dialog('close');
                 oUIRelayContorl.GetRelayList();
@@ -221,10 +225,10 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
                 
         function InitModifySourceDialog(){
             $( "#modal_modify_source_content" ).dialog({
-                    title: "Edit Source",
+                    title: "Edit Source URL",
                     modal: true,
                     resizable: false,
-                    draggable: false,
+                    draggable: true,
                     closeOnEscape: false,
                     autoOpen: false,
                     dialogClass: "no-close",
@@ -241,10 +245,10 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
         
         function InitModifyChannelDialog(){
             $( "#modal_modify_channel_content" ).dialog({
-                    title: "Edit Channel",
+                    title: "Modify Miscellaneous",
                     modal: true,
                     resizable: false,
-                    draggable: false,
+                    draggable: true,
                     closeOnEscape: false,
                     autoOpen: false,
                     dialogClass: "no-close",
@@ -264,20 +268,38 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
              
         function InitAddChannelDialog(){
             $( "#modal_create_channel_content" ).dialog({
-                    title: "Add",
+                    title: "Single Channel",
                     modal: true,
                     resizable: false,
-                    draggable: false,
+                    draggable: true,
                     closeOnEscape: false,
                     autoOpen: false,
                     dialogClass: "no-close",
                     height:550,
-                    width:680               
+                    width:720               
             });                 
-//            $('#btn_close_modify_channel').click(function () {	                
-//                $( "#modal_modify_channel_content" ).dialog('close');
-//                oUIRelayContorl.GetRelayList();
-//            });
+            $('#btn_close_create_channel').click(function (event) {	    
+                event.preventDefault();
+                $( "#modal_create_channel_content" ).dialog('close');                
+            });
+        };
+        
+        function InitDetailDialog(){
+            $( "#modal_detail_content" ).dialog({
+                    title: "Channel Source Information",
+                    modal: true,
+                    resizable: false,
+                    draggable: true,
+                    closeOnEscape: false,
+                    autoOpen: false,
+                    dialogClass: "no-close",
+                    height:350,
+                    width:600               
+            });
+            $('#btn_close_detail_content').click(function (event) {
+                event.preventDefault();
+                $( "#modal_detail_content" ).dialog('close');                
+            });            
         };
         
         oUIRelayContorl.CheckNum = function(str){
@@ -384,56 +406,51 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
         {
             var otmpSourceUrl;
             $.each(msg, function(relayindex, relayelement) {     
-               if(typeof(relayList[relayelement['idChannel']]) !== 'undefined'){
-                   if(relayelement['status'] !== relayList[relayelement['idChannel']]['status']){                                                      
-                       relayList[relayelement['idChannel']]['status'] = relayelement['status'];
-                       $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Status).text(oHtml.GetRelayStatusStr(relayelement['status']));
-                   };
-                   if(relayelement['numChannel'] !== relayList[relayelement['idChannel']]['channelnumber']){                                                      
-                       relayList[relayelement['idChannel']]['channelnumber'] = relayelement['numChannel'];
-                       $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.ChannelNumber).text(relayelement['numChannel']);
-                   };
-                   if(relayelement['nameChannel'] !== relayList[relayelement['idChannel']]['name']){                                                      
-                       relayList[relayelement['idChannel']]['name'] = relayelement['nameChannel'];
-                       $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.ChannelName).text(relayelement['nameChannel']);
-                   };
-                   if(relayelement['dest'] !== relayList[relayelement['idChannel']]['fulldest']){                                                      
-                        var dest_temp = relayelement['dest'].split(':');
-                        var port = '';
-                        var dest_name = '';
-                        if (typeof(dest_temp[2]) !== 'undefined') {
-                            dest_temp = dest_temp[2].split('/');
-                            port = dest_temp[0];
-                            dest_name = dest_temp[1];
-                        }
-                        relayList[relayelement['idChannel']]['destname'] = dest_name;
-                        relayList[relayelement['idChannel']]['port'] = port;
-                        relayList[relayelement['idChannel']]['fulldest'] = relayelement['dest'];
-                        $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Destination).text(relayelement['dest']);
-                   };
-                   if(relayelement['descChannel'] !== relayList[relayelement['idChannel']]['description']){                        
-                        relayList[relayelement['idChannel']]['description'] = relayelement['descChannel'];
-                        $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Description).text(relayelement['descChannel']);
-                   };
-//                        if(relayelement['Source'].length > 0 && relayelement['Source'][0]['urlSource'] !== relayList[relayelement['idChannel']]['source'][0]['url'])
-//                        {
-                       relayList[relayelement['idChannel']]['source'] = [];
-                       $.each(relayelement['Source'],function(sourceindex,sourceelement){
-                           otmpSourceUrl = new relaySourceClass(sourceelement['idSource'],sourceelement['state'],sourceelement['urlSource'],sourceelement['prior']);
-                           relayList[relayelement['idChannel']]['source'][sourceindex] = otmpSourceUrl;
-                       });
-                       $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Source).html(oHtml.CreateTdSourceText(relayelement['idChannel']));
-                       $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.SourceQtp).text(relayelement['Source'].length);
-//                        };
-               }
-           });
-           $('.DetailSource').tooltip({    
-               items: "img ",
-               content: function() {  
-                   var tooltip = oHtml.GetTooltip($(this).attr('id'));
-                   return tooltip;
-               }
-           });
+                if(typeof(relayList[relayelement['idChannel']]) !== 'undefined'){
+                    if(relayelement['status'] !== relayList[relayelement['idChannel']]['status']){                                                      
+                        relayList[relayelement['idChannel']]['status'] = relayelement['status'];
+                        $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Status).text(oHtml.GetRelayStatusStr(relayelement['status']));
+                    };
+                    if(relayelement['numChannel'] !== relayList[relayelement['idChannel']]['channelnumber']){                                                      
+                        relayList[relayelement['idChannel']]['channelnumber'] = relayelement['numChannel'];
+                        $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.ChannelNumber).text(relayelement['numChannel']);
+                    };
+                    if(relayelement['nameChannel'] !== relayList[relayelement['idChannel']]['name']){                                                      
+                        relayList[relayelement['idChannel']]['name'] = relayelement['nameChannel'];
+                        $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.ChannelName).text(relayelement['nameChannel']);
+                    };
+                    if(relayelement['dest'] !== relayList[relayelement['idChannel']]['fulldest']){                                                      
+                         var dest_temp = relayelement['dest'].split(':');
+                         var port = '';
+                         var dest_name = '';
+                         if (typeof(dest_temp[2]) !== 'undefined') {
+                             dest_temp = dest_temp[2].split('/');
+                             port = dest_temp[0];
+                             dest_name = dest_temp[1];
+                         }
+                         relayList[relayelement['idChannel']]['destname'] = dest_name;
+                         relayList[relayelement['idChannel']]['port'] = port;
+                         relayList[relayelement['idChannel']]['fulldest'] = relayelement['dest'];
+                         $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Destination).text(relayelement['dest']);
+                    };
+                    if(relayelement['descChannel'] !== relayList[relayelement['idChannel']]['description']){                        
+                         relayList[relayelement['idChannel']]['description'] = relayelement['descChannel'];
+                         $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Description).text(relayelement['descChannel']);
+                    };
+ //                        if(relayelement['Source'].length > 0 && relayelement['Source'][0]['urlSource'] !== relayList[relayelement['idChannel']]['source'][0]['url'])
+ //                        {
+                        relayList[relayelement['idChannel']]['source'] = [];
+                        $.each(relayelement['Source'],function(sourceindex,sourceelement){
+                            otmpSourceUrl = new relaySourceClass(sourceelement['idSource'],sourceelement['state'],sourceelement['urlSource'],sourceelement['prior']);
+                            relayList[relayelement['idChannel']]['source'][sourceindex] = otmpSourceUrl;
+                        });
+                        $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Source).html(oHtml.CreateTdSourceText(relayelement['idChannel']));
+//                        $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Source).children(":first-child").text(relayList[relayelement['idChannel']]['source'][0]['url']);
+                        $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.SourceQtp).text(relayelement['Source'].length);
+ //                        };
+                }
+            });
+            RebindDetailEvent();
         }
                 
         oUIRelayContorl.GetRelayList = function(){
@@ -442,19 +459,41 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
             oUIRelayContorl.CallBackGetRelay(request);
         };     
         
-        oUIRelayContorl.CallBackGetRelay = function(request){            
+        oUIRelayContorl.CallBackGetRelay = function(request){              
             request.done(function(msg, statustext, jqxhr) {
-                oHtml.stopPage();                
-                oHtml.clearTable();
-                oHtml.appendTable(msg);               
-                RebindAllRelayEvent(); 
-                $('.DetailSource').tooltip({    
-                    items: "img ",
-                    content: function() {  
-                        var tooltip = oHtml.GetTooltip($(this).attr('id'));
-                        return tooltip;
+                var tmp_relay_item;
+                var dest_temp;
+                var port;
+                var dest_name;
+                var atmpSourceUrl;
+                var otmpSourceUrl;                
+                relayList = [];
+                $.each(msg, function(relayindex, relayelement) {               
+                    dest_temp = relayelement['dest'].split(':');
+                    port = '';
+                    dest_name = '';
+                    if (typeof(dest_temp[2]) !== 'undefined') {
+                        dest_temp = dest_temp[2].split('/');
+                        port = dest_temp[0];
+                        dest_name = dest_temp[1];
                     }
+                    atmpSourceUrl = [];
+                    $.each(relayelement['Source'],function(sourceindex,sourceelement){
+                        otmpSourceUrl = new relaySourceClass(sourceelement['idSource'],sourceelement['state']
+                        ,sourceelement['urlSource'],sourceelement['prior']);
+                        atmpSourceUrl[sourceindex] = otmpSourceUrl;
+                    });
+                    tmp_relay_item = new relayClass(relayelement['idChannel'], atmpSourceUrl
+                    , port, dest_name,relayelement['numChannel'],relayelement['nameChannel']
+                    ,relayelement['descChannel'],relayelement['dest'],relayelement['status']);
+                    relayList[relayelement['idChannel']] = tmp_relay_item;                   
                 });
+                oHtml.stopPage(); 
+                DefaultSortByChannelNo();
+                oHtml.clearTable();
+                oHtml.appendTablebyList();
+                RebindAllRelayEvent(); 
+                ReCreateRelayList();
             });
             request.fail(function(jqxhr, textStatus) {
                 oHtml.stopPage();
@@ -491,15 +530,15 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
         
         function VerifyRelayInput(sDestName,sName,sDescription,iDestPort,iChannelNumber,eChannelVerifyAction){
             if (!oUIRelayContorl.VerifyRelayInput(sDestName)) {
-                alert("Error : Can't input whitespace and ',' in Destination Name.");
+                alert("Error : Can't input whitespace and ',' in Name.");
                 return false;
             }
             if (!oUIRelayContorl.VerifyRelayInput(sName)) {
-                alert("Error : Can't input whitespace and ',' in Remark1.");
+                alert("Error : Can't input whitespace and ',' in Channel Name.");
                 return false;
             }
             if (!oUIRelayContorl.VerifyRelayInput(sDescription)) {
-                alert("Error : Can't input whitespace and ',' in Remark2.");
+                alert("Error : Can't input whitespace and ',' in Description.");
                 return false;
             }                                   
             if (iDestPort.length === 0) {
@@ -512,7 +551,7 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
             };
             
             if (sName.length === 0) {
-                alert("Error : Please input value in Name.");
+                alert("Error : Please input value in Channel Name.");
                 return false;
             };  
             if (iChannelNumber.length === 0) {
@@ -534,7 +573,7 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
                             return false;
                         }
                         else if(sName === element['name']){
-                            alert("Error : DUPLICATE Name !");
+                            alert("Error : DUPLICATE Channel Name !");
                             return false;
                         }   
                         else if(String(iChannelNumber) === String(element['channelnumber'])){
@@ -543,15 +582,15 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
                         }
                         break;
                     case ChannelVerifyAction.ModifyAction:                         
-                        if (String(iDestPort) !== relayList[iModifyChannelID]['port'] && String(iDestPort) === element['port']) {
+                        if (String(iDestPort) !== relayList[iModifyID]['port'] && String(iDestPort) === element['port']) {
                             alert("Error : DUPLICATE PORT NUMBER !");
                             return false;
                         }
-                        else if(sName !== relayList[iModifyChannelID]['name'] && sName === element['name']){
-                            alert("Error : DUPLICATE Name !");
+                        else if(sName !== relayList[iModifyID]['name'] && sName === element['name']){
+                            alert("Error : DUPLICATE Channel Name !");
                             return false;
                         }   
-                        else if(String(iChannelNumber) !== String(relayList[iModifyChannelID]['channelnumber']) && String(iChannelNumber) === String(element['channelnumber'])){
+                        else if(String(iChannelNumber) !== String(relayList[iModifyID]['channelnumber']) && String(iChannelNumber) === String(element['channelnumber'])){
                             alert("Error : DUPLICATE Channel Number !");
                             return false;
                         }
@@ -578,11 +617,13 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
         };
         
         oUIRelayContorl.CallBackCreateRelay = function(request)
-        {            
+        {                        
             request.done(function(msg, statustext, jqxhr) {                
+                $( "#modal_create_channel_content" ).dialog('close');
                 setTimeout(function(){oUIRelayContorl.GetRelayList();}, 1000);
             });
             request.fail(function(jqxhr, textStatus) {
+                $( "#modal_create_channel_content" ).dialog('close');
                 oHtml.stopPage();
                 oError.CheckAuth(jqxhr.status,ActionStatus.CreateRelay);
             });
@@ -628,14 +669,12 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
         
         oUIRelayContorl.MassEntryDialog = function(aMassCreateItem)
         {
-//            var progressbar = $( "#progressbar" );
             $('#closedialog').hide();
             var progressLabel = $( ".progress-label" ); 
             var iTotalCreate = aMassCreateItem.length - 1;   
             sPortCheck = ",";
             sNameCheck = ",";
-            sChannelNumberCheck = ",";
-//            $.each(relayList, function(index, element) {     
+            sChannelNumberCheck = ",";   
             for(var key in relayList){ 
                 var element = relayList[key];
                 sPortCheck += element['port'] + ',';      
@@ -699,7 +738,7 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
                 return false;
             }
             if (aCreateInput[0].length <= 2) {
-                oHtml.AppendMassEntryResultTable(RowNum,"Please input value in Source Url.");
+                oHtml.AppendMassEntryResultTable(RowNum,"Please input value in Source URL.");
                 return false;
             }
             if (aCreateInput[1].length === 0) {
@@ -711,14 +750,14 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
                 return false;
             };
             if (aCreateInput[4].length <= 2) {
-                oHtml.AppendMassEntryResultTable(RowNum,"Please input value in Name.");
+                oHtml.AppendMassEntryResultTable(RowNum,"Please input value in Channel Name.");
                 return false;
             };
             var sSourceUrl = aCreateInput[0];            
             var aSourceUrl = sSourceUrl.trim().split(',');
             if(aSourceUrl.length > max_create_count)
             {
-                oHtml.AppendMassEntryResultTable(RowNum,'Count of Source Url is over maximum count(' + max_create_count +').');
+                oHtml.AppendMassEntryResultTable(RowNum,'Count of Source URL is over maximum count(' + max_create_count +').');
                 return false;
             }
             var sDestinationName = aCreateInput[2].length > 2 ? aCreateInput[2].substring(1,aCreateInput[2].length-1) : '';
@@ -730,16 +769,16 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
             for(var index in aSourceUrl)
             {
                 if (!oUIRelayContorl.VerifyRelayInput(aSourceUrl[index])) {
-                    oHtml.AppendMassEntryResultTable(RowNum,"Can't input whitespace and ',' in Source Url('" + sSourceUrl + "').");
+                    oHtml.AppendMassEntryResultTable(RowNum,"Can't input whitespace and ',' in Source URL('" + sSourceUrl + "').");
                     return false;
                 }
             }
             if (!oUIRelayContorl.VerifyRelayInput(sDestinationName)) {
-                oHtml.AppendMassEntryResultTable(RowNum,"Can't input whitespace and ',' in Destination Name('" + sDestinationName + "').");
+                oHtml.AppendMassEntryResultTable(RowNum,"Can't input whitespace and ',' in Name('" + sDestinationName + "').");
                 return false;
             }
             if (!oUIRelayContorl.VerifyRelayInput(sName)) {
-                oHtml.AppendMassEntryResultTable(RowNum,"Can't input whitespace and ',' in Name('" + sName + "').");
+                oHtml.AppendMassEntryResultTable(RowNum,"Can't input whitespace and ',' in Channel Name('" + sName + "').");
                 return false;
             }
             if (!oUIRelayContorl.VerifyRelayInput(sDescription)) {
@@ -747,7 +786,7 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
                 return false;
             }                        
             if (!oUIRelayContorl.CheckNum(aCreateInput[1])){
-                oHtml.AppendMassEntryResultTable(RowNum,"Destination Port('" + aCreateInput[1] + "') must be integer.");   
+                oHtml.AppendMassEntryResultTable(RowNum,"Port('" + aCreateInput[1] + "') must be integer.");   
                 return false;
             };   
             aCreateInput[1] = parseInt(aCreateInput[1]);
@@ -757,11 +796,11 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
             }; 
             aCreateInput[3] = parseInt(aCreateInput[3]);
             if(sPortCheck.indexOf(aCreateInput[1]) !== -1){
-                oHtml.AppendMassEntryResultTable(RowNum,"Destination Port('" + aCreateInput[1] + "') is duplicate.");   
+                oHtml.AppendMassEntryResultTable(RowNum,"Port('" + aCreateInput[1] + "') is duplicate.");   
                 return false;
             }  
             if(sNameCheck.indexOf(',' + sName + ',') !== -1){
-                oHtml.AppendMassEntryResultTable(RowNum,"Name('" + sName + "') is duplicate.");   
+                oHtml.AppendMassEntryResultTable(RowNum,"Channel Name('" + sName + "') is duplicate.");   
                 return false;
             }  
             if(sChannelNumberCheck.indexOf(aCreateInput[3]) !== -1){
@@ -781,8 +820,33 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
             RebindResumeEvent();
             RebindModifySourceEvent();
             RebindModifyChannelEvent();
+            RebindEditEvent();
+            RebindDetailEvent();
         }               
-                
+        
+        function RebindDetailEvent(){
+//            $('.DetailSource').tooltip({    
+//                items: "img ",
+//                content: function() {  
+//                     var tooltip = oHtml.GetTooltip($(this).attr('id'));
+//                     return tooltip;
+//                }
+//            });
+            $('.DetailSource').click(function(event){
+                event.preventDefault();
+                oHtml.clearDetailTable();
+                oHtml.appendDetailTable($(this).attr('id'));
+                $( "#modal_detail_content" ).dialog('open');
+            });
+        };
+        
+        function RebindEditEvent(){
+            $('.RealyEdit').click(function(event){
+                event.preventDefault();
+                iModifyID = $(this).attr('data-edit');
+            });
+        };
+        
         function RebindStopEvent() {
             $(stop_class).click(function(event) {
                 event.preventDefault();
@@ -810,8 +874,8 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
         function RebindDeleteEvent(event) {
             $(delete_class).click(function(event) {
                 event.preventDefault();
-                var thisitem = $(this);                
-                DeleteRelay(relayList[thisitem.attr('id')]['id']);
+//                var thisitem = $(this);                
+                DeleteRelay(iModifyID);
             });
         };
         
@@ -855,12 +919,12 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
                 oHtml.stopPage();
                 oError.CheckAuth(jqxhr.status,ActionStatus.ResumeRelay);
             });
-        };                
+        };                                
         
         function RebindModifySourceEvent(){
             $(modify_source_class).click(function(event) {
                 event.preventDefault();
-                var channelid = parseInt($(this).attr('id'));
+                var channelid = iModifyID;
                 ModifySourceList = [];
                 ModifySourceList = relayList[channelid]['source'];
                 ModifySourceList.sort(function(a,b)
@@ -877,8 +941,8 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
         function RebindModifyChannelEvent(){
             $(modify_channel_class).click(function(event) {
                 event.preventDefault();
-                var channelid = parseInt($(this).attr('id'));
-                iModifyChannelID = channelid;
+                var channelid = iModifyID;
+//                iModifyID = channelid;
                 $('#btn_modify_channel').attr('id',channelid);
                 $('#ModfiyPort').val(relayList[channelid]['port']);
                 $('#ModfiyDestinationName').val(relayList[channelid]['destname']);
@@ -903,7 +967,7 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
             iDestPort = parseInt(iDestPort);
             iChannelNumber = parseInt(iChannelNumber);
             oHtml.blockPage();
-            var request =  oRelayAjax.ModifyChannel(iModifyChannelID,iChannelNumber,sName
+            var request =  oRelayAjax.ModifyChannel(iModifyID,iChannelNumber,sName
             ,sDescription, iDestPort, sDestName);
             CallBackModifyChannel(request);
         }
@@ -933,11 +997,11 @@ $('.RealyEdit').on('show', function(event, dropdownData) {
                event.preventDefault();
                var sSourceUrl = $('#ModifyAddSourceUrl').val();
                if (sSourceUrl.length === 0) {
-                    alert("Error : Please input value in Source.");
+                    alert("Error : Please input value in Source URL.");
                     return;
                 };     
                 if (!oUIRelayContorl.VerifyRelayInput(sSourceUrl)) {
-                    alert("Error : Can't input whitespace and ',' in Source.");
+                    alert("Error : Can't input whitespace and ',' in Source URL.");
                     return; 
                 }
                var oAddSourceUrl = new relaySourceClass(0,0,sSourceUrl,ModifySourceList.length + 1);

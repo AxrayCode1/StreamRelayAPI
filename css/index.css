@@ -2,7 +2,7 @@ html, body{
     margin:0;
     padding:0;
     width: 100%;
-    min-width: 1024px; /* this is the important part*/
+    min-width: 1024px;
 }
 div.Logo{
     position: absolute; 
@@ -390,7 +390,10 @@ input:-ms-input-placeholder {
     display: inline-block;
     width: 170px;
 }
-
+.LabelAddRelayHead{
+    display: inline-block;
+    width: 150px;
+}
 .LabelIPHead{
     display: inline-block;
     width: 130px;

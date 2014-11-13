@@ -2,6 +2,7 @@ var CreateHtml = {
     createNew: function() {                
         var table_relay = $('#table_relay');
         var table_log = $('#table_log');
+        var table_detail=$('#table_detail');
         var ip_field = $('#div_ip_field');
         var source_area = $('#UrlArea');
         var modify_source_area = $('#ModifySourceArea');
@@ -26,6 +27,9 @@ var CreateHtml = {
         };
         createobj.clearLogTable = function() {
             table_log.find("tr:gt(0)").remove();
+        };
+        createobj.clearDetailTable = function(){
+            table_detail.empty();
         };
         createobj.appendTable = function(relay_list) {
             var tmp_relay_item;
@@ -73,6 +77,18 @@ var CreateHtml = {
                 table_relay.append(append_str);
             };
         };
+        createobj.appendDetailTable = function(index){
+            var ListSource = relayList[index]['source'];
+            var TooltipHtml = '';            
+            for(var key in ListSource){       
+                TooltipHtml += '<tr">';
+                TooltipHtml += '<td style="width:25%">Priority ' + ListSource[key]['prior'] + '</label>' ;
+                TooltipHtml += '<td style="width:65%">' + ListSource[key]['url'] + '</label>';
+                TooltipHtml += '<td style="width:10%">' + GetSourceStatusStr(ListSource[key]['flag']) + '</label>';                                 
+                TooltipHtml += '</tr>';
+            };            
+            table_detail.append(TooltipHtml);
+        };
         createobj.GetTooltip = function(index){
             var ListSource = relayList[index]['source'];
             var TooltipHtml = '';
@@ -90,25 +106,22 @@ var CreateHtml = {
             var append_str = '';
             append_str += '<tr id="tr' + element['id'] +'">';
             append_str += '<td style="text-align:center">' + index + '</td>';              
-            append_str += '<td style="text-align:right">' + element['channelnumber'] + '</td>';
-            append_str += '<td>' + element['name'] + '</td>';
+            append_str += '<td style="text-align:center">' + element['channelnumber'] + '</td>';
+            append_str += '<td style="text-align:center">' + element['name'] + '</td>';
             append_str += '<td><div class="wrapword">' + sourceurl;
             append_str += '<img src="/img/Info.png" style="margin-left:5px" height="20" width="20" align="center" class="DetailSource" id="' + element['id'] + '">';
             append_str += '<div></td>';
-            append_str += '<td style="text-align:right">' + element['source'].length + '</td>';  
+            append_str += '<td style="text-align:center">' + element['source'].length + '</td>';  
             append_str += '<td>' + element['fulldest'] + '</td>';
             append_str += '<td>' + createobj.GetRelayStatusStr(element['status']) + '</td>';            
             append_str += '<td>' + element['description'] + '</td>';
-            append_str += '<td>';
-            append_str += '<a href="#" class="btn-light delete" id="' + element['id'] + '">Delete</a>';
-            append_str += '<a href="#" style="margin-left:10px" class="btn-light stop" id="' + element['id'] + '">Stop</a>';
+            append_str += '<td><div style="width:220px;white-space: nowrap;">';
+            append_str += '<a href="#" class="btn-light stop" id="' + element['id'] + '">Stop</a>';
             if (element['port'] !== '')
-                append_str += '<a href="#" style="margin-left:10px" class="btn-light resume" id="' + element['id'] + '">Resume</a>';
-            append_str += '<a href="#" style="margin-top:5px" class="btn-light ModifySource" id="' + element['id'] + '">Edit Source</a>';
-            append_str += '<a href="#" style="margin-top:5px;margin-left:10px" class="btn-light ModifyChannel" id="' + element['id'] + '">Edit Channel</a>';
-            append_str += '</td>';
-            append_str += '</tr>';
-            //<a href="#" class="btn-light" data-dropdown="#dropdown-1">Create&nbsp;&darr;</a>   
+                append_str += '<a href="#" style="margin-left:5px" class="btn-light resume" id="' + element['id'] + '">Resume</a>';
+            append_str += '<a href="#" style="margin-left:5px" class="btn-light RealyEdit" data-dropdown="#dropdown-1" data-edit="' + element['id'] + '">Edit&nbsp;&darr;</a>';            
+            append_str += '</div></td>';
+            append_str += '</tr>';            
             return append_str;
         };
         createobj.CreateTdSourceText = function(ChannelID){
@@ -132,7 +145,7 @@ var CreateHtml = {
             var i =0;
             if(source_url_list.length === 0){
                 append_str += '<div>';
-                append_str += '<label class="LabelRelayHead">Priority 1 : </label>';
+                append_str += '<label class="LabelAddRelayHead">Priority 1 : </label>';
                 append_str += '<input id="AddSourceUrl" class="InputRelay" value="" type="text">';
                 append_str += '<a href="#" class="btn-light AddSource" style="margin-left:5px">Add</a>';
                 append_str += '</div>';
@@ -145,7 +158,7 @@ var CreateHtml = {
                     {
                         case 0:
                             append_str += '<div>';
-                            append_str += '<label class="LabelRelayHead">Priority ' + (i+1) + ': </label>';                            
+                            append_str += '<label class="LabelAddRelayHead">Priority ' + (i+1) + ': </label>';                            
                             append_str += '<label class="LabelSource">' + element['url'] + '</label>';                            
                             append_str += '<a  href="#" class="btn-light DeleteSource" style="margin-left:5px" id="' + key + '">Delete</a>';
                             if(source_url_list.length >= 2)                                                                                            
@@ -154,7 +167,7 @@ var CreateHtml = {
                             break;
                         default:
                             append_str += '<div style="margin-top: 5px">';
-                            append_str += '<label class="LabelRelayHead">Priority ' + (i+1) + ': </label>';                             
+                            append_str += '<label class="LabelAddRelayHead">Priority ' + (i+1) + ': </label>';                             
                             append_str += '<label class="LabelSource">' + element['url'] + '</label>';
                             append_str += '<a  href="#" class="btn-light DeleteSource" style="margin-left:5px" id="' + key +'">Delete</a>';
                             if(i < source_url_list.length -1)
@@ -171,7 +184,7 @@ var CreateHtml = {
                 };                
                 if(source_url_list.length < max_create_count){
                     append_str += '<div style="margin-top: 5px">';
-                    append_str += '<label class="LabelRelayHead">Priority ' + (i+1) + ': </label>';;
+                    append_str += '<label class="LabelAddRelayHead">Priority ' + (i+1) + ': </label>';;
                     append_str += '<input id="AddSourceUrl" class="InputRelay" value="" type="text">';
                     append_str += '<a  href="#" class="btn-light AddSource" style="margin-left:5px">Add</a>';
                     append_str += '</div>';
