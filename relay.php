@@ -41,6 +41,8 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script type='text/javascript' src="/js/jquery-1.11.1.min.js"></script>        
         <script type='text/javascript' src='/js/jquery-ui-1.11.1.min.js'></script>
+        <script src="/js/jquery.hashchange.js" type="text/javascript"></script>
+        <script src="/js/jquery.easytabs.js" type="text/javascript"></script>
         <script type="text/javascript" src="/js/jquery.dropdown.min.js"></script>
         <script type='text/javascript' src="/js/tvcloud.js"></script>
         <script type='text/javascript' src="/js/sha512.js"></script>
@@ -54,7 +56,11 @@ and open the template in the editor.
         <script type='text/javascript' src="/js/UISystemControl.js"></script>
         <script type='text/javascript' src="/js/UIUpgrageControl.js"></script>
         <script type='text/javascript' src="/js/UILogControl.js"></script>
-        <script type='text/javascript' src="/js/RelayUI.js"></script>        
+        <script type='text/javascript' src="/js/RelayUI.js"></script>              
+        <script type='text/javascript' src="/js/missed.js"></script>        
+        <script type='text/javascript' src="/js/jquery.scombobox.min.js"></script>
+        <script type='text/javascript' src="/js/jquery.easing.min.js"></script>
+        <link type='text/css' href="/css/jquery.scombobox.css" rel="stylesheet" />
         <link type='text/css' href="/css/index.css" rel="stylesheet">
         <link type='text/css' href='/css/jquery-ui.min.css' rel='stylesheet'/>
         <link type='text/css' href='/css/jquery-ui.structure.min.css' rel='stylesheet'/>
@@ -146,24 +152,166 @@ and open the template in the editor.
         </div>
         
         <div id="div_sys_config">
-            <fieldset>
-                <legend>Change Password</legend>                            
-                <div class="div_fieldcontent">                                        
-                    <label class="LabelHead">Current Password : </label>                    
-                    <input id="CurPWD" class="InputText"  style="height: 20px"  value="" type="password">
-                    <br>    
-                    <br>
-                    <label class="LabelHead">New Password : </label>                    
-                    <input id="NewPWD" class="InputText" style="height: 20px" value="" type="password">
-                    <br>
-                    <br>
-                    <label class="LabelHead">Confirm New Password : </label>                    
-                    <input id="ConfNewPWD" class="InputText" style="height: 20px" value="" type="password">                    
-                    <br>
-                    <br>
-                    <a id="btn_chg_pwd" href="#" class="btn-light">Confirm</a>
+            <div id="tab-container" class='tab-container' style="padding: 10px">
+                <ul class='etabs'>
+                  <li class='tab'><a href="#tabs1-password">Change Password</a></li>
+                  <li class='tab'><a href="#tabs1-time">Time</a></li>
+                </ul>
+                <div class='panel-container'>
+                    <div id="tabs1-password"> 
+                        <div class="div_fieldcontent" style="margin-top:20px;width: 550px;height: 280px;position: relative">                                        
+                            <label class="LabelHead">Current Password : </label>                    
+                            <input id="CurPWD" class="InputText" value="" type="password">
+                            <br>    
+                            <br>
+                            <label class="LabelHead">New Password : </label>                    
+                            <input id="NewPWD" class="InputText"  value="" type="password">
+                            <br>
+                            <br>
+                            <label class="LabelHead">Confirm New Password : </label>                    
+                            <input id="ConfNewPWD" class="InputText"  value="" type="password">                    
+                            <br>
+                            <br>
+                            <div style="position: absolute;right: 0px">
+                                <a id="btn_chg_pwd" href="#" class="btn-light">Confirm</a>
+                                <a id="btn_clear_pwd" href="#" class="btn-light">Clear</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tabs1-time">
+                        <div style="margin-top:20px;width: 550px;height: 400px;position: relative;">
+                            <div style="border-bottom: dashed 1px rgba(0, 0, 0, .2);
+                                    -webkit-background-clip: padding-box; /* for Safari */
+                                    background-clip: padding-box;">
+                                <label style="padding: 10px;color: blue;font-size: large">Time Zone</label>    
+                            </div>
+                            <div>                                
+                                <label class="LabelHead" style="padding: 20px 0px 0px 10px;">Time Zone :</label>
+                                <select id="combotimezone" style="width: 200px">
+                                    <option value="1">(GMT-11:00) Samnona Standard Time; Midway Is.</option>
+                                    <option value="2">(GMT-10:00) Hawaii Standard Time</option>
+                                    <option value="3">(GMT-09:00) Alaska Standard Time</option>
+                                    <option value="4">(GMT-08:00) Pacific Time(US & Canada); Tijuana</option>
+                                    <option value="5">(GMT-07:00) Arizona</option>
+                                    <option value="6">(GMT-07:00) Chihuahua, Mazatlan</option>
+                                    <option value="7">(GMT-07:00) Mountain Time (US & Canada)</option>
+                                    <option value="8">(GMT-06:00) Central America Standard Time; Guate</option>
+                                    <option value="9">(GMT-06:00) Central Time (US & Canada)</option>
+                                    <option value="10">(GMT-06:00) Mexico City; Tegucigalpa</option>
+                                    <option value="11">(GMT-06:00) Saskatchewan</option>
+                                    <option value="12">(GMT-05:00) Bogota, Lima, Quito, Rio Branco</option>
+                                    <option value="13">(GMT-05:00) Eastern Time (US & Canada)</option>
+                                    <option value="14">(GMT-05:00) Indiana (East)</option>
+                                    <option value="15">(GMT-04:30) Caracas</option>
+                                    <option value="16">(GMT-04:00) Atlantic Time (Canada)</option>
+                                    <option value="17">(GMT-04:00) La Paz</option>
+                                    <option value="18">(GMT-04:00) Manaus</option>
+                                    <option value="19">(GMT-04:00) Santiago</option>
+                                    <option value="20">(GMT-03:30) Newfoundland</option>
+                                    <option value="21">(GMT-03:00) Brasilia</option>
+                                    <option value="22">(GMT-03:00) Buenos Aires, Georgetown</option>
+                                    <option value="23">(GMT-03:00) Greenland Standard Time</option>
+                                    <option value="24">(GMT-03:00) Montevideo</option>
+                                    <option value="25">(GMT-02:00) Mid-Atlantic Standard Time</option>
+                                    <option value="26">(GMT-01:00) Azores Standard Time</option>
+                                    <option value="27">(GMT-01:00) Cape Verde Is.</option>
+                                    <option value="28">(GMT) Casablanca</option>
+                                    <option value="29">(GMT) Dublin, Edinburgh, Lisbon, London</option>
+                                    <option value="30">(GMT) Monrovia, Reykjavik</option>
+                                    <option value="31">(GMT+01:00) Amsterdam, Berlin, Rome, Stockholm, Vienna</option>
+                                    <option value="32">(GMT+01:00) Belgrade, Bratislava, Budapest, Prague</option>
+                                    <option value="33">(GMT+01:00) Brussels, Copenhagen, Madrid, Paris</option>
+                                    <option value="34">(GMT+01:00) Sarajevo, Skopie, Warsaw, Zagreb</option>
+                                    <option value="35">(GMT+01:00) Western Africa Time</option>
+                                    <option value="36">(GMT+01:00) Windhoek</option>
+                                    <option value="37">(GMT+02:00) Amman</option>
+                                    <option value="38">(GMT+02:00) Athens, Bucharest, Istanbul</option>
+                                    <option value="39">(GMT+02:00) Beirut</option>
+                                    <option value="40">(GMT+02:00) Egypt Standard Time</option>
+                                    <option value="41">(GMT+02:00) Harare, Pretoria</option>
+                                    <option value="42">(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius</option>
+                                    <option value="43">(GMT+02:00) Israel Standard Time</option>
+                                    <option value="44">(GMT+02:00) Central Africa Time</option>
+                                    <option value="45">(GMT+02:00) Eastern Europe Standard Time</option>
+                                    <option value="46">(GMT+03:00) Minsk</option>
+                                    <option value="47">(GMT+03:00) Baghdad</option>
+                                    <option value="48">(GMT+03:00) Kuwait</option>
+                                    <option value="49">(GMT+03:00) Nairobi</option>
+                                    <option value="50">(GMT+03:00) Moscow, St. Petersburg, Kazan, Volgograd</option>
+                                    <option value="51">(GMT+03:30) Iran Standard Time</option>
+                                    <option value="52">(GMT+04:00) Abu Dhabi, Muscat</option>
+                                    <option value="53">(GMT+04:00) Baku</option>
+                                    <option value="54">(GMT+04:00) Tbilisi</option>
+                                    <option value="55">(GMT+04:00) Yerevan</option>
+                                    <option value="56">(GMT+04:30) Afghanistan Standard Time</option>
+                                    <option value="57">(GMT+05:00) Karachi, Islamabad, Tashkent</option>
+                                    <option value="58">(GMT+05:00) Ekaterinburg</option>
+                                    <option value="59">(GMT+05:30) Bombay, Calcutta, Madras, New Delhi, Colombo</option>
+                                    <option value="60">(GMT+05:45) Kathmandu</option>
+                                    <option value="61">(GMT+06:00) Almaty, Astana</option>
+                                    <option value="62">(GMT+06:00) Dhaka</option>
+                                    <option value="63">(GMT+06:00) Novosibirsk</option>
+                                    <option value="64">(GMT+06:30) Yangon(Rangoon)</option>
+                                    <option value="65">(GMT+07:00) Bangkok, Hanoi, Jakarta</option>
+                                    <option value="66">(GMT+07:00) Krasnoyarsk</option>
+                                    <option value="67">(GMT+08:00) Taipei</option>
+                                    <option value="68">(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi</option>
+                                    <option value="69">(GMT+08:00) Ulaanbaatar</option>
+                                    <option value="70">(GMT+08:00) Kuala Lumpur, Singapore</option>
+                                    <option value="71">(GMT+08:00) Perth</option>
+                                    <option value="72">(GMT+08:00) Irkutsk</option>
+                                    <option value="73">(GMT+09:00) Tokyo, Osaka, Sapporo</option>
+                                    <option value="74">(GMT+09:00) Seoul</option>
+                                    <option value="75">(GMT+09:00) Yakutsk</option>
+                                    <option value="76">(GMT+09:30) Adelaide</option>
+                                    <option value="77">(GMT+09:30) Darwin</option>
+                                    <option value="78">(GMT+10:00) Brisbane</option>
+                                    <option value="79">(GMT+10:00) Melbourne, Sydney, Canberra</option>
+                                    <option value="80">(GMT+10:00) Guam, Port Moresby</option>
+                                    <option value="81">(GMT+10:00) Tasmania Standard Time</option>
+                                    <option value="82">(GMT+10:00) Vladivostok</option>
+                                    <option value="83">(GMT+10:00) Magadan, Solomon Is., New Caledonia</option>
+                                    <option value="84">(GMT+11:00) New Caledonia</option>
+                                    <option value="85">(GMT+12:00) Auckland, Wellington</option>
+                                    <option value="86">(GMT+12:00) Fiji, Kamchatka, Marshall Is.</option>
+                                </select>                                
+                            </div>
+                        </div>
+                    </div>                    
                 </div>
-            </fieldset>
+            </div>
+<!--            <div id="tabs">
+                <ul>
+                  <li><a href="#tabs-1">Change Passwoird</a></li>
+                  <li><a href="#tabs-2">Proin dolor</a></li>
+                  <li><a href="#tabs-3">Aenean lacinia</a></li>
+                </ul>
+                <div id="tabs-1">
+                    <div class="div_fieldcontent">                                        
+                        <label class="LabelHead">Current Password : </label>                    
+                        <input id="CurPWD" class="InputText"  style="height: 20px"  value="" type="password">
+                        <br>    
+                        <br>
+                        <label class="LabelHead">New Password : </label>                    
+                        <input id="NewPWD" class="InputText" style="height: 20px" value="" type="password">
+                        <br>
+                        <br>
+                        <label class="LabelHead">Confirm New Password : </label>                    
+                        <input id="ConfNewPWD" class="InputText" style="height: 20px" value="" type="password">                    
+                        <br>
+                        <br>
+                        <a id="btn_chg_pwd" href="#" class="btn-light">Confirm</a>
+                    </div>
+                </div>
+                <div id="tabs-2">
+                  <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
+                </div>
+                <div id="tabs-3">
+                  <p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
+                  <p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
+                </div>
+          </div>-->
+
 <!--            <div style="margin-top: 10px;text-align: right;margin-right: 10px">
                 Copyright © 2014 AcroRed Technologies, Inc. All rights reserved.
             </div>-->

@@ -400,7 +400,8 @@ input:-ms-input-placeholder {
 }
 
 .InputText{
-    width: 180px;
+    width: 250px;
+    height: 25px;
 }
 
 .InputRelay{
@@ -456,45 +457,18 @@ div.ui-tooltip {
     width:280px
 }
 
-#jui_dropdown_demo {
-  height: 400px;
-}
- 
-#jui_dropdown_demo button {
-  padding: 1px !important;
-}
- 
-#jui_dropdown_demo ul li {
-  background: none;
-  display: inline-block;
-  list-style: none;
-}
- 
-/* selected option indicator ------------------------------------------------ */
-#opt_selected {
-  margin-top: 20px;
-  font-size: 20px;
-}
- 
-/* demo_dropdown 1 ---------------------------------------------------------- */
-.container1 {
-  margin-left: 10px ;
-  display: inline-block;
-}
-.launcherClass{
-    height: 25px;
-    width: 75px
-}
-.menu1 {
-  position: absolute;
-  width: 120px !important;
-  margin-top: 3px !important;
-}
- 
-/* fix for jquery-ui-bootstrap theme */
-/*#launcher1 span {
-  display: inline-block;
-}*/
-#launcher1 .ui-button-text {
-  padding: 0em 1.1em 0em 0em;
+.etabs { margin: 0; padding: 0; }
+.tab { display: inline-block; zoom:1; *display:inline; background: #eee; border: solid 1px #999; border-bottom: none; -moz-border-radius: 4px 4px 0 0; -webkit-border-radius: 4px 4px 0 0; }
+.tab a { font-size: 14px; line-height: 2em; display: block; padding: 0 10px; outline: none; }
+.tab a:hover { text-decoration: underline; }
+.tab.active { background: #fff; padding-top: 6px; position: relative; top: 1px; border-color: #666; }
+.tab a.active { font-weight: bold; }
+.tab-container .panel-container { background: #fff; border: solid #666 1px; padding: 10px; -moz-border-radius: 0 4px 4px 4px; -webkit-border-radius: 0 4px 4px 4px; }
+
+#combotimezone {
+    position: absolute;
+    width: 250px;
+    height: 30px;
+    top: 30px;
+    left: 210px;
 }

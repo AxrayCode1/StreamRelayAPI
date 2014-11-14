@@ -16,8 +16,8 @@ class Process_System_API
     function ListVersion()
     {                
         $exu_str = UpdateRootPath.'list_version.sh';        
-        $output = exec($exu_str,$outputarr);                
-        $json_arr = json_decode($output);        
+        $output = exec($exu_str,$outputarr);
+        $json_arr = json_decode($output);          
         if($json_arr == null)
         {
             $json_arr['Result'] = '-99';

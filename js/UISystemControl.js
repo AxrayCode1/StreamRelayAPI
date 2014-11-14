@@ -6,17 +6,28 @@ var UISystemControl = {
         var oError = {};
         oUISystemContorl.Init = function(){   
             oError = ErrorHandle.createNew();
+            $('#combotimezone').scombobox({
+                wrap:false
+            });
+            $(".scombobox-display").prop('disabled', true);
             $('#ss').click(function() {
-                $('#CurPWD').val('');        
-                $('#NewPWD').val('');
-                $('#ConfNewPWD').val('');
+                ClearPassword();
                 oHtml.HideAllOption();
                 oHtml.ShowOption(DivSystem);                
             });            
+            $('#btn_clear_pwd').click(function(){
+                ClearPassword();
+            });
             $('#btn_chg_pwd').click(function() {
-                 oUISystemContorl.ChangePasswordAction();
+                oUISystemContorl.ChangePasswordAction();
             });
         };                
+        
+        function ClearPassword(){
+            $('#CurPWD').val('');        
+            $('#NewPWD').val('');
+            $('#ConfNewPWD').val('');
+        }
         
         oUISystemContorl.ChangePasswordAction = function(){            
             var sCurPWD = $('#CurPWD').val();        

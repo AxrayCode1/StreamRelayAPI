@@ -58,6 +58,7 @@ var UIRelayControl = {
             oHtml.AppendSourceArea(CreateSourceList);
             RebindAllControlSourceEvent();
             oUIRelayContorl.InitMassEntryDialog();
+            InitSystemTab();
             InitAddChannelDialog();
             InitModifySourceDialog();
             InitModifyChannelDialog();
@@ -141,6 +142,89 @@ var UIRelayControl = {
                 ReCreateRelayList();                
             });
             PollingRelayList(true);
+        };
+        
+        function InitSystemTab(){
+            $('#tab-container').easytabs();
+        }
+        
+        function InitModifySourceDialog(){
+            $( "#modal_modify_source_content" ).dialog({
+                    title: "Edit Source URL",
+                    modal: true,
+                    resizable: false,
+                    draggable: true,
+                    closeOnEscape: false,
+                    autoOpen: false,
+                    dialogClass: "no-close",
+                    height:400,
+                    width:720               
+            });                
+            $('#closemodifydialog').click(function (event) {
+                event.preventDefault();
+                $( "#modal_modify_source_content" ).dialog('close');
+//                oUIRelayContorl.GetRelayList();
+                    setTimeout(function(){GetRelayNoRefresh();}, 200);
+            });
+        };        
+        
+        function InitModifyChannelDialog(){
+            $( "#modal_modify_channel_content" ).dialog({
+                    title: "Modify Miscellaneous",
+                    modal: true,
+                    resizable: false,
+                    draggable: true,
+                    closeOnEscape: false,
+                    autoOpen: false,
+                    dialogClass: "no-close",
+                    height:400,
+                    width:600               
+            });     
+            $('#btn_modify_channel').click(function (event) {	
+                event.preventDefault();
+                ModifyChannel();
+            });
+            $('#btn_close_modify_channel').click(function (event) {
+                 event.preventDefault();
+                $( "#modal_modify_channel_content" ).dialog('close');
+                setTimeout(function(){GetRelayNoRefresh();}, 200);
+            });
+        };
+             
+        function InitAddChannelDialog(){
+            $( "#modal_create_channel_content" ).dialog({
+                    title: "Single Channel",
+                    modal: true,
+                    resizable: false,
+                    draggable: true,
+                    closeOnEscape: false,
+                    autoOpen: false,
+                    dialogClass: "no-close",
+                    height:530,
+                    width:720               
+            });                 
+            $('#btn_close_create_channel').click(function (event) {	    
+                event.preventDefault();
+                $( "#modal_create_channel_content" ).dialog('close');                
+            });
+        };
+        
+        function InitDetailDialog(){
+            $( "#modal_detail_content" ).dialog({
+                    title: "Source URL Information",
+                    modal: true,
+                    resizable: false,
+                    draggable: true,
+                    closeOnEscape: false,
+                    autoOpen: false,
+                    dialogClass: "no-close",
+                    height:350,
+                    width:600               
+            });
+            $('#btn_close_detail_content').click(function (event) {
+                event.preventDefault();
+                $( "#modal_detail_content" ).dialog('close');                
+            });            
         };
         
         function DefaultSortByChannelNo()
@@ -246,86 +330,7 @@ var UIRelayControl = {
                 $( "#modal_update_progress_content" ).dialog('close');
                 oUIRelayContorl.GetRelayList();
             });
-        };
-                
-        function InitModifySourceDialog(){
-            $( "#modal_modify_source_content" ).dialog({
-                    title: "Edit Source URL",
-                    modal: true,
-                    resizable: false,
-                    draggable: true,
-                    closeOnEscape: false,
-                    autoOpen: false,
-                    dialogClass: "no-close",
-                    height:400,
-                    width:720               
-            });                
-            $('#closemodifydialog').click(function (event) {
-                event.preventDefault();
-                $( "#modal_modify_source_content" ).dialog('close');
-//                oUIRelayContorl.GetRelayList();
-                    setTimeout(function(){GetRelayNoRefresh();}, 200);
-            });
-        };        
-        
-        function InitModifyChannelDialog(){
-            $( "#modal_modify_channel_content" ).dialog({
-                    title: "Modify Miscellaneous",
-                    modal: true,
-                    resizable: false,
-                    draggable: true,
-                    closeOnEscape: false,
-                    autoOpen: false,
-                    dialogClass: "no-close",
-                    height:400,
-                    width:600               
-            });     
-            $('#btn_modify_channel').click(function (event) {	
-                event.preventDefault();
-                ModifyChannel();
-            });
-            $('#btn_close_modify_channel').click(function (event) {
-                 event.preventDefault();
-                $( "#modal_modify_channel_content" ).dialog('close');
-                setTimeout(function(){GetRelayNoRefresh();}, 200);
-            });
-        };
-             
-        function InitAddChannelDialog(){
-            $( "#modal_create_channel_content" ).dialog({
-                    title: "Single Channel",
-                    modal: true,
-                    resizable: false,
-                    draggable: true,
-                    closeOnEscape: false,
-                    autoOpen: false,
-                    dialogClass: "no-close",
-                    height:530,
-                    width:720               
-            });                 
-            $('#btn_close_create_channel').click(function (event) {	    
-                event.preventDefault();
-                $( "#modal_create_channel_content" ).dialog('close');                
-            });
-        };
-        
-        function InitDetailDialog(){
-            $( "#modal_detail_content" ).dialog({
-                    title: "Source URL Information",
-                    modal: true,
-                    resizable: false,
-                    draggable: true,
-                    closeOnEscape: false,
-                    autoOpen: false,
-                    dialogClass: "no-close",
-                    height:350,
-                    width:600               
-            });
-            $('#btn_close_detail_content').click(function (event) {
-                event.preventDefault();
-                $( "#modal_detail_content" ).dialog('close');                
-            });            
-        };
+        };                        
         
         oUIRelayContorl.CheckNum = function(str){
             return str.match(/^[0-9]*$/);
@@ -841,10 +846,7 @@ var UIRelayControl = {
                        
         function RebindAllRelayEvent(){
             RebindStopEvent();
-//            RebindDeleteEvent();
             RebindResumeEvent();
-//            RebindModifySourceEvent();
-//            RebindModifyChannelEvent();
             RebindEditEvent();
             RebindDetailEvent();
         }               
