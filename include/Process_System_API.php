@@ -57,5 +57,12 @@ class Process_System_API
         }
         return $json_arr;
     }
+    
+    function GetTime()
+    {        
+        date_default_timezone_set('Asia/Taipei');
+        $TimeData = array("Time" => strtotime(date("Y-m-d H:i:s")));
+        return $TimeData;
+    }
 }
 ?>

@@ -82,8 +82,8 @@
             }
             methods.displayDropdown.call(this, opts.showDropDown);
             if (opts.mode != 'checkboxes') {
-                if (this.find(cp + cdisplay).length == 0) {
-                    var $inputDisplay = $('<input class="' + pname + cdisplay + '" type="text" />');
+                if (this.find(cp + cdisplay).length == 0) {                                           
+                    var $inputDisplay = $('<input class="' + pname + cdisplay + '" type="text"/>');                   
                     this.append($inputDisplay);
                     this.height(
                         +$inputDisplay.css('font-size') +
@@ -97,7 +97,7 @@
             }
             if (this.find(cp + cvalue).length == 0) {
                 this.append('<input class="' + pname + cvalue + '" type="hidden" />');
-            }
+            }            
             if (this.find(cp + cdisplay).is(':disabled') || opts.disabled) {
                 this.find(cp + cddback + ', ' + cp + cddarr).hide();
             }
@@ -105,6 +105,8 @@
                 this.find(cp + cdisplay).prop('disabled', true);
                 this.addClass(pname + cdisabled);
             }
+            if(!opts.editAble)
+                this.find(cp + cdisplay).prop('disabled', true);
             if ($div.length == 0) {
                 this.append($div = $('<div class="' + pname + clist + '"></div>'));
             }
@@ -277,6 +279,9 @@
                 this.removeClass(pname + cdisabled);
                 this.children(cp + cddback + ', ' + cp + cddarr).show();
             }
+            var editAble = this.data(pname).editAble;
+            if(mode != 'checkboxes' && !editAble)
+                this.find(cp + cdisplay).prop('disabled', true);
             return this;
         },
         /**
@@ -322,9 +327,15 @@
                     var value = this.find(cp + cvalue).val();
                     value = !allowDisplay ? value : (value ? value : this.find(cp + cdisplay).val());
                 }
-                return mode == 'default' ?
-                    (this.find(cp + cdisplay).is(':disabled') ? '' : value) :
-                    (mode == 'checkboxes' ? getValues.call(this) : null);
+                if(!opts.editAble && !opts.disabled){
+                    return mode == 'default' ?                    
+                        value :
+                        (mode == 'checkboxes' ? getValues.call(this) : null);
+                }   
+                else
+                    return mode == 'default' ?                    
+                        (this.find(cp + cdisplay).is(':disabled') ? '' : value) :
+                        (mode == 'checkboxes' ? getValues.call(this) : null);
             } else { // set the value
                 if (mode == 'default') {
                     setValue.call(this, v);
@@ -333,7 +344,7 @@
                 }
             }
             return this;
-        },
+        },       
         open: function() {
             slide.call(this.children(cp + clist), 'down');
             return this;
@@ -1094,6 +1105,10 @@
     };
 
     $.fn[pname].defaults = {
+        /**
+         * Whether set Select Text Box disabled.
+         */
+        editAble : true,
         /**
          * If no data given combobox is filled relying on $('select option') list.
          * By default (see pMarkup and pFillFunc) the data is an array of objects:

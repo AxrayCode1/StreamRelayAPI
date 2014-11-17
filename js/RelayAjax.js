@@ -145,6 +145,10 @@ var Relay = {
             var request = relayobj.CallAjax("/relay/modify/" + idchannel, "PUT", jsonrequest, "json");
             return request;            
         };
+        relayobj.ListTime = function(){
+            var request = relayobj.CallAjax("/system/time/list", "GET", '', "json");
+            return request;  
+        };
         relayobj.CallAjaxNoAsync = function(url, method, data, datatype) {
             var request = $.ajax({
                 type: method,

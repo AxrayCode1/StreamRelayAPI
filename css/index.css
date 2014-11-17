@@ -467,8 +467,58 @@ div.ui-tooltip {
 
 #combotimezone {
     position: absolute;
-    width: 250px;
+    width: 355px;
     height: 30px;
-    top: 30px;
+    top: 10px;
     left: 210px;
+}
+
+#combontpserver{
+    position: absolute;
+    width: 355px;
+    height: 30px;
+    top: 160px;
+    left: 210px;
+}
+
+#combohour{
+    position: absolute;
+    width: 100px;
+    height: 30px;
+    top:80px;
+    left: 210px
+}
+
+#lablehourmin{
+    position: absolute;
+    line-height: 30px;
+    height: 30px;
+    top:85px;
+    text-align: center;
+    left: 327px
+}
+
+#combomin{
+    position: absolute;
+    width: 100px;
+    height: 30px;
+    top:80px;
+    left: 338px
+}
+
+#lableminsecond{
+    position: absolute;
+    line-height: 30px;
+    height: 30px;
+    top:85px;
+    text-align: center;
+    left: 453px
+}
+
+#combosecond{
+    position: absolute;
+    width: 100px;
+    height: 30px;
+    top:80px;
+    left: 465px
 }

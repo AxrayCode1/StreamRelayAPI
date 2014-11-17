@@ -86,6 +86,27 @@ function HandleUpdate($Action,$oProcSystem)
             break;
     }
 }
+
+function HandleTime($Action,$oProcSystem)
+{    
+    switch($Action)
+    {
+        case 'list':
+            switch($_SERVER['REQUEST_METHOD'])
+            {
+                case 'GET':
+                    $TimeData = $oProcSystem->GetTime();
+                    echo json_encode($TimeData);
+                    break;
+                default :
+                    http_response_code(404);
+            }
+            break;        
+        default :
+            http_response_code(404);
+            break;
+    }
+}
 $ologin = CheckAuth();
 $url=explode("/",$_GET["api"]);
 $oProcSystem = new Process_System_API();
@@ -99,6 +120,9 @@ switch (count($url))
                 break;            
             case 'update':
                 HandleUpdate($url[1],$oProcSystem);
+                break;
+            case 'time':
+                HandleTime($url[1],$oProcSystem);
                 break;
             default :
                 http_response_code(404);

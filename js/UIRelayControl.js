@@ -57,8 +57,7 @@ var UIRelayControl = {
             oHtml.EmptySoucreArea();
             oHtml.AppendSourceArea(CreateSourceList);
             RebindAllControlSourceEvent();
-            oUIRelayContorl.InitMassEntryDialog();
-            InitSystemTab();
+            oUIRelayContorl.InitMassEntryDialog();            
             InitAddChannelDialog();
             InitModifySourceDialog();
             InitModifyChannelDialog();
@@ -87,11 +86,17 @@ var UIRelayControl = {
             });
             $('#btn_resume_all').click(function(event){
                 event.preventDefault();
-                ResumeAllRelay();
+                var confirmable = confirm("Do you want to resume all now?");
+                if (confirmable === true) {
+                    ResumeAllRelay();
+                }                 
             });
             $('#btn_stop_all').click(function(event){
                 event.preventDefault();
-                StopAllRelay();
+                var confirmable = confirm("Do you want to stop all now?");
+                if (confirmable === true) {
+                    StopAllRelay();
+                }                 
             });
             $('#btn_refresh').click(function(event) {
                 event.preventDefault();
@@ -144,9 +149,7 @@ var UIRelayControl = {
             PollingRelayList(true);
         };
         
-        function InitSystemTab(){
-            $('#tab-container').easytabs();
-        }
+        
         
         function InitModifySourceDialog(){
             $( "#modal_modify_source_content" ).dialog({
