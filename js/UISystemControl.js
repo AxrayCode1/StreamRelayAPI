@@ -207,7 +207,10 @@ var UISystemControl = {
             var newtimestamp = curr_year + "-" + curr_month + "-" + curr_date + " " + curr_hour + ":" + curr_min + ":" + curr_sec;
             $('#curTime').text(newtimestamp);
             if(bChangeDate)
+            {
                 $( "#datepicker" ).datepicker( "setDate", curr_year + "-" + curr_month + "-" + curr_date );
+                TimeModeChangeEnableDisableElement();
+            }
         }
         
         function TimeModeChangeEnableDisableElement(){           

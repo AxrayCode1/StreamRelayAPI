@@ -58,7 +58,7 @@ and open the template in the editor.
         <script type='text/javascript' src="/js/UILogControl.js"></script>
         <script type='text/javascript' src="/js/RelayUI.js"></script>              
         <script type='text/javascript' src="/js/missed.js"></script>        
-        <script type='text/javascript' src="/js/jquery.scombobox.js"></script>
+        <script type='text/javascript' src="/js/jquery.scombobox.min.js"></script>
         <script type='text/javascript' src="/js/jquery.easing.min.js"></script>
         <link type='text/css' href="/css/jquery.scombobox.css" rel="stylesheet" />
         <link type='text/css' href="/css/index.css" rel="stylesheet">
