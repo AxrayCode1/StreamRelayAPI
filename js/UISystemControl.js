@@ -30,9 +30,11 @@ var UISystemControl = {
             });
             $('#btn_set_time').click(function(event){
                 event.preventDefault();
-                alert($('#combotimezone').scombobox('val'));
-                alert($('#combontpserver').scombobox('val'));
-                ListTime(false);
+                SetTime();
+            });
+            $('#btnupdate').click(function(event){
+                event.preventDefault();
+                UpdateTime();
             });
             $('#btn_reset_time').click(function(event) {
                 event.preventDefault();
@@ -65,6 +67,7 @@ var UISystemControl = {
             });
             $('#combontpserver').scombobox({
                 invalidAsValue: true,
+                customEdit : true,
                 wrap:false
             });
         };     
@@ -157,6 +160,84 @@ var UISystemControl = {
             return "";
         };
         
+        function VerifyNtpServer(Input_Data)
+        {
+            if (Input_Data.length === 0) {
+                alert("Error : Please input value in Server Address.");
+                return false;
+            };  
+            var whitespace = " ";
+            var sDot = ",";            
+            if (Input_Data.indexOf(whitespace) !== -1 || Input_Data.indexOf(sDot) !== -1){
+                lert("Error : Can't input whitespace and ',' in Server Address.");
+                return false;
+            }
+            else
+                return true;
+        };
+        
+        function SetTime(){
+            var mode = 0;
+            var time = '';            
+            var timezone = $('#combotimezone').scombobox('val');
+            var ntpserver = '';
+            var check_val = $( ".radiotime:checked" ).val();            
+            if(check_val === 'sync'){
+                mode =1;
+                ntpserver = $('#combontpserver').scombobox('val');
+                if(!VerifyNtpServer(ntpserver)){                    
+                    return;
+                }
+            }
+            else{               
+                var date = $('#datepicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
+                var hour = $('#combohour').scombobox('val'); 
+                var min = $('#combomin').scombobox('val'); 
+                var second = $('#combosecond').scombobox('val'); 
+                time = date + " " + hour + ":" + min + ":" + second;                
+            }
+            oHtml.blockPage();
+            var request = oRelayAjax.SetTime(mode,timezone,time,ntpserver);
+            CallBackSetTime(request);       
+        };
+                        
+        function CallBackSetTime(request){
+            request.done(function(msg, statustext, jqxhr) {          
+                oHtml.stopPage();    
+                ListTime(true);
+                
+            });            
+            request.fail(function(jqxhr, textStatus) {   
+                oHtml.stopPage();
+                oError.CheckAuth(jqxhr.status,ActionStatus.SetTime);
+                if(jqxhr.status === 400)
+                    ListTime(true);
+            });
+        }
+        
+        function UpdateTime(){
+            var ntpserver = $('#combontpserver').scombobox('val');  
+            if(!VerifyNtpServer(ntpserver)){                
+                return;
+            }
+            oHtml.blockPage();
+            var request = oRelayAjax.UpdateTime(ntpserver);
+            CallBackUpdateTime(request);       
+        };
+                        
+        function CallBackUpdateTime(request){
+            request.done(function(msg, statustext, jqxhr) {          
+                oHtml.stopPage();    
+                ListTime(false);                
+            });            
+            request.fail(function(jqxhr, textStatus) {   
+                oHtml.stopPage();
+                oError.CheckAuth(jqxhr.status,ActionStatus.UpdateNtp);
+                if(jqxhr.status === 400)
+                    ListTime(false);
+            });
+        }
+        
         function ListTime(bChangeDate){
             oHtml.blockPage();    
             var request = oRelayAjax.ListTime();
@@ -166,9 +247,17 @@ var UISystemControl = {
         function CallBackListTime(request,bChangeDate){
             request.done(function(msg, statustext, jqxhr) {          
                 oHtml.stopPage();    
-                Senconds= msg['Time'];                
+                var d=new Date(msg['Time']);
+                Senconds= d.getTime();                
                 if(typeof(GetTimeInterval) !== 'undefined')
                     clearInterval(GetTimeInterval);
+                if(bChangeDate){
+                    $('#combotimezone').scombobox('val', msg['TimeZone']);
+                }
+                if(bChangeDate && msg['Mode'] === 1){
+                    $('#raido_sync').prop('checked',true);
+                    $('#combontpserver').scombobox('val',msg['NTP']);
+                }                    
                 SetTimeStrBySenconds(bChangeDate);
                 GetTimeInterval = setInterval(function(){SetTimeStrBySenconds(false);}, 1000);
             });            
@@ -178,9 +267,8 @@ var UISystemControl = {
             });
         };
         
-        function SetTimeStrBySenconds(bChangeDate) {
-            Senconds += 1;
-            var d1=new Date(Senconds*1000);
+        function SetTimeStrBySenconds(bChangeDate) {            
+            var d1=new Date(Senconds);
 
             var curr_year = d1.getFullYear();
 
@@ -205,10 +293,14 @@ var UISystemControl = {
                 curr_sec = "0" + curr_sec;
 
             var newtimestamp = curr_year + "-" + curr_month + "-" + curr_date + " " + curr_hour + ":" + curr_min + ":" + curr_sec;
+            Senconds += 1000;
             $('#curTime').text(newtimestamp);
             if(bChangeDate)
             {
                 $( "#datepicker" ).datepicker( "setDate", curr_year + "-" + curr_month + "-" + curr_date );
+                $('#combohour').scombobox('val', curr_hour); 
+                $('#combomin').scombobox('val', curr_min); 
+                $('#combosecond').scombobox('val', curr_sec); 
                 TimeModeChangeEnableDisableElement();
             }
         }
@@ -222,7 +314,7 @@ var UISystemControl = {
                     var disabled = false;
                     $('#combohour').scombobox('disabled', disabled); 
                     $('#combomin').scombobox('disabled', disabled); 
-                    $('#combosecond').scombobox('disabled', disabled); 
+                    $('#combosecond').scombobox('disabled', disabled);                    
                     disabled = true;
                     $('#combontpserver').scombobox('disabled', disabled); 
                     break;
@@ -232,7 +324,7 @@ var UISystemControl = {
                     var disabled = true;
                     $('#combohour').scombobox('disabled', disabled);    
                     $('#combomin').scombobox('disabled', disabled); 
-                    $('#combosecond').scombobox('disabled', disabled); 
+                    $('#combosecond').scombobox('disabled', disabled);                     
                     disabled = false;
                     $('#combontpserver').scombobox('disabled', disabled); 
                     break;

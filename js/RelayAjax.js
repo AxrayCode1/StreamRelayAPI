@@ -149,6 +149,19 @@ var Relay = {
             var request = relayobj.CallAjax("/system/time/list", "GET", '', "json");
             return request;  
         };
+        relayobj.SetTime = function(mode,timezone,time,ntpserver){
+            var jsonrequest = '{"TimeZone":"'+ timezone 
+                    +'","Time":"' + time 
+                    + '","Mode":' + mode                    
+                    + ',"NTP":"' + ntpserver + '"}';              
+            var request = relayobj.CallAjax("/system/time/set" , "POST", jsonrequest, "json");
+            return request;
+        };
+        relayobj.UpdateTime = function(ntpserver){
+            var jsonrequest = '{"NTP":"' + ntpserver + '"}';              
+            var request = relayobj.CallAjax("/system/time/ntpupdate" , "POST", jsonrequest, "json");
+            return request;
+        }
         relayobj.CallAjaxNoAsync = function(url, method, data, datatype) {
             var request = $.ajax({
                 type: method,

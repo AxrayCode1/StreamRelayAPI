@@ -101,7 +101,39 @@ function HandleTime($Action,$oProcSystem)
                 default :
                     http_response_code(404);
             }
-            break;        
+            break; 
+        case 'set':
+            switch($_SERVER['REQUEST_METHOD'])
+            {
+                case 'POST':
+                    $Result = $oProcSystem->SetTime(file_get_contents("php://input"));
+                    if(!$Result)
+                        http_response_code(400);
+                    else
+                    {
+                        echo '{}';
+                    }
+                    break;
+                default :
+                    http_response_code(404);
+            }
+            break;
+        case 'ntpupdate':
+            switch($_SERVER['REQUEST_METHOD'])
+            {
+                case 'POST':
+                    $Result = $oProcSystem->UpdateTime(file_get_contents("php://input"));
+                    if(!$Result)
+                        http_response_code(400);
+                    else
+                    {
+                        echo '{}';
+                    }
+                    break;
+                default :
+                    http_response_code(404);
+            }
+            break;    
         default :
             http_response_code(404);
             break;

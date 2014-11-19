@@ -14,7 +14,9 @@ var ActionStatus = {
     SystemUpdate:44,
     SystemCheckUpdate:45,
     ListLog:51,
-    ListTime : 61
+    ListTime : 61,
+    SetTime : 62,
+    UpdateNtp:63
 };
 var ErrorHandle = {
     createNew: function() {                        
@@ -36,8 +38,18 @@ var ErrorHandle = {
                     bAuth = true;
                     break;
                 case 400:
-                    if(InputAction === ActionStatus.SystemChangePWD)
-                        alert('Error : Password is modified faliure.');
+                    switch(InputAction)
+                    {
+                        case ActionStatus.SystemChangePWD:
+                            alert('Error : Password is modified faliure.');
+                            break;
+                        case ActionStatus.SetTime:
+                            alert('Error : Time is setted faliure.');
+                            break;
+                        case ActionStatus.UpdateNtp:
+                            alert('Error : Time is updatted faliure.');
+                            break;
+                    }
                     break;
                 default:
                     sError = oError.AlertErrorByAction(InputAction);
@@ -90,6 +102,9 @@ var ErrorHandle = {
                     break;
                 case ActionStatus.ListTime:
                     sError = "Error : Ajax List Time Error";
+                    break;
+                case ActionStatus.SetTime:
+                    sError = "Error : Ajax Set Time Error";
                     break;
             }
             return sError;

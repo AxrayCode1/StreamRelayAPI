@@ -58,7 +58,7 @@ and open the template in the editor.
         <script type='text/javascript' src="/js/UILogControl.js"></script>
         <script type='text/javascript' src="/js/RelayUI.js"></script>              
         <script type='text/javascript' src="/js/missed.js"></script>        
-        <script type='text/javascript' src="/js/jquery.scombobox.min.js"></script>
+        <script type='text/javascript' src="/js/jquery.scombobox.js"></script>
         <script type='text/javascript' src="/js/jquery.easing.min.js"></script>
         <link type='text/css' href="/css/jquery.scombobox.css" rel="stylesheet" />
         <link type='text/css' href="/css/index.css" rel="stylesheet">
@@ -140,11 +140,15 @@ and open the template in the editor.
         </div>
         
         <div id="div_ip_control">
-            <div id="div_ip_field">            
+            <div id="div_ip_field" style="width: 550px">            
             </div>
-            <div style="margin-top: 10px">
-                <a id="btn_ip_confirm" href="#" class="btn-light">Confirm</a>
-                <a style="margin-left: 10px" id="btn_ip_cancel" href="#" class="btn-light">Cancel</a>
+            <div style="margin-top: 10px;width: 550px">
+                <div style="position: relative">
+                    <div style="position: absolute;right: 0px">
+                        <a id="btn_ip_confirm" href="#" class="btn-light">Confirm</a>
+                        <a style="margin-left: 10px" id="btn_ip_cancel" href="#" class="btn-light">Cancel</a>
+                    </div>
+                </div>
             </div>
 <!--            <div style="margin-top: 10px;text-align: right;margin-right: 10px">
                             Copyright © 2014 AcroRed Technologies, Inc. All rights reserved.
@@ -197,92 +201,92 @@ and open the template in the editor.
                                 <div style="position: relative">
                                     <label class="LabelHead" style="position: absolute;top:20px;left: 10px">Time Zone :</label>
                                     <select id="combotimezone" >
-                                        <option value="1">(GMT-11:00) Samnona Standard Time; Midway Is.</option>
-                                        <option value="2">(GMT-10:00) Hawaii Standard Time</option>
-                                        <option value="3">(GMT-09:00) Alaska Standard Time</option>
-                                        <option value="4">(GMT-08:00) Pacific Time(US & Canada); Tijuana</option>
-                                        <option value="5">(GMT-07:00) Arizona</option>
-                                        <option value="6">(GMT-07:00) Chihuahua, Mazatlan</option>
-                                        <option value="7">(GMT-07:00) Mountain Time (US & Canada)</option>
-                                        <option value="8">(GMT-06:00) Central America Standard Time; Guate</option>
-                                        <option value="9">(GMT-06:00) Central Time (US & Canada)</option>
-                                        <option value="10">(GMT-06:00) Mexico City; Tegucigalpa</option>
-                                        <option value="11">(GMT-06:00) Saskatchewan</option>
-                                        <option value="12">(GMT-05:00) Bogota, Lima, Quito, Rio Branco</option>
-                                        <option value="13">(GMT-05:00) Eastern Time (US & Canada)</option>
-                                        <option value="14">(GMT-05:00) Indiana (East)</option>
-                                        <option value="15">(GMT-04:30) Caracas</option>
-                                        <option value="16">(GMT-04:00) Atlantic Time (Canada)</option>
-                                        <option value="17">(GMT-04:00) La Paz</option>
-                                        <option value="18">(GMT-04:00) Manaus</option>
-                                        <option value="19">(GMT-04:00) Santiago</option>
-                                        <option value="20">(GMT-03:30) Newfoundland</option>
-                                        <option value="21">(GMT-03:00) Brasilia</option>
-                                        <option value="22">(GMT-03:00) Buenos Aires, Georgetown</option>
-                                        <option value="23">(GMT-03:00) Greenland Standard Time</option>
-                                        <option value="24">(GMT-03:00) Montevideo</option>
-                                        <option value="25">(GMT-02:00) Mid-Atlantic Standard Time</option>
-                                        <option value="26">(GMT-01:00) Azores Standard Time</option>
-                                        <option value="27">(GMT-01:00) Cape Verde Is.</option>
-                                        <option value="28">(GMT) Casablanca</option>
-                                        <option value="29">(GMT) Dublin, Edinburgh, Lisbon, London</option>
-                                        <option value="30">(GMT) Monrovia, Reykjavik</option>
-                                        <option value="31">(GMT+01:00) Amsterdam, Berlin, Rome, Stockholm, Vienna</option>
-                                        <option value="32">(GMT+01:00) Belgrade, Bratislava, Budapest, Prague</option>
-                                        <option value="33">(GMT+01:00) Brussels, Copenhagen, Madrid, Paris</option>
-                                        <option value="34">(GMT+01:00) Sarajevo, Skopie, Warsaw, Zagreb</option>
-                                        <option value="35">(GMT+01:00) Western Africa Time</option>
-                                        <option value="36">(GMT+01:00) Windhoek</option>
-                                        <option value="37">(GMT+02:00) Amman</option>
-                                        <option value="38">(GMT+02:00) Athens, Bucharest, Istanbul</option>
-                                        <option value="39">(GMT+02:00) Beirut</option>
-                                        <option value="40">(GMT+02:00) Egypt Standard Time</option>
-                                        <option value="41">(GMT+02:00) Harare, Pretoria</option>
-                                        <option value="42">(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius</option>
-                                        <option value="43">(GMT+02:00) Israel Standard Time</option>
-                                        <option value="44">(GMT+02:00) Central Africa Time</option>
-                                        <option value="45">(GMT+02:00) Eastern Europe Standard Time</option>
-                                        <option value="46">(GMT+03:00) Minsk</option>
-                                        <option value="47">(GMT+03:00) Baghdad</option>
-                                        <option value="48">(GMT+03:00) Kuwait</option>
-                                        <option value="49">(GMT+03:00) Nairobi</option>
-                                        <option value="50">(GMT+03:00) Moscow, St. Petersburg, Kazan, Volgograd</option>
-                                        <option value="51">(GMT+03:30) Iran Standard Time</option>
-                                        <option value="52">(GMT+04:00) Abu Dhabi, Muscat</option>
-                                        <option value="53">(GMT+04:00) Baku</option>
-                                        <option value="54">(GMT+04:00) Tbilisi</option>
-                                        <option value="55">(GMT+04:00) Yerevan</option>
-                                        <option value="56">(GMT+04:30) Afghanistan Standard Time</option>
-                                        <option value="57">(GMT+05:00) Karachi, Islamabad, Tashkent</option>
-                                        <option value="58">(GMT+05:00) Ekaterinburg</option>
-                                        <option value="59">(GMT+05:30) Bombay, Calcutta, Madras, New Delhi, Colombo</option>
-                                        <option value="60">(GMT+05:45) Kathmandu</option>
-                                        <option value="61">(GMT+06:00) Almaty, Astana</option>
-                                        <option value="62">(GMT+06:00) Dhaka</option>
-                                        <option value="63">(GMT+06:00) Novosibirsk</option>
-                                        <option value="64">(GMT+06:30) Yangon(Rangoon)</option>
-                                        <option value="65">(GMT+07:00) Bangkok, Hanoi, Jakarta</option>
-                                        <option value="66">(GMT+07:00) Krasnoyarsk</option>
-                                        <option value="67">(GMT+08:00) Taipei</option>
-                                        <option value="68">(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi</option>
-                                        <option value="69">(GMT+08:00) Ulaanbaatar</option>
-                                        <option value="70">(GMT+08:00) Kuala Lumpur, Singapore</option>
-                                        <option value="71">(GMT+08:00) Perth</option>
-                                        <option value="72">(GMT+08:00) Irkutsk</option>
-                                        <option value="73">(GMT+09:00) Tokyo, Osaka, Sapporo</option>
-                                        <option value="74">(GMT+09:00) Seoul</option>
-                                        <option value="75">(GMT+09:00) Yakutsk</option>
-                                        <option value="76">(GMT+09:30) Adelaide</option>
-                                        <option value="77">(GMT+09:30) Darwin</option>
-                                        <option value="78">(GMT+10:00) Brisbane</option>
-                                        <option value="79">(GMT+10:00) Melbourne, Sydney, Canberra</option>
-                                        <option value="80">(GMT+10:00) Guam, Port Moresby</option>
-                                        <option value="81">(GMT+10:00) Tasmania Standard Time</option>
-                                        <option value="82">(GMT+10:00) Vladivostok</option>
-                                        <option value="83">(GMT+10:00) Magadan, Solomon Is., New Caledonia</option>
-                                        <option value="84">(GMT+11:00) New Caledonia</option>
-                                        <option value="85">(GMT+12:00) Auckland, Wellington</option>
-                                        <option value="86">(GMT+12:00) Fiji, Kamchatka, Marshall Is.</option>
+                                        <option value="Pacific/Midway">(GMT-11:00) Samnona Standard Time; Midway Is.</option>
+                                        <option value="Pacific/Honolulu">(GMT-10:00) Hawaii Standard Time</option>
+                                        <option value="US/Alaska">(GMT-09:00) Alaska Standard Time</option>
+                                        <option value="US/Pacific">(GMT-08:00) Pacific Time(US & Canada); Tijuana</option>
+                                        <option value="US/Arizona">(GMT-07:00) Arizona</option>
+                                        <option value="US/Mountain">(GMT-07:00) Chihuahua, Mazatlan</option>
+                                        <option value="America/Chihuahua">(GMT-07:00) Mountain Time (US & Canada)</option>
+                                        <option value="America/Guatemala">(GMT-06:00) Central America Standard Time; Guate</option>
+                                        <option value="US/Central">(GMT-06:00) Central Time (US & Canada)</option>
+                                        <option value="America/Mexico_City">(GMT-06:00) Mexico City; Tegucigalpa</option>
+                                        <option value="Canada/Saskatchewan">(GMT-06:00) Saskatchewan</option>
+                                        <option value="America/Bogota">(GMT-05:00) Bogota, Lima, Quito, Rio Branco</option>
+                                        <option value="US/Eastern">(GMT-05:00) Eastern Time (US & Canada)</option>
+                                        <option value="US/East-Indiana">(GMT-05:00) Indiana (East)</option>
+                                        <option value="America/Caracas">(GMT-04:30) Caracas</option>
+                                        <option value="Canada/Atlantic">(GMT-04:00) Atlantic Time (Canada)</option>
+                                        <option value="America/La_Paz">(GMT-04:00) La Paz</option>
+                                        <option value="America/Manaus">(GMT-04:00) Manaus</option>                                        
+                                        <option value="Canada/Newfoundland">(GMT-03:30) Newfoundland</option>
+                                        <option value="America/Santiago">(GMT-03:00) Santiago</option>
+                                        <option value="America/Fortaleza">(GMT-03:00) Brasilia</option>
+                                        <option value="America/Buenos_Aires">(GMT-03:00) Buenos Aires, Georgetown</option>
+                                        <option value="America/Godthab">(GMT-03:00) Greenland Standard Time</option>
+                                        <option value="America/Montevideo">(GMT-02:00) Montevideo</option>
+                                        <option value="Atlantic/South_Georgia">(GMT-02:00) Mid-Atlantic Standard Time</option>
+                                        <option value="Atlantic/Azores">(GMT-01:00) Azores Standard Time</option>
+                                        <option value="Atlantic/Cape_Verde">(GMT-01:00) Cape Verde Is.</option>
+                                        <option value="Africa/Casablanca">(GMT) Casablanca</option>
+                                        <option value="Europe/London">(GMT) Dublin, Edinburgh, Lisbon, London</option>
+                                        <option value="Africa/Monrovia">(GMT) Monrovia, Reykjavik</option>
+                                        <option value="Europe/Amsterdam">(GMT+01:00) Amsterdam, Berlin, Rome, Stockholm, Vienna</option>
+                                        <option value="Europe/Belgrade">(GMT+01:00) Belgrade, Bratislava, Budapest, Prague</option>
+                                        <option value="Europe/Brussels">(GMT+01:00) Brussels, Copenhagen, Madrid, Paris</option>
+                                        <option value="Europe/Sarajevo">(GMT+01:00) Sarajevo, Skopie, Warsaw, Zagreb</option>
+                                        <option value="Africa/Kinshasa">(GMT+01:00) Western Africa Time</option>
+                                        <option value="Africa/Windhoek">(GMT+02:00) Windhoek</option>
+                                        <option value="Asia/Amman">(GMT+02:00) Amman</option>
+                                        <option value="Europe/Athens">(GMT+02:00) Athens, Bucharest, Istanbul</option>
+                                        <option value="Asia/Beirut">(GMT+02:00) Beirut</option>
+                                        <option value="Egypt">(GMT+02:00) Egypt Standard Time</option>
+                                        <option value="Africa/Harare">(GMT+02:00) Harare, Pretoria</option>
+                                        <option value="Europe/Helsinki">(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius</option>
+                                        <option value="Israel">(GMT+02:00) Israel Standard Time</option>
+                                        <option value="Africa/Gaborone">(GMT+02:00) Central Africa Time</option>
+                                        <option value="Europe/Sofia">(GMT+02:00) Eastern Europe Standard Time</option>
+                                        <option value="Europe/Minsk">(GMT+03:00) Minsk</option>
+                                        <option value="Asia/Baghdad">(GMT+03:00) Baghdad</option>
+                                        <option value="Asia/Kuwait">(GMT+03:00) Kuwait</option>
+                                        <option value="Africa/Nairobi">(GMT+03:00) Nairobi</option>
+                                        <option value="Europe/Moscow">(GMT+03:00) Moscow, St. Petersburg, Kazan, Volgograd</option>
+                                        <option value="Iran">(GMT+03:30) Iran Standard Time</option>
+                                        <option value="Asia/Muscat">(GMT+04:00) Abu Dhabi, Muscat</option>
+                                        <option value="Asia/Baku">(GMT+04:00) Baku</option>
+                                        <option value="Asia/Tbilisi">(GMT+04:00) Tbilisi</option>
+                                        <option value="Asia/Yerevan">(GMT+04:00) Yerevan</option>
+                                        <option value="Asia/Kabul">(GMT+04:30) Afghanistan Standard Time</option>
+                                        <option value="Asia/Karachi">(GMT+05:00) Karachi, Islamabad, Tashkent</option>
+                                        <option value="Asia/Yekaterinburg">(GMT+05:00) Ekaterinburg</option>
+                                        <option value="Asia/Calcutta">(GMT+05:30) Bombay, Calcutta, Madras, New Delhi, Colombo</option>
+                                        <option value="Asia/Kathmandu">(GMT+05:45) Kathmandu</option>
+                                        <option value="Asia/Almaty">(GMT+06:00) Almaty, Astana</option>
+                                        <option value="Asia/Dhaka">(GMT+06:00) Dhaka</option>
+                                        <option value="Asia/Novosibirsk">(GMT+06:00) Novosibirsk</option>
+                                        <option value="Asia/Rangoon">(GMT+06:30) Yangon(Rangoon)</option>
+                                        <option value="Asia/Bangkok">(GMT+07:00) Bangkok, Hanoi, Jakarta</option>
+                                        <option value="Asia/Krasnoyarsk">(GMT+07:00) Krasnoyarsk</option>
+                                        <option value="Asia/Taipei">(GMT+08:00) Taipei</option>
+                                        <option value="Asia/Hong_Kong">(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi</option>
+                                        <option value="Asia/Ulaanbaatar">(GMT+08:00) Ulaanbaatar</option>
+                                        <option value="Asia/Kuala_Lumpur">(GMT+08:00) Kuala Lumpur, Singapore</option>
+                                        <option value="Australia/Perth">(GMT+08:00) Perth</option>
+                                        <option value="Asia/Irkutsk">(GMT+08:00) Irkutsk</option>
+                                        <option value="Asia/Tokyo">(GMT+09:00) Tokyo, Osaka, Sapporo</option>
+                                        <option value="Asia/Seoul">(GMT+09:00) Seoul</option>
+                                        <option value="Asia/Yakutsk">(GMT+09:00) Yakutsk</option>                                        
+                                        <option value="Australia/Darwin">(GMT+09:30) Darwin</option>
+                                        <option value="Australia/Brisbane">(GMT+10:00) Brisbane</option>                                        
+                                        <option value="Pacific/Guam">(GMT+10:00) Guam, Port Moresby</option>                                        
+                                        <option value="Asia/Vladivostok">(GMT+10:00) Vladivostok</option>
+                                        <option value="Asia/Magadan">(GMT+10:00) Magadan, Solomon Is., New Caledonia</option>
+                                        <option value="Australia/Adelaide">(GMT+10:30) Adelaide</option>
+                                        <option value="Australia/Tasmania">(GMT+11:00) Tasmania Standard Time</option>
+                                        <option value="Australia/Melbourne">(GMT+11:00) Melbourne, Sydney, Canberra</option>
+                                        <option value="Pacific/Noumea">(GMT+11:00) New Caledonia</option>
+                                        <option value="Pacific/Auckland">(GMT+12:00) Auckland, Wellington</option>
+                                        <option value="Pacific/Fiji">(GMT+12:00) Fiji, Kamchatka, Marshall Is.</option>
                                     </select>        
                                 </div>
                             </div>
@@ -293,7 +297,7 @@ and open the template in the editor.
                             </div>
                             <div style="position: absolute;top:200px"> 
                                 <div style="position: relative">
-                                    <input type="radio" name="time" class="LabelHead radiotime" value="manually" style="position: absolute;top:8px;left: 10px" checked>
+                                    <input id="raido_manually" type="radio" name="time" class="LabelHead radiotime" value="manually" style="position: absolute;top:8px;left: 10px" checked>
                                     <label class="LabelHead" style="position: absolute;top:10px;left: 35px">Manually</label>
                                     <label class="LabelHead" style="position: absolute;top:50px;left: 35px">Date :</label> 
                                     <input type="text" id="datepicker" style="position: absolute;
@@ -303,16 +307,16 @@ and open the template in the editor.
                                     left: 215px;"> 
                                     <label class="LabelHead" style="position: absolute;top:90px;left: 35px">Time :</label> 
                                     <select id="combohour" >
-                                        <option value="0">00</option>
-                                        <option value="1">01</option>
-                                        <option value="2">02</option>
-                                        <option value="3">03</option>
-                                        <option value="4">04</option>
-                                        <option value="5">05</option>
-                                        <option value="6">06</option>
-                                        <option value="7">07</option>
-                                        <option value="8">08</option>
-                                        <option value="9">09</option>
+                                        <option value="00">00</option>
+                                        <option value="01">01</option>
+                                        <option value="02">02</option>
+                                        <option value="03">03</option>
+                                        <option value="04">04</option>
+                                        <option value="05">05</option>
+                                        <option value="06">06</option>
+                                        <option value="07">07</option>
+                                        <option value="08">08</option>
+                                        <option value="09">09</option>
                                         <option value="10">10</option>
                                         <option value="11">11</option>
                                         <option value="12">12</option>
@@ -330,16 +334,16 @@ and open the template in the editor.
                                     </select>
                                     <label id="lablehourmin">:</label>
                                     <select id="combomin" >
-                                        <option value="0">00</option>
-                                        <option value="1">01</option>
-                                        <option value="2">02</option>
-                                        <option value="3">03</option>
-                                        <option value="4">04</option>
-                                        <option value="5">05</option>
-                                        <option value="6">06</option>
-                                        <option value="7">07</option>
-                                        <option value="8">08</option>
-                                        <option value="9">09</option>
+                                        <option value="00">00</option>
+                                        <option value="01">01</option>
+                                        <option value="02">02</option>
+                                        <option value="03">03</option>
+                                        <option value="04">04</option>
+                                        <option value="05">05</option>
+                                        <option value="06">06</option>
+                                        <option value="07">07</option>
+                                        <option value="08">08</option>
+                                        <option value="09">09</option>
                                         <option value="10">10</option>
                                         <option value="11">11</option>
                                         <option value="12">12</option>
@@ -393,16 +397,16 @@ and open the template in the editor.
                                     </select>
                                     <label id="lableminsecond">:</label>
                                     <select id="combosecond" >
-                                        <option value="0">00</option>
-                                        <option value="1">01</option>
-                                        <option value="2">02</option>
-                                        <option value="3">03</option>
-                                        <option value="4">04</option>
-                                        <option value="5">05</option>
-                                        <option value="6">06</option>
-                                        <option value="7">07</option>
-                                        <option value="8">08</option>
-                                        <option value="9">09</option>
+                                        <option value="00">00</option>
+                                        <option value="01">01</option>
+                                        <option value="02">02</option>
+                                        <option value="03">03</option>
+                                        <option value="04">04</option>
+                                        <option value="05">05</option>
+                                        <option value="06">06</option>
+                                        <option value="07">07</option>
+                                        <option value="08">08</option>
+                                        <option value="09">09</option>
                                         <option value="10">10</option>
                                         <option value="11">11</option>
                                         <option value="12">12</option>
@@ -454,7 +458,7 @@ and open the template in the editor.
                                         <option value="58">58</option>
                                         <option value="59">59</option>
                                     </select>
-                                    <input type="radio" name="time" class="LabelHead radiotime" value="sync" style="position: absolute;top:128px;left: 10px" >
+                                    <input id="raido_sync" type="radio" name="time" class="LabelHead radiotime" value="sync" style="position: absolute;top:128px;left: 10px" >
                                     <label class="LabelHead" style="position: absolute;top:130px;left: 35px;width: 300px">Synchronize with NTP Server</label>                                                               
                                     <label class="LabelHead" style="position: absolute;top:170px;left: 35px">Server Address :</label> 
                                     <select id="combontpserver">
@@ -467,7 +471,7 @@ and open the template in the editor.
                             
                             <div style="position: absolute;right: 0px;bottom: 0px">                                                              
                                 <a id='btn_set_time' href="#" class="btn-light">Confirm</a>
-                                <a id='btn_reset_time' href="#" class="btn-light">Reset</a>                                    
+                                <a id='btn_reset_time' href="#" class="btn-light">Cancel</a>                                    
                             </div>
                         </div>
                     </div>                    

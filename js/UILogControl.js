@@ -11,6 +11,10 @@ var UILogControl = {
                 oHtml.ShowOption(DivSystemLog);
                 oUILogContorl.ListLog();
             }); 
+            $('#btn_log_refresh').click(function(event){
+                event.preventDefault(); 
+                oUILogContorl.ListLog();
+            });
             $('.logth').click(function(){
                var th = $(this);
                var eSortType = SortType.String;

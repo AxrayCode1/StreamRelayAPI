@@ -469,9 +469,15 @@
         var $select = $t.children('select'), $valueInput = $t.children(cp + cvalue), $display = $t.children(cp + cdisplay);
         var $selected = $select.children('[value="' + value + '"]');
         if ($selected.length == 0) { // no such value
-            $select.children().prop('selected', false);
-            $valueInput.val(''); // TODO make combobox return null instead of empty string (standard select behavior)
-            $display.val('');
+            if($t.data(pname).customEdit){
+                $valueInput.val(value); // TODO make combobox return null instead of empty string (standard select behavior)
+                $display.val(value);
+            }   
+            else{
+                $select.children().prop('selected', false);
+                $valueInput.val(''); // TODO make combobox return null instead of empty string (standard select behavior)
+                $display.val('');
+            }
             return;
         }
         $select.val(value).change();
@@ -1106,7 +1112,11 @@
 
     $.fn[pname].defaults = {
         /**
-         * Whether set Select Text Box disabled.
+         * Whether set Select Text Box customEdit.
+         */
+        customEdit : false,
+        /**
+         * Whether set Select Text Box EditAble.
          */
         editAble : true,
         /**
