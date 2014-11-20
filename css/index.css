@@ -470,15 +470,15 @@ div.ui-tooltip {
     width: 355px;
     height: 30px;
     top: 10px;
-    left: 210px;
+    left: 220px;
 }
 
 #combontpserver{
     position: absolute;
     width: 355px;
     height: 30px;
-    top: 160px;
-    left: 210px;
+    top: 170px;
+    left: 220px;
 }
 
 #combohour{
@@ -486,7 +486,7 @@ div.ui-tooltip {
     width: 100px;
     height: 30px;
     top:80px;
-    left: 210px
+    left: 220px
 }
 
 #lablehourmin{
@@ -495,7 +495,7 @@ div.ui-tooltip {
     height: 30px;
     top:85px;
     text-align: center;
-    left: 327px
+    left: 337px
 }
 
 #combomin{
@@ -503,7 +503,7 @@ div.ui-tooltip {
     width: 100px;
     height: 30px;
     top:80px;
-    left: 338px
+    left: 348px
 }
 
 #lableminsecond{
@@ -512,7 +512,7 @@ div.ui-tooltip {
     height: 30px;
     top:85px;
     text-align: center;
-    left: 453px
+    left: 463px
 }
 
 #combosecond{
@@ -520,5 +520,13 @@ div.ui-tooltip {
     width: 100px;
     height: 30px;
     top:80px;
-    left: 465px
+    left: 475px
+}
+
+.TimeShift{
+    left: 20px;
+}
+
+.TimeSettingShift{
+    left: 50px;
 }

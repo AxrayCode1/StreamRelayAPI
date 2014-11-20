@@ -109,7 +109,7 @@ var CreateHtml = {
             append_str += '<td style="text-align:center">' + element['channelnumber'] + '</td>';
             append_str += '<td style="text-align:center">' + element['name'] + '</td>';
             append_str += '<td><div class="wrapword">' + sourceurl;
-            append_str += '<img src="/img/Info.png" style="margin-left:5px" height="20" width="20" align="center" class="DetailSource" id="' + element['id'] + '">';
+            append_str += '<img src="/img/Info.png" style="margin-left:5px;cursor:pointer" height="20" width="20" align="center" class="DetailSource" id="' + element['id'] + '">';
             append_str += '<div></td>';
             append_str += '<td style="text-align:center">' + element['source'].length + '</td>';  
             append_str += '<td>' + element['fulldest'] + '</td>';
@@ -129,7 +129,7 @@ var CreateHtml = {
             var sourceurl = atmpSourceUrl.length > 0 ? atmpSourceUrl[0]['url'] : ''; 
             var append_str = '';
             append_str += '<div class="wrapword">' + sourceurl;
-            append_str += '<img src="/img/Info.png" style="margin-left:5px" height="20" width="20" align="center" class="DetailSource" id="' + ChannelID + '">';
+            append_str += '<img src="/img/Info.png" style="margin-left:5px;cursor:pointer" height="20" width="20" align="center" class="DetailSource" id="' + ChannelID + '">';
             append_str += '</div>';
             return append_str;
         };        

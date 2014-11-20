@@ -12,6 +12,12 @@ var UISystemControl = {
             InitDatePicker();
             InitTimeCombo();
             $('#btnupdate').button();
+            $('.iCheckRadio').iCheck({  
+                radioClass: 'iradio_flat-blue',    
+            });
+            $('.iCheckRadio').on('ifChecked', function(event){
+                TimeModeChangeEnableDisableElement($(this).val());
+            });
             $('#ss').click(function(event) {
                 event.preventDefault();
                 ClearPassword();                
@@ -40,9 +46,9 @@ var UISystemControl = {
                 event.preventDefault();
                 ListTime(true);
             });
-            $(".radiotime").click(function(event){                
-                TimeModeChangeEnableDisableElement();
-            });
+//            $(".radiotime").click(function(event){                
+//                TimeModeChangeEnableDisableElement();
+//            });
         };                
         
         function InitTimeCombo(){
@@ -181,7 +187,7 @@ var UISystemControl = {
             var time = '';            
             var timezone = $('#combotimezone').scombobox('val');
             var ntpserver = '';
-            var check_val = $( ".radiotime:checked" ).val();            
+            var check_val = $( ".iCheckRadio:checked" ).val();            
             if(check_val === 'sync'){
                 mode =1;
                 ntpserver = $('#combontpserver').scombobox('val');
@@ -254,9 +260,13 @@ var UISystemControl = {
                 if(bChangeDate){
                     $('#combotimezone').scombobox('val', msg['TimeZone']);
                 }
-                if(bChangeDate && msg['Mode'] === 1){
-                    $('#raido_sync').prop('checked',true);
-                    $('#combontpserver').scombobox('val',msg['NTP']);
+                if(bChangeDate){
+                    if(msg['Mode'] === 1){
+                        $('#radio-sync').iCheck('check');                    
+                        $('#combontpserver').scombobox('val',msg['NTP']);
+                    }
+                    else
+                        $('#radio-manually').iCheck('check');
                 }                    
                 SetTimeStrBySenconds(bChangeDate);
                 GetTimeInterval = setInterval(function(){SetTimeStrBySenconds(false);}, 1000);
@@ -305,8 +315,8 @@ var UISystemControl = {
             }
         }
         
-        function TimeModeChangeEnableDisableElement(){           
-            var check_val = $( ".radiotime:checked" ).val();            
+        function TimeModeChangeEnableDisableElement(check_val){           
+//            var check_val = $( ".radiotime:checked" ).val();            
             switch(check_val){
                 case 'manually':
                     $( "#btnupdate" ).button( "option", "disabled", true );

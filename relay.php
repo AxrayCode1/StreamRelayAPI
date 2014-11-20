@@ -60,12 +60,14 @@ and open the template in the editor.
         <script type='text/javascript' src="/js/missed.js"></script>        
         <script type='text/javascript' src="/js/jquery.scombobox.js"></script>
         <script type='text/javascript' src="/js/jquery.easing.min.js"></script>
+        <link type='text/css' href='/css/flat/blue.css' rel='stylesheet'/>
+        <script type='text/javascript' src="/js/icheck.js"></script>
         <link type='text/css' href="/css/jquery.scombobox.css" rel="stylesheet" />
         <link type='text/css' href="/css/index.css" rel="stylesheet">
         <link type='text/css' href='/css/jquery-ui.min.css' rel='stylesheet'/>
         <link type='text/css' href='/css/jquery-ui.structure.min.css' rel='stylesheet'/>
         <link type='text/css' href='/css/jquery-ui.theme.min.css' rel='stylesheet'/>
-        <link type='text/css' href='/css/jquery.dropdown.css' rel='stylesheet'/>
+        <link type='text/css' href='/css/jquery.dropdown.css' rel='stylesheet'/>        
     </head>
     <body>        
         <div id="div_relay_header">                
@@ -115,11 +117,11 @@ and open the template in the editor.
             </div>-->            
                         
             <div style="position: relative;">
-                <a style="margin-left: 5px" href="#" class="btn-light" data-dropdown="#dropdown-Add">Create&nbsp;&darr;</a>
+                <a style="margin-left: 5px;font-size: smaller;" href="#" class="btn-jquery" data-dropdown="#dropdown-Add">Create&nbsp;&darr;</a>
                 <div style="position: absolute;top:0px;right: 10px">
-                    <a id="btn_stop_all" href="#" class="btn-light">Stop All</a>
-                    <a id="btn_resume_all" href="#" class="btn-light">Resume All</a>
-                    <a  id="btn_refresh" href="#" class="btn-light">Refresh</a>
+                    <a id="btn_stop_all" href="#" class="btn-jquery" style="font-size: smaller;">Stop All</a>
+                    <a id="btn_resume_all" href="#" class="btn-jquery" style="font-size: smaller;">Resume All</a>
+                    <a  id="btn_refresh" href="#" class="btn-jquery" style="font-size: smaller;">Refresh</a>
                 </div>
             </div>
             <div id="div_relay_table" style="position: absolute;top: 40px;width: 100%">
@@ -145,8 +147,8 @@ and open the template in the editor.
             <div style="margin-top: 10px;width: 550px">
                 <div style="position: relative">
                     <div style="position: absolute;right: 0px">
-                        <a id="btn_ip_confirm" href="#" class="btn-light">Confirm</a>
-                        <a style="margin-left: 10px" id="btn_ip_cancel" href="#" class="btn-light">Cancel</a>
+                        <a id="btn_ip_confirm" href="#" class="btn-jquery" style="font-size: smaller;">Confirm</a>
+                        <a style="font-size: smaller;margin-left: 10px" id="btn_ip_cancel" href="#" class="btn-jquery">Cancel</a>
                     </div>
                 </div>
             </div>
@@ -177,20 +179,20 @@ and open the template in the editor.
                             <br>
                             <br>
                             <div style="position: absolute;right: 0px">
-                                <a id="btn_chg_pwd" href="#" class="btn-light">Confirm</a>
-                                <a id="btn_clear_pwd" href="#" class="btn-light">Clear</a>
+                                <a id="btn_chg_pwd" href="#" class="btn-jquery" style="font-size: smaller">Confirm</a>
+                                <a id="btn_clear_pwd" href="#" class="btn-jquery" style="font-size: smaller">Clear</a>
                             </div>
                         </div>
                     </div>
                     <div id="tabs1-time">
-                        <div style="margin-top:20px;width: 600px;height: 480px;position: relative;">
+                        <div class="div_fieldcontent" style="margin-top:20px;width: 600px;height: 480px;position: relative;">
                             <div style="position: absolute;border-bottom: dashed 1px rgba(0, 0, 0, .2);
                                     -webkit-background-clip: padding-box; 
                                     background-clip: padding-box;width: 600px">
                                 <label style="padding: 10px;color: blue;font-size: large">Current Time</label>    
                             </div>
-                            <div style="position: absolute;top:10px">                                
-                              <label id="curTime" class="LabelHead" style="padding: 20px 0px 0px 10px;"></label>
+                            <div style="position: relative;top:10px" >                                
+                              <label id="curTime" class="LabelHead TimeShift" style="position: absolute;top:20px"></label>
                             </div>
                             <div style="position: absolute;border-bottom: dashed 1px rgba(0, 0, 0, .2);
                                     -webkit-background-clip: padding-box; 
@@ -199,7 +201,7 @@ and open the template in the editor.
                             </div>
                             <div style="position: absolute;top:100px">        
                                 <div style="position: relative">
-                                    <label class="LabelHead" style="position: absolute;top:20px;left: 10px">Time Zone :</label>
+                                    <label class="LabelHead TimeShift" style="position: absolute;top:20px;" >Time Zone :</label>
                                     <select id="combotimezone" >
                                         <option value="Pacific/Midway">(GMT-11:00) Samnona Standard Time; Midway Is.</option>
                                         <option value="Pacific/Honolulu">(GMT-10:00) Hawaii Standard Time</option>
@@ -297,15 +299,19 @@ and open the template in the editor.
                             </div>
                             <div style="position: absolute;top:200px"> 
                                 <div style="position: relative">
-                                    <input id="raido_manually" type="radio" name="time" class="LabelHead radiotime" value="manually" style="position: absolute;top:8px;left: 10px" checked>
-                                    <label class="LabelHead" style="position: absolute;top:10px;left: 35px">Manually</label>
-                                    <label class="LabelHead" style="position: absolute;top:50px;left: 35px">Date :</label> 
+                                    <div style="position: relative;top:8px;left:20px">
+                                        <input type="radio" id="radio-manually" name="radio-time"  class="iCheckRadio" value="manually" >
+                                        <label class="LabelHead" style="position: absolute;top:2px;left: 30px;cursor:pointer" for="radio-manually">Manually</label>
+                                    </div>
+<!--                                    <input id="raido_manually" type="radio" name="time" class="LabelHead radiotime" value="manually" style="position: absolute;top:8px;left: 10px" checked>
+                                    <label class="LabelHead" style="position: absolute;top:10px;left: 35px">Manually</label>-->
+                                    <label class="LabelHead TimeSettingShift" style="position: absolute;top:50px;">Date :</label> 
                                     <input type="text" id="datepicker" style="position: absolute;
                                     width: 350px;
                                     height: 30px;
                                     top: 40px;
-                                    left: 215px;"> 
-                                    <label class="LabelHead" style="position: absolute;top:90px;left: 35px">Time :</label> 
+                                    left: 225px;"> 
+                                    <label class="LabelHead TimeSettingShift" style="position: absolute;top:90px;">Time :</label> 
                                     <select id="combohour" >
                                         <option value="00">00</option>
                                         <option value="01">01</option>
@@ -458,20 +464,24 @@ and open the template in the editor.
                                         <option value="58">58</option>
                                         <option value="59">59</option>
                                     </select>
-                                    <input id="raido_sync" type="radio" name="time" class="LabelHead radiotime" value="sync" style="position: absolute;top:128px;left: 10px" >
-                                    <label class="LabelHead" style="position: absolute;top:130px;left: 35px;width: 300px">Synchronize with NTP Server</label>                                                               
-                                    <label class="LabelHead" style="position: absolute;top:170px;left: 35px">Server Address :</label> 
+                                    <div style="position: relative;top:128px;left:20px">
+                                        <input type="radio" id="radio-sync" name="radio-time"  class="iCheckRadio" value="sync">
+                                        <label class="LabelHead" style="position: absolute;top:2px;left: 30px;cursor:pointer" for="radio-sync">Auto Sync.</label>
+                                    </div>
+<!--                                    <input id="raido_sync" type="radio" name="time" class="LabelHead radiotime" value="sync" style="position: absolute;top:128px;left: 10px" >
+                                    <label class="LabelHead" style="position: absolute;top:130px;left: 35px;width: 300px">Synchronize with NTP Server</label>                                                               -->
+                                    <label class="LabelHead TimeSettingShift" style="position: absolute;top:180px">Server Address :</label> 
                                     <select id="combontpserver">
                                         <option value="pool.ntp.org">pool.ntp.org</option>
                                         <option value="time.nist.gov">time.nist.gov</option>
                                     </select>
-                                    <a href="#" id="btnupdate" style="position: absolute;top:200px;left: 35px;width: 120px;font-size: smaller">Update Now</a>                                    
+                                    <a href="#" id="btnupdate" class="TimeSettingShift" style="position: absolute;top:210px;width: 120px;font-size: smaller">Update Now</a>                                    
                                 </div>                                
                             </div>                                                                     
                             
                             <div style="position: absolute;right: 0px;bottom: 0px">                                                              
-                                <a id='btn_set_time' href="#" class="btn-light">Confirm</a>
-                                <a id='btn_reset_time' href="#" class="btn-light">Cancel</a>                                    
+                                <a id='btn_set_time' href="#" class="btn-jquery" style="font-size: smaller">Confirm</a>
+                                <a id='btn_reset_time' href="#" class="btn-jquery" style="font-size: smaller">Cancel</a>                                    
                             </div>
                         </div>
                     </div>                    
@@ -494,8 +504,8 @@ and open the template in the editor.
                     <label id="txt_new_firmware" style="color:blue"></label>                            
                     <br>            
                     <br>
-                    <a id="btn_check_firmware" href="#" class="btn-light" >Check New Firmware</a>
-                    <a id="btn_update_firmware" href="#" class="btn-light">Update</a>
+                    <a id="btn_check_firmware" href="#" class="btn-jquery" style="font-size: smaller">Check New Firmware</a>
+                    <a id="btn_update_firmware" href="#" class="btn-jquery" style="font-size: smaller">Update</a>
                 </div>
             </fieldset>
 <!--            <div style="margin-top: 10px;text-align: right;margin-right: 10px">
@@ -506,7 +516,7 @@ and open the template in the editor.
         <div id="div_log_control">
             <a href="/ui/download_log.html" style="position :absolute;left: 5px;text-decoration: underline;" download>Click Here to Export Log</a>
             <div style="position: absolute;right: 10px">
-                <a id="btn_log_refresh"  href="#" class="btn-light">Refresh</a>
+                <a id="btn_log_refresh"  href="#" class="btn-jquery" style="font-size: smaller">Refresh</a>
             </div>
             <div id="div_log_table" style="position: absolute;top: 40px;width: 100%">
                 <table id="table_log">
@@ -536,7 +546,7 @@ and open the template in the editor.
                         <br>
                         <input id="file_mass_create" accept=".txt" type="file" class="upload" />
                     </div>
-                    <a id="btn_mass_create" style="margin-left: 10px" href="#" class="btn-light">Create</a>
+                    <a id="btn_mass_create" style="margin-left: 10px;font-size: smaller" href="#" class="btn-jquery">Create</a>
                 </div>                               
                 <div style="position: absolute;top:90px;color: black">Progress : <div id="progressbar">
                         <div class="progress-label"></div>                
@@ -553,7 +563,7 @@ and open the template in the editor.
                     </div>
                 </div>
                 <div style="position: absolute;right: 0px;bottom: 10px">
-                    <a id="closedialog" href="#" class="btn-light">Exit</a>
+                    <a id="closedialog" href="#" class="btn-jquery" style="font-size: smaller">Exit</a>
                 </div>
             </div>
         </div>
@@ -562,7 +572,7 @@ and open the template in the editor.
             <div id="ModifySourceArea">                
             </div>
             <div style="position: absolute;right: 10px">
-                <a id="closemodifydialog" href="#" class="btn-light">Exit</a>
+                <a id="closemodifydialog" href="#" class="btn-jquery" style="font-size: smaller">Exit</a>
             </div>
         </div>
         
@@ -593,8 +603,8 @@ and open the template in the editor.
                 <br>
                 <br>
                 <div style="position: absolute;right: 10px">
-                    <a id="btn_modify_channel" href="#" class="btn-light">Confirm</a>
-                    <a id="btn_close_modify_channel" href="#" class="btn-light">Exit</a>
+                    <a id="btn_modify_channel" href="#" class="btn-jquery" style="font-size: smaller">Confirm</a>
+                    <a id="btn_close_modify_channel" href="#" class="btn-jquery" style="font-size: smaller">Exit</a>
                 </div>
             </div>
         </div>
@@ -618,7 +628,7 @@ and open the template in the editor.
             <table id='table_detail'>                
             </table>
             <div style="position: absolute;bottom: 10px;right: 10px">                
-                <a id="btn_close_detail_content" href="#" class="btn-light">Exit</a>
+                <a id="btn_close_detail_content" href="#" class="btn-jquery" style="font-size: smaller">Exit</a>
             </div>
         </div>
         
@@ -659,8 +669,8 @@ and open the template in the editor.
                     <br>
                     <label class="LabelRelayHead"></label>
                     <div style="position: absolute;right: 10px">
-                        <a id="btn_create" href="#" class="btn-light">Confirm</a>
-                        <a id="btn_close_create_channel" href="#" class="btn-light">Exit</a>
+                        <a id="btn_create" href="#" class="btn-jquery" style="font-size: smaller">Confirm</a>
+                        <a id="btn_close_create_channel" href="#" class="btn-jquery" style="font-size: smaller">Exit</a>
                     </div>
                 </div>
             </div>

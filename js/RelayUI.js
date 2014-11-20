@@ -29,6 +29,7 @@ $( document ).ready(function() {
     main();    
 });
 function main() {    
+    $('.btn-jquery').button();
     oRelayAjax = Relay.createNew();
     oHtmlCreate = CreateHtml.createNew();
     oUIRelay = UIRelayControl.createNew(oHtmlCreate,oRelayAjax);

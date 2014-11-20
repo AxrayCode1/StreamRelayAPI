@@ -65,7 +65,7 @@ var UIRelayControl = {
             oUIRelayContorl.GetRelayList();
             RebindDeleteEvent();
             RebindModifySourceEvent();
-            RebindModifyChannelEvent();
+            RebindModifyChannelEvent();            
             $('.btn_add_single').click(function(event){
                 event.preventDefault();
                 CreateSourceList = [];
