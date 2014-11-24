@@ -139,6 +139,40 @@ function HandleTime($Action,$oProcSystem)
             break;
     }
 }
+
+function HandleCache($Action,$oProcSystem)
+{
+    switch($Action)
+    {
+        case 'list':
+            switch($_SERVER['REQUEST_METHOD'])
+            {
+                case 'GET':
+                    $CacheData = $oProcSystem->GetCache();
+                    echo $CacheData;
+                    break;
+                default :
+                    http_response_code(404);
+            }
+            break; 
+        case 'set':
+            switch($_SERVER['REQUEST_METHOD'])
+            {
+                case 'POST':
+                    $Result = $oProcSystem->SetCache(file_get_contents("php://input"));
+                    if(!$Result)
+                        http_response_code(400);
+                    else
+                    {
+                        echo '{}';
+                    }
+                    break;
+                default :
+                    http_response_code(404);
+            }
+            break;
+    }
+}
 $ologin = CheckAuth();
 $url=explode("/",$_GET["api"]);
 $oProcSystem = new Process_System_API();
@@ -155,6 +189,9 @@ switch (count($url))
                 break;
             case 'time':
                 HandleTime($url[1],$oProcSystem);
+                break;
+            case 'cache':
+                HandleCache($url[1],$oProcSystem);
                 break;
             default :
                 http_response_code(404);

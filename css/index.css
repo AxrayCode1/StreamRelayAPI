@@ -530,3 +530,10 @@ div.ui-tooltip {
 .TimeSettingShift{
     left: 50px;
 }
+
+#combocache{    
+    position: absolute;
+    width: 150px;
+    height: 30px;    
+    left: 220px
+}

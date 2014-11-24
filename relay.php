@@ -160,8 +160,9 @@ and open the template in the editor.
         <div id="div_sys_config">
             <div id="tab-container" class='tab-container' style="padding: 10px">
                 <ul class='etabs'>
-                  <li class='tab'><a href="#tabs1-password">Change Password</a></li>
-                  <li class='tab'><a href="#tabs1-time">Time</a></li>
+                    <li class='tab'><a href="#tabs1-password">Change Password</a></li>
+                    <li class='tab'><a href="#tabs1-time">Time</a></li>
+                    <li class='tab'><a href="#tabs1-cache">Cache Time</a></li>
                 </ul>
                 <div class='panel-container'>
                     <div id="tabs1-password"> 
@@ -475,7 +476,7 @@ and open the template in the editor.
                                         <option value="pool.ntp.org">pool.ntp.org</option>
                                         <option value="time.nist.gov">time.nist.gov</option>
                                     </select>
-                                    <a href="#" id="btnupdate" class="TimeSettingShift" style="position: absolute;top:210px;width: 120px;font-size: smaller">Update Now</a>                                    
+                                    <a href="#" id="btnupdate" class="TimeSettingShift btn-jquery" style="position: absolute;top:210px;width: 120px;font-size: smaller">Update Now</a>                                    
                                 </div>                                
                             </div>                                                                     
                             
@@ -484,7 +485,27 @@ and open the template in the editor.
                                 <a id='btn_reset_time' href="#" class="btn-jquery" style="font-size: smaller">Cancel</a>                                    
                             </div>
                         </div>
-                    </div>                    
+                    </div>         
+                    <div id="tabs1-cache"> 
+                        <div class="div_fieldcontent" style="margin-top:20px;width: 500px;height: 150px;position: relative">                                                                    
+                            <label class="LabelHead" style="position: absolute;top:12px">Cache Time : </label>                    
+                            <select id="combocache">
+                                <option value="5000">05 Seconds</option>
+                                <option value="10000">10 Seconds</option>
+                                <option value="15000">15 Seconds</option>
+                                <option value="20000">20 Seconds</option>
+                                <option value="25000">25 Seconds</option>
+                                <option value="30000">30 Seconds</option>
+                                <option value="40000">40 Seconds</option>
+                                <option value="50000">50 Seconds</option>
+                                <option value="60000">60 Seconds</option>
+                            </select>                               
+                            <div style="position: absolute;right: 0px;bottom: 0px">                                                              
+                                <a id='btn_set_cache' href="#" class="btn-jquery" style="font-size: smaller">Confirm</a>
+                                <a id='btn_reset_cache' href="#" class="btn-jquery" style="font-size: smaller">Cancel</a>                                    
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 <!--            <div style="margin-top: 10px;text-align: right;margin-right: 10px">
@@ -674,15 +695,7 @@ and open the template in the editor.
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div id="modal_mass_entry_content">
-            
-        </div>
-        
-        <div id="moadl_modify_content">
-            
-        </div>
+        </div>               
         
         <div id="dialog_wait">
             <h2 id="dialog_msg" style="text-align: center;top:50%">Please Wait...</h2>

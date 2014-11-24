@@ -11,9 +11,12 @@ var UISystemControl = {
             InitSystemTab();
             InitDatePicker();
             InitTimeCombo();
-            $('#btnupdate').button();
+            InitCacheCombo();
+            InitPwdButton();  
+            InitTimeButton();
+            InitCacheButton();
             $('.iCheckRadio').iCheck({  
-                radioClass: 'iradio_flat-blue',    
+                radioClass: 'iradio_flat-blue'    
             });
             $('.iCheckRadio').on('ifChecked', function(event){
                 TimeModeChangeEnableDisableElement($(this).val());
@@ -25,7 +28,11 @@ var UISystemControl = {
                 oHtml.ShowOption(DivSystem);                
                 $('#tab-container').easytabs('select', '#tabs1-password');
                 ListTime(true);
-            });            
+                ListCache();
+            });                                                            
+        };                
+        
+        function InitPwdButton(){
             $('#btn_clear_pwd').click(function(event){
                 event.preventDefault();
                 ClearPassword();
@@ -34,22 +41,33 @@ var UISystemControl = {
                 event.preventDefault();
                 oUISystemContorl.ChangePasswordAction();
             });
+        }
+        
+        function InitTimeButton(){
             $('#btn_set_time').click(function(event){
                 event.preventDefault();
                 SetTime();
-            });
-            $('#btnupdate').click(function(event){
-                event.preventDefault();
-                UpdateTime();
             });
             $('#btn_reset_time').click(function(event) {
                 event.preventDefault();
                 ListTime(true);
             });
-//            $(".radiotime").click(function(event){                
-//                TimeModeChangeEnableDisableElement();
-//            });
-        };                
+            $('#btnupdate').click(function(event){
+                event.preventDefault();
+                UpdateTime();
+            });
+        }
+        
+        function InitCacheButton(){
+            $('#btn_set_cache').click(function(event){
+                event.preventDefault(); 
+                SetCache();
+            });
+            $('#btn_reset_cache').click(function(event) {
+                event.preventDefault();  
+                ListCache();
+            });
+        }
         
         function InitTimeCombo(){
             $('#combotimezone').scombobox({
@@ -85,6 +103,13 @@ var UISystemControl = {
         function InitDatePicker(){
             $( "#datepicker" ).datepicker({dateFormat: "yy-mm-dd"});            
         };
+        
+        function InitCacheCombo(){            
+            $('#combocache').scombobox({
+                editAble:false,
+                wrap:false
+            });
+        }
         
         function ClearPassword(){
             $('#CurPWD').val('');        
@@ -340,6 +365,42 @@ var UISystemControl = {
                     break;
             }
         }
+        
+        function ListCache(){
+            oHtml.blockPage();    
+            var request = oRelayAjax.ListCache();
+            CallBackListCache(request);             
+        };
+        
+        function CallBackListCache(request){            
+            request.done(function(msg, statustext, jqxhr) {          
+                oHtml.stopPage();                                    
+                $('#combocache').scombobox('val', msg['network-caching']);                
+            });            
+            request.fail(function(jqxhr, textStatus) {   
+                oHtml.stopPage();
+                oError.CheckAuth(jqxhr.status,ActionStatus.ListCache);
+            });
+        };
+        
+        function SetCache(){
+            var cachetime = $('#combocache').scombobox('val');
+            oHtml.blockPage();    
+            var request = oRelayAjax.SetCache(cachetime);
+            CallBackSetCache(request);             
+        };
+        
+        function CallBackSetCache(request){
+            request.done(function(msg, statustext, jqxhr) {         
+                oHtml.stopPage();            
+                ListCache();
+            });            
+            request.fail(function(jqxhr, textStatus) {   
+                oHtml.stopPage();
+                oError.CheckAuth(jqxhr.status,ActionStatus.SetCache);
+                ListCache();
+            });
+        };
         
         return oUISystemContorl;
     }

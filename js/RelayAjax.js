@@ -161,7 +161,16 @@ var Relay = {
             var jsonrequest = '{"NTP":"' + ntpserver + '"}';              
             var request = relayobj.CallAjax("/system/time/ntpupdate" , "POST", jsonrequest, "json");
             return request;
-        }
+        };
+        relayobj.ListCache = function(){
+            var request = relayobj.CallAjax("/system/cache/list", "GET", '', "json");
+            return request;
+        };
+        relayobj.SetCache = function(time){
+            var jsonrequest = '{"Cache":' + time + '}';              
+            var request = relayobj.CallAjax("/system/cache/set", "POST", jsonrequest, "json");
+            return request;
+        } ;
         relayobj.CallAjaxNoAsync = function(url, method, data, datatype) {
             var request = $.ajax({
                 type: method,

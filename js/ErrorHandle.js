@@ -16,7 +16,9 @@ var ActionStatus = {
     ListLog:51,
     ListTime : 61,
     SetTime : 62,
-    UpdateNtp:63
+    UpdateNtp:63,
+    ListCache : 71,
+    SetCache : 72
 };
 var ErrorHandle = {
     createNew: function() {                        
@@ -105,6 +107,12 @@ var ErrorHandle = {
                     break;
                 case ActionStatus.SetTime:
                     sError = "Error : Ajax Set Time Error";
+                    break;
+                case ActionStatus.ListCache:
+                    sError = "Error : Ajax List Cache Error";
+                    break;
+                case ActionStatus.SetCache:
+                    sError = "Error : Ajax Set Cache Error";
                     break;
             }
             return sError;

@@ -161,15 +161,20 @@ SQL;
                 die();
                 break;
             default :
-                $out = fopen('php://output', 'w');
+                $BOM = "\xEF\xBB\xBF";
+                $out = fopen('php://output', 'w');  
+                fwrite($out, $BOM);
                 fputcsv($out,array('Type','Source','Destination','Channel Name','Description','Time'));
                 foreach ($outputarr as $key => $value)
-                {
-                    fputcsv($out, array($value['LogType'],$value['LogType'], $value['Dest']
-                            , $value['ChannelName'],$value['Description'],$value['CreateTime']));
-//                    print('"'.$value['LogType'].'","'.$value['LogType'].'","'.$value['Dest'].'","'.
-//                          $value['ChannelName'].'","'.$value['Description'].'","'.$value['CreateTime'].'"\r\n');
+                {                    
+                    fputcsv($out, array($value['LogType']
+                        ,$value['SouceURL']
+                        ,$value['Dest']
+                        ,$value['ChannelName']
+                        ,$value['Description']
+                        ,$value['CreateTime']));                    
                 }
+                
                 fclose($out);
                 break;
         }            
