@@ -252,16 +252,18 @@ var CreateHtml = {
             LogList = [];
             for(var key in log_list) {  
                 var loglement = log_list[key];
-                tmp_log_item = new LogClass(loglement['LogType'], loglement['SouceURL'], loglement['Dest'],
+                tmp_log_item = new LogClass(loglement['LogType'],loglement['Operator'],loglement['ChannelNumber'], loglement['SouceURL'], loglement['Dest'],
                 loglement['ChannelName'],loglement['CreateTime'],loglement['Description']);
                 LogList[key]=tmp_log_item;
                 var append_str = '';
                 append_str += '<tr>';
                 append_str += '<td style="text-align:center">' + i + '</td>';
                 append_str += '<td>' + loglement['LogType'] + '</td>';
-                append_str += '<td>' + loglement['SouceURL'] + '</td>';
-                append_str += '<td>' + loglement['Dest'] + '</td>';
+                append_str += '<td>' + loglement['Operator'] + '</td>';                
+                append_str += '<td>' + loglement['ChannelNumber'] + '</td>';
                 append_str += '<td>' + loglement['ChannelName'] + '</td>';
+                append_str += '<td>' + loglement['SouceURL'] + '</td>';
+                append_str += '<td>' + loglement['Dest'] + '</td>';                
                 append_str += '<td>' + loglement['Description'] + '</td>';
                 append_str += '<td>' + loglement['CreateTime'] + '</td>';                                
                 append_str += '</tr>';
@@ -277,9 +279,11 @@ var CreateHtml = {
                 append_str += '<tr>';
                 append_str += '<td style="text-align:center">' + i + '</td>';
                 append_str += '<td>' + element['type'] + '</td>';
-                append_str += '<td>' + element['source'] + '</td>';
-                append_str += '<td>' + element['fulldest'] + '</td>';
+                append_str += '<td>' + element['operator'] + '</td>';                
+                append_str += '<td>' + element['channelnumber'] + '</td>';                
                 append_str += '<td>' + element['name'] + '</td>';
+                append_str += '<td>' + element['source'] + '</td>';
+                append_str += '<td>' + element['fulldest'] + '</td>';                
                 append_str += '<td>' + element['description'] + '</td>';
                 append_str += '<td>' + element['time'] + '</td>';       
                 append_str += '</tr>';

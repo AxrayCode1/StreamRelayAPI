@@ -542,11 +542,13 @@ and open the template in the editor.
             <div id="div_log_table" style="position: absolute;top: 40px;width: 100%">
                 <table id="table_log">
                     <tr>
-                        <th width="2%">Item</th>                        
-                        <th id="type" class="logth" width="10%">Operator</th>
-                        <th id="source" class="logth" width="18%">Source</th>
-                        <th id="fulldest" class="logth" width="18%">Destination</th>    
-                        <th id="name" class="logth" width="15%">Channel Name</th>
+                        <th width="1%">Item</th>                     
+                        <th id="type" class="logth" width="2%">Type</th>
+                        <th id="opeator" class="logth" width="5%">Operator</th>
+                        <th id="channelnumber" class="logth" width="2%">Channel No.</th>
+                        <th id="name" class="logth" width="15%">Channel Name</th>                        
+                        <th id="source" class="logth" width="19%">Source</th>
+                        <th id="fulldest" class="logth" width="19%">Destination</th>                            
                         <th id="description" class="logth" width="19%">Description</th>                        
                         <th id="time" class="logth" width="18%">Time</th>
                     </tr>               

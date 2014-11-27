@@ -86,7 +86,7 @@ class Process_Log_API
 "Australia/Melbourne"=>"+11:00",
 "Pacific/Noumea"=>"+11:00",
 "Pacific/Auckland"=>"+12:00",
-"Pacific/Fiji"=>"+12:00");
+"Pacific/Fiji"=>"+12:00");  
     function ListLog($PDODB,&$LogList=null)
     {
         $exu_str = "sudo /var/www/html/date.sh get tz";
@@ -98,7 +98,7 @@ class Process_Log_API
 SQL;
         $sqlSELECTLog = <<<SQL
                 
-                SELECT timeCreate,typeLog,nameChannel,source,outUrl,message FROM tbLog ORDER BY timeCreate DESC;
+                SELECT * FROM tbLog ORDER BY timeCreate DESC;
 SQL;
         $Stmt = $PDODB->prepare($sqlSetTimeZone);
         // Using prepared statements means that SQL injection is not possible. 
@@ -109,9 +109,21 @@ SQL;
             $Stmt->execute();
             $LogList = array();
             while ($row = $Stmt->fetch()) {
-                $LogList[] = array('CreateTime'=>$row['timeCreate'],'LogType'=>$row['typeLog']
+                switch ($value['typeLog'])
+                {
+                    case 0:
+                        $LogType = 'Normal';
+                        break;
+                    case 1:
+                        $LogType = 'Warning';
+                        break;
+                    case 2:
+                        $LogType = 'Error';
+                        break;                            
+                }
+                $LogList[] = array('CreateTime'=>$row['timeCreate'],'LogType'=>$LogType
                         ,'ChannelName'=>$row['nameChannel'],'SouceURL'=>$row['source'],'Dest'=>$row['outUrl']
-                        ,'Description'=>$row['message']);
+                        ,'Description'=>$row['message'],'Operator'=>$row['riser'],'ChannelNumber'=>$row['numberChannel']);
             }              
             return APIStatus::ListLogSuccess;
         }            
@@ -164,17 +176,31 @@ SQL;
                 $BOM = "\xEF\xBB\xBF";
                 $out = fopen('php://output', 'w');  
                 fwrite($out, $BOM);
-                fputcsv($out,array('Type','Source','Destination','Channel Name','Description','Time'));
+                fputcsv($out,array('Type','Operator','Channel Number','Channel Name','Source','Destination','Description','Time'));
                 foreach ($outputarr as $key => $value)
-                {                    
-                    fputcsv($out, array($value['LogType']
+                {
+                    $LogType = 'Normal';
+                    switch ($value['LogType'])
+                    {
+                        case 0:
+                            $LogType = 'Normal';
+                            break;
+                        case 1:
+                            $LogType = 'Warning';
+                            break;
+                        case 2:
+                            $LogType = 'Error';
+                            break;                            
+                    }
+                    fputcsv($out, array($LogType
+                        ,$value['riser']
+                        ,$value['numberChannel']
                         ,$value['SouceURL']
                         ,$value['Dest']
                         ,$value['ChannelName']
                         ,$value['Description']
                         ,$value['CreateTime']));                    
-                }
-                
+                }                
                 fclose($out);
                 break;
         }            

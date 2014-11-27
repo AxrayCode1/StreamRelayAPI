@@ -50,8 +50,11 @@ var UILogControl = {
                             break;
                         case SortType.String:
                             LogList.sort( function(a,b)
-                            {                                
-                                return a[sSortVariable].toUpperCase() < b[sSortVariable].toUpperCase() ? -1 : ( a[sSortVariable].toUpperCase() > b[sSortVariable].toUpperCase() ? 1 : 0 );
+                            {               
+                                if(a[sSortVariable] !== null && b[sSortVariable] !== null)
+                                    return a[sSortVariable].toUpperCase() < b[sSortVariable].toUpperCase() ? -1 : ( a[sSortVariable].toUpperCase() > b[sSortVariable].toUpperCase() ? 1 : 0 );
+                                else
+                                    return a[sSortVariable] < b[sSortVariable] ? -1 : ( a[sSortVariable] > b[sSortVariable] ? 1 : 0 );
                             });
                             break;
                     }
@@ -68,8 +71,12 @@ var UILogControl = {
                             break;
                         case SortType.String:
                             LogList.sort( function(a,b)
-                            {                               
-                                return a[sSortVariable].toUpperCase() > b[sSortVariable].toUpperCase() ? -1 : ( a[sSortVariable].toUpperCase() < b[sSortVariable].toUpperCase() ? 1 : 0 );
+                            {                       
+                                if(a[sSortVariable] !== null && b[sSortVariable] !== null)
+                                    return a[sSortVariable].toUpperCase() > b[sSortVariable].toUpperCase() ? -1 : ( a[sSortVariable].toUpperCase() < b[sSortVariable].toUpperCase() ? 1 : 0 );
+                                else
+                                    return a[sSortVariable] > b[sSortVariable] ? -1 : ( a[sSortVariable] < b[sSortVariable] ? 1 : 0 );
+                                    
                             });
                             break;
                     }
