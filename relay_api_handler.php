@@ -99,6 +99,17 @@ switch (count($url))
                         http_response_code(404);
                 }
                 break;
+            case 'start':
+                switch($_SERVER['REQUEST_METHOD'])
+                {
+                    case 'PUT':
+                        $result = $proc_api ->start($url[1]);
+                        echo '{}';
+                        break;
+                    default :
+                        http_response_code(404);
+                }                        
+                break;
             case 'stop': 
                 switch ($url[1])
                 {

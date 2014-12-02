@@ -131,11 +131,20 @@ class Process_System_API
     }
     
     function SetCache($JsonData)
-    {
+    {        
         $Result = false;
         $InputJson = json_decode($JsonData,true);    
         $exu_str = "sudo ".RootPath."relay.exe param_set network-caching ".$InputJson['Cache'];
         $output = exec($exu_str,$outputarr);           
+        if($InputJson['Restart'] == 1)
+        {
+            foreach ($InputJson['ID'] as $key => $value)
+            {
+                $exu_str = "sudo /var/www/html/relay.exe restart ".$value.' >/dev/null 2>&1 &';
+                $pipe = popen($exu_str,"r");
+                pclose($pipe);
+            }       
+        }
         $Result = true;
         return $Result;
     }

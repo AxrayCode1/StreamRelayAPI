@@ -443,6 +443,14 @@ var UIRelayControl = {
                     if(relayelement['status'] !== relayList[relayelement['idChannel']]['status']){                                                      
                         relayList[relayelement['idChannel']]['status'] = relayelement['status'];
                         $('#tr' + relayelement['idChannel']).find('td').eq(RelayColumn.Status).text(oHtml.GetRelayStatusStr(relayelement['status']));
+                        if(relayelement['status'] === 3){
+                            $('#' + relayelement['idChannel'] + '.stop').text('Start');
+                            $('#' + relayelement['idChannel'] + '.stop').addClass('start');                            
+                        }
+                        else{
+                            $('#' + relayelement['idChannel'] + '.stop').text('Stop');
+                            $('#' + relayelement['idChannel'] + '.stop').removeClass('start');
+                        }
                     };
                     if(relayelement['numChannel'] !== relayList[relayelement['idChannel']]['channelnumber']){                                                      
                         relayList[relayelement['idChannel']]['channelnumber'] = relayelement['numChannel'];
@@ -880,13 +888,33 @@ var UIRelayControl = {
         function RebindStopEvent() {
             $(stop_class).click(function(event) {
                 event.preventDefault();
-                var thisitem = $(this);                
-                StopRelay(relayList[thisitem.attr('id')]['id']);
+                var thisitem = $(this);  
+                if(thisitem.hasClass('start'))
+                    StartRelay(relayList[thisitem.attr('id')]['id']);                    
+                else
+                    StopRelay(relayList[thisitem.attr('id')]['id']);
+                    
+            });
+        };
+        
+        function StartRelay(id){
+            oHtml.blockPage();
+            var request = oRelayAjax.startRelay(id);   
+            CallBackStartRelay(request);
+        }
+        
+        function CallBackStartRelay(request){            
+            request.done(function(msg, statustext, jqxhr) {                
+                setTimeout(function(){GetRelayNoRefresh();}, 200);
+            });
+            request.fail(function(jqxhr, textStatus) {
+                oHtml.stopPage();
+                oError.CheckAuth(jqxhr.status,ActionStatus.StartRelay);
             });
         };
         
         function StopRelay(id){
-            oHtml.blockPage();            
+            oHtml.blockPage();               
             var request = oRelayAjax.stopRelay(id);   
             CallBackStopRelay(request);
         };

@@ -96,6 +96,12 @@ class Process_API
             $result = true;
         }
         return $result;
+    }        
+    
+    function start($id)
+    {
+        $exu_str = "sudo /var/www/html/relay.exe restart $id";
+        exec($exu_str,$output);
     }
     
     function stop($id)

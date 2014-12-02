@@ -116,9 +116,12 @@ var CreateHtml = {
             append_str += '<td>' + createobj.GetRelayStatusStr(element['status']) + '</td>';            
             append_str += '<td>' + element['description'] + '</td>';
             append_str += '<td><div style="width:220px;white-space: nowrap;">';
-            append_str += '<a href="#" class="btn-light stop" id="' + element['id'] + '">Stop</a>';
+            if(element['status'] === 3)
+                append_str += '<a href="#" class="btn-light stop start" id="' + element['id'] + '">Start</a>';
+            else
+                append_str += '<a href="#" class="btn-light stop" id="' + element['id'] + '">Stop</a>';
             if (element['port'] !== '')
-                append_str += '<a href="#" style="margin-left:5px" class="btn-light resume" id="' + element['id'] + '">Resume</a>';
+                append_str += '<a href="#" style="margin-left:5px" class="btn-light resume" id="' + element['id'] + '">Restart</a>';
             append_str += '<a href="#" style="margin-left:5px" class="btn-light RealyEdit" data-dropdown="#dropdown-1" data-edit="' + element['id'] + '">Edit&nbsp;&darr;</a>';            
             append_str += '</div></td>';
             append_str += '</tr>';            

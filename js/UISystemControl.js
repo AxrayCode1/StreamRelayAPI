@@ -6,6 +6,8 @@ var UISystemControl = {
         var oError = {};
         var GetTimeInterval;
         var Senconds;
+        var CacheTime;
+        var CacheComboChangeWork;
         oUISystemContorl.Init = function(){   
             oError = ErrorHandle.createNew();
             InitSystemTab();
@@ -15,6 +17,7 @@ var UISystemControl = {
             InitPwdButton();  
             InitTimeButton();
             InitCacheButton();
+            CacheComboChangeWork = false;
             $('.iCheckRadio').iCheck({  
                 radioClass: 'iradio_flat-blue'    
             });
@@ -108,6 +111,22 @@ var UISystemControl = {
             $('#combocache').scombobox({
                 editAble:false,
                 wrap:false
+            });
+            $('#combocache').scombobox('change',function(){
+                if(!CacheComboChangeWork)
+                    CacheComboChangeWork = true;
+                else{                     
+                    if(CacheTime != $('#combocache').scombobox('val')){
+                        var confirmable = confirm("Warning!!!After changing cache time, all channels will be restarted.\nDo you want to set now?");
+                            if (confirmable === true) {
+                                SetCache();
+                            }   
+                            else{
+                                CacheComboChangeWork = false;
+                                $('#combocache').scombobox('val',CacheTime);                                
+                            }
+                    }                    
+                }
             });
         }
         
@@ -374,7 +393,9 @@ var UISystemControl = {
         
         function CallBackListCache(request){            
             request.done(function(msg, statustext, jqxhr) {          
-                oHtml.stopPage();                                    
+                oHtml.stopPage();      
+                CacheComboChangeWork = false;
+                CacheTime=msg['network-caching'];                
                 $('#combocache').scombobox('val', msg['network-caching']);                
             });            
             request.fail(function(jqxhr, textStatus) {   
@@ -384,9 +405,14 @@ var UISystemControl = {
         };
         
         function SetCache(){
+            var arrID = [];
             var cachetime = $('#combocache').scombobox('val');
             oHtml.blockPage();    
-            var request = oRelayAjax.SetCache(cachetime);
+            for(var key in relayList){ 
+                if(relayList[key]['status'] !== 3)
+                    arrID.push(relayList[key]['id']);                
+            };
+            var request = oRelayAjax.SetCache(cachetime,1,arrID);
             CallBackSetCache(request);             
         };
         

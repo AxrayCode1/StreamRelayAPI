@@ -121,9 +121,14 @@ SQL;
                         $LogType = 'Error';
                         break;                            
                 }
-                $LogList[] = array('CreateTime'=>$row['timeCreate'],'LogType'=>$LogType
-                        ,'ChannelName'=>$row['nameChannel'],'SouceURL'=>$row['source'],'Dest'=>$row['outUrl']
-                        ,'Description'=>$row['message'],'Operator'=>$row['riser'],'ChannelNumber'=>$row['numberChannel']);
+                $LogList[] = array('CreateTime'=>$row['timeCreate']==null?'N/A':$row['timeCreate']
+                        ,'LogType'=>$LogType==null?'N/A':$LogType
+                        ,'ChannelName'=>$row['nameChannel']==null?'N/A':$row['nameChannel']
+                        ,'SouceURL'=>$row['source']==null?'N/A':$row['source']
+                        ,'Dest'=>$row['outUrl']==null?'N/A':$row['outUrl']
+                        ,'Description'=>$row['message']==null?'N/A':$row['message']
+                        ,'Operator'=>$row['riser']==null?'N/A':$row['riser']
+                        ,'ChannelNumber'=>$row['numberChannel']==null?'N/A':$row['numberChannel']);
             }              
             return APIStatus::ListLogSuccess;
         }            
@@ -154,7 +159,7 @@ SQL;
             header('Content-Disposition: attachment; filename="'.$encoded_filename.'"');    
         }
         else
-                header('Content-Disposition: attachment; filename="'.$name.'"');
+            header('Content-Disposition: attachment; filename="'.$name.'"');
         header("Content-Transfer-Encoding: binary");
         header('Accept-Ranges: bytes');
 
@@ -193,11 +198,11 @@ SQL;
                             break;                            
                     }
                     fputcsv($out, array($LogType
-                        ,$value['riser']
-                        ,$value['numberChannel']
-                        ,$value['SouceURL']
-                        ,$value['Dest']
+                        ,$value['Operator']                        
+                        ,$value['ChannelNumber']
                         ,$value['ChannelName']
+                        ,$value['SouceURL']
+                        ,$value['Dest']                        
                         ,$value['Description']
                         ,$value['CreateTime']));                    
                 }                

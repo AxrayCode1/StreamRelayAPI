@@ -120,7 +120,7 @@ and open the template in the editor.
                 <a style="margin-left: 5px;font-size: smaller;" href="#" class="btn-jquery" data-dropdown="#dropdown-Add">Create&nbsp;&darr;</a>
                 <div style="position: absolute;top:0px;right: 10px">
                     <a id="btn_stop_all" href="#" class="btn-jquery" style="font-size: smaller;">Stop All</a>
-                    <a id="btn_resume_all" href="#" class="btn-jquery" style="font-size: smaller;">Resume All</a>
+                    <a id="btn_resume_all" href="#" class="btn-jquery" style="font-size: smaller;">Restart All</a>
                     <a  id="btn_refresh" href="#" class="btn-jquery" style="font-size: smaller;">Refresh</a>
                 </div>
             </div>
@@ -500,10 +500,10 @@ and open the template in the editor.
                                 <option value="50000">50 Seconds</option>
                                 <option value="60000">60 Seconds</option>
                             </select>                               
-                            <div style="position: absolute;right: 0px;bottom: 0px">                                                              
+<!--                            <div style="position: absolute;right: 0px;bottom: 0px">                                                              
                                 <a id='btn_set_cache' href="#" class="btn-jquery" style="font-size: smaller">Confirm</a>
                                 <a id='btn_reset_cache' href="#" class="btn-jquery" style="font-size: smaller">Cancel</a>                                    
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>

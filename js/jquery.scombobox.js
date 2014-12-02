@@ -482,6 +482,7 @@
         }
         $select.val(value).change();
         $t.find(cp + cvalue).val(value);
+        $t.find(cp + clist + ' p').eq($selected[0].index).addClass(pname + chovered).siblings().removeClass(pname + chovered);
     }
 
     /**
@@ -700,10 +701,10 @@
             }
             var $select = $div.closest(cp).children('select');
             $select.children('option').eq(index).prop('selected', true);
-            $select.siblings(cp + cvalue).val($select.val());
-            $select.change();
+            $select.siblings(cp + cvalue).val($select.val());            
             slide.call($t.parent(), 'up');
             $t.addClass(pname + chovered).siblings().removeClass(pname + chovered);
+            $select.change();
         });
         this.on('blur', cp + cdisplay, function() {
             var $t = $(this), O = $T.data(pname);

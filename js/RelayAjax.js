@@ -20,6 +20,10 @@ var Relay = {
             var request = relayobj.CallAjax("/relay/delete/" + deleteID, "DELETE", "", "json");
             return request;           
         };
+        relayobj.startRelay = function(startID) {
+            var request = relayobj.CallAjax("/relay/start/" + startID, "PUT", "", "json");
+            return request;           
+        };
         relayobj.stopRelay = function(stopID) {
             var request = relayobj.CallAjax("/relay/stop/" + stopID, "PUT", "", "json");
             return request;           
@@ -166,8 +170,26 @@ var Relay = {
             var request = relayobj.CallAjax("/system/cache/list", "GET", '', "json");
             return request;
         };
-        relayobj.SetCache = function(time){
-            var jsonrequest = '{"Cache":' + time + '}';              
+        relayobj.SetCache = function(time,isrestart,arrID){
+            var idrequest = '';
+            if(isrestart === 1){
+            var idrequest = ',"ID":[';
+                try {
+                    for(var i = 0; i < arrID.length; i++)
+                    {
+                        if(i !== arrID.length -1)
+                            idrequest += arrID[i] + ',';
+                        else
+                            idrequest += arrID[i];
+                    }
+                } catch (exception) {
+                }
+                idrequest += ']';
+            }
+            var jsonrequest = '{"Cache":' + time + ',"Restart":' + isrestart;    
+            if(isrestart === 1)
+                jsonrequest += idrequest;
+            jsonrequest += '}';
             var request = relayobj.CallAjax("/system/cache/set", "POST", jsonrequest, "json");
             return request;
         } ;

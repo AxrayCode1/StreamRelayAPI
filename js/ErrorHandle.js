@@ -6,6 +6,7 @@ var ActionStatus = {
     AddSource :4,
     ModifyChannel : 5,
     StopRelay : 6,
+    StartRelay : 7,
     GetIP:24,
     SetIP:25,
     SystemChangePWD:41,
@@ -73,10 +74,13 @@ var ErrorHandle = {
                     sError = "Error : Ajax Delete Relay Error";
                     break;
                 case ActionStatus.ResumeRelay:
-                    sError = "Error : Ajax Resume Relay Error";
+                    sError = "Error : Ajax Restart Relay Error";
                     break;                
                 case ActionStatus.ModifyChannel:
                     sError = "Error : Ajax Modify Channel Error";
+                    break;
+                case ActionStatus.StartRelay:
+                    sError = "Error : Ajax Start Relay Error";
                     break;
                 case ActionStatus.StopRelay:
                     sError = "Error : Ajax Stop Relay Error";
