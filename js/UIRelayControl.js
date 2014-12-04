@@ -86,7 +86,7 @@ var UIRelayControl = {
             });
             $('#btn_resume_all').click(function(event){
                 event.preventDefault();
-                var confirmable = confirm("Do you want to resume all now?");
+                var confirmable = confirm("Do you want to restart all now?");
                 if (confirmable === true) {
                     ResumeAllRelay();
                 }                 
@@ -161,7 +161,7 @@ var UIRelayControl = {
                     autoOpen: false,
                     dialogClass: "no-close",
                     height:400,
-                    width:720               
+                    width:780               
             });                
             $('#closemodifydialog').click(function (event) {
                 event.preventDefault();

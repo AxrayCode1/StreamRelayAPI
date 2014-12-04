@@ -12,6 +12,9 @@ function ResponseChangePassword($Result)
         case APIStatus::DBPrepareFail:
             http_response_code(503);
             exit();
+        default :
+            echo '{}';
+            exit();
     }
 }
 function HandlePassword($Action,$oProcSystem,$oLogin)

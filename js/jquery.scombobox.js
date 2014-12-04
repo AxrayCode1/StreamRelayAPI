@@ -733,16 +733,21 @@
             }
         });
         this.on('focus', cp + cdisplay, function() {
+            console.log('focused');
             if (!this.value.trim()) { // focusing in empty field
                 // should trigger full dropdown:
                 if ($T.data(pname).expandOnFocus) {
                     $(this).keyup();
                 }
             } else { // input.display is not empty
-                if ($T[pname]('val')) { // if value is valid
-                    var $listDiv = $T.children(cp + clist);
-                    $listDiv.children().show();
-                    slide.call($listDiv, 'down');
+                if ($T.data(pname).expandOnFocusWithValue) {
+                    if ($T[pname]('val')) { // if value is valid
+                        var $listDiv = $T.children(cp + clist);
+                        $listDiv.children().show();
+                        slide.call($listDiv, 'down');
+                    } else {
+                        $(this).keyup(); // else start filtering
+                    }
                 }
             }
         });
@@ -769,7 +774,7 @@
                 slide.call($div, 'up');
             } else {
                 slide.call($div, 'down');
-                $combo.children(cp + cdisplay).focus();
+                $combo.children(cp + cdisplay).focus();                                            
             }
         });
         this.on('click', cp + cdiremove, function(e) {
@@ -1168,10 +1173,14 @@
          */
         hideSeparatorsOnSearch: false,
         /**
-         * When false options list does not drop down on focus.
-         * In this case you have to click on arrow to expand the list.
+         * When false options list does not drop down on focus (applies on an empty combobox).
+         * In this case you have to click on arrow to expand the list or start typing.
          */
         expandOnFocus: true,
+        /**
+         * When false options list does not drop down on focus (applies on a filled combobox).
+         */
+        expandOnFocusWithValue: true,
         /**
          * Set tabindex
          */

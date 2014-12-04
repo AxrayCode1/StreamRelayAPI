@@ -189,7 +189,7 @@ var UISystemControl = {
             request.done(function(msg, statustext, jqxhr) {                  
                 oHtml.stopPage();
                 alert('Password is modified successful.');
-                window.location = '/ui/index.html';
+                window.location = '/ui/Logout.html';
             });            
             request.fail(function(jqxhr, textStatus) {  
                 oHtml.stopPage();
